@@ -97,6 +97,16 @@ class Empresa(models.Model):
     class Meta:
         db_table = "empresas"
 
+class Modelo(models.Model):
+    id_md=models.AutoField(primary_key=True, db_column="id_Modelo")
+    id_md_emp=models.ForeignKey(to=Empresa, on_delete=models.CASCADE, db_column="id_Empresa")
+    str_md_nombre=models.CharField(max_length=256, db_column="Nombre")
+    str_md_descripcion=models.CharField(max_length=256, blank=True, null=True, db_column="Descripcion")
+    bool_md_eliminado=models.BooleanField(default=False)
+    
+    class Meta:
+        db_table= "modelos"
+        
 class Benchmarking(models.Model):
     id_bench=models.AutoField(primary_key=True, db_column="id_Bench")
     id_bench_sc=models.ForeignKey(to=Sector, null=True, blank=True, db_column="id_Sector", on_delete=models.PROTECT)

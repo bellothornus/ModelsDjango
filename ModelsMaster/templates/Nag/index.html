@@ -1,3 +1,36 @@
+<<<<<<< HEAD
+{% extends '../base.html' %}
+    {% block head%}
+        <title>Indice de Nivel Área Geográfica</title>
+    {% endblock %}
+        {%block thead%}
+            <th> ID: </th>
+            <th> Nivel:</th>
+            <th> Nombre:</th>
+            <th> Descripcion:</th>
+            <th> Editar:</th>
+            <th> Ver:</th>
+            <th> Eliminar:</th>
+        {% endblock %}
+        {% block tbody %}
+            {% if nags %}
+                {% for nag in nags %}
+                    <tr>
+                        <td>{{nag.id_Nivel_Area}}</td>
+                        <td>{{nag.Num_NG_Nivel}}</td>
+                        <td>{{nag.Str_NG_Nombre}}</td>
+                        <td>{{nag.Str_NG_Descripcion}}</td>
+                        <td><a class="btn btn-xs far fa-eye" href="/show/nag/{{nag.id_Nivel_Area}}"></a></td>
+                        <td><a class="btn btn-primary btn-xs fas fa-pen" href="/edit/nag/{{nag.id_Nivel_Area}}"></a></td>
+                        <td><a class="btn btn-danger btn-xs  fas fa-trash-alt  fas fa-trash-alt" href="/delete/nag/{{nag.id_Nivel_Area}}"></a></td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <h2>No se han encontrado ningún NAG creado</h2>
+            {% endif %}
+        {% endblock %}
+        <a href="/">Volver atrás</a>
+=======
 {% extends '../base_index.html' %}
     {% block head %}
         <title>Indice de Nivel Áreas Geográficas</title>
@@ -33,3 +66,4 @@
         {% endif %}
     {% endblock %}
     
+>>>>>>> 5b9b79a3da05343d2fa92af8e0a749b72643a84d

@@ -1,6 +1,29 @@
 {% extends '../base_form.html' %}
     {% block head%}
         <title>edit Tipo Interviniente</title>
+<<<<<<< HEAD
+    </head>
+    <body>
+        <form action="/update/tipo_interviniente/{{tipo_interviniente.id_Tipo_Interviniente}}" method="POST"> {% csrf_token %}
+        <input type="text" name="Str_Nombre" value="{{tipo_interviniente.Str_Nombre}}">
+        <input type="submit" value="Enviar">
+        </form>
+        {% if form.errors %}
+            {% for error_field, error_message in form.errors.items %}
+            <div class="alert alert-danger " role="alert">
+ 
+                <p> {{ error_field|striptags }}-{{ error_message|striptags }}</p>
+ 
+            </div> 
+            {% endfor %}
+        {% endif %}
+        {% if aviso %}
+            <h2 style="color:green;">{{aviso}}</h2>
+        {% endif %}
+        <a href="/show/tipo_interviniente/{{tipo_interviniente.id_Tipo_Interviniente}}">Volver atrás</a>
+    </body>
+</html>
+=======
     {% endblock %}
     {% block body%}
         <form action="/update/tipo_interviniente/{{tipo_interviniente.id_ti}}" method="POST"> {% csrf_token %}
@@ -9,3 +32,4 @@
         </form>
         <a href="/show/tipo_interviniente/{{tipo_interviniente.id_ti}}">Volver atrás</a>
     {% endblock %}
+>>>>>>> 5b9b79a3da05343d2fa92af8e0a749b72643a84d

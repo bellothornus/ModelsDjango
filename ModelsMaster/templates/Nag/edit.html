@@ -1,3 +1,15 @@
+<<<<<<< HEAD
+{% extends '../base.html' %}
+    {% block head%}
+        <title>edit nag</title>
+        <h1>Edita Nivel Area Geografica</h1>
+    {% endblock %}
+    {% block content %}
+        <form action="/update/nag/{{nag.id_Nivel_Area}}" method="POST"> {% csrf_token %}
+        <input type="text" name="Str_NG_Nombre" value="{{nag.Str_NG_Nombre}}">
+        <input type="text" name="Str_NG_Descripcion" value="{{nag.Str_NG_Descripcion}}">
+        <select name="Num_NG_Nivel"> 
+=======
 {% extends '../base_form.html' %}
     {% block head %}
         <title>edit Nivel Area Geográgica</title>
@@ -7,6 +19,7 @@
         <input type="text" name="str_nag_nombre" value="{{nag.str_nag_nombre}}">
         <input type="text" name="str_nag_descripcion" value="{% if nag.str_nag_descripcion %}{{nag.str_nag_descripcion}}{%endif%}">
         <select name="num_nag_nivel"> 
+>>>>>>> 5b9b79a3da05343d2fa92af8e0a749b72643a84d
             <option  value="1">1</option>
             <option  value="2">2</option>
             <option  value="3">3</option>
@@ -20,5 +33,24 @@
         </select>
         <input type="submit" value="Enviar">
         </form>
+<<<<<<< HEAD
+        {% endblock %}
+        {% if form.errors %}
+            {% for error_field, error_message in form.errors.items %}
+            <div class="alert alert-danger " role="alert">
+ 
+                <p> {{ error_field|striptags }}-{{ error_message|striptags }}</p>
+ 
+            </div> 
+            {% endfor %}
+        {% endif %}
+        {% if aviso %}
+            <h2 style="color:green;">{{aviso}}</h2>
+        {% endif %}
+        <a href="/show/nag/{{nag.id_Nivel_Area}}">Volver atrás</a>
+    </body>
+</html>
+=======
         <a href="/show/nag/{{nag.id_nag}}">Volver atrás</a>
     {% endblock %}
+>>>>>>> 5b9b79a3da05343d2fa92af8e0a749b72643a84d

@@ -3,6 +3,7 @@ from django.urls import path, include
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 #from .views import *
 from . import views
+
 urlpatterns = [
     path('index/ambito/', views.AmbitoView.index),
     path('show/ambito/<int:id>', views.AmbitoView.show),
@@ -75,6 +76,11 @@ urlpatterns = [
     path('edit/empresa/<int:id>', views.EmpresaView.edit),
     path('update/empresa/<int:id>', views.EmpresaView.update),
     path('delete/empresa/<int:id>', views.EmpresaView.delete),
+
+    path('index/modelo', views.ModeloView.index),
+    path('show/modelo/<int:id>', views.ModeloView.show),
+    path('new/modelo', views.ModeloView.new),
+    path('create/modelo', views.ModeloView.create),
 
     path('index/benchmarking', views.BenchmarkingView.index),
     path('show/benchmarking/<int:id>', views.BenchmarkingView.show),

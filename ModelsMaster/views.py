@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from .forms import AmbitoForm, TipoObjetivoForm, EstructuraForm, RiesgoForm, TipoIntervinienteForm, SectorForm, NivelAreaGeograficaForm, AreaGeograficaForm, EmpresaForm, BenchmarkingForm
-from .models import Ambito, TipoObjetivo, Estructura, Riesgo, TipoInterviniente,Sector, NivelAreaGeografica, AreaGeografica, Empresa, Benchmarking
+from .forms import AmbitoForm, TipoObjetivoForm, EstructuraForm, RiesgoForm, TipoIntervinienteForm, SectorForm, NivelAreaGeograficaForm, AreaGeograficaForm, EmpresaForm, ModeloForm, BenchmarkingForm
+from .models import Ambito, TipoObjetivo, Estructura, Riesgo, TipoInterviniente,Sector, NivelAreaGeografica, AreaGeografica, Empresa, Modelo, Benchmarking
+
 # Create your views here.
 def index(request):
     return render(request, 'index.html')
@@ -424,7 +425,7 @@ class SectorView(View):
                 "form":ModelForm_form,
                 "sector":sector
             }
-        return render(request, 'Sector/edit.html', {"aviso":aviso, "sector":sector})
+        return render(request, 'Sector/edit.html', args)
 
     def delete(request,id):
         sector = Sector.objects.get(id_sc=id)
@@ -687,6 +688,49 @@ class EmpresaView(View):
         }
         return render(request, 'Empresa/index.html', args)
 
+class ModeloView(View):
+
+    def index(request):
+        all=Modelo.objects.filter(bool_md_eliminado=False)
+        args= {"modelos":all}
+
+        return render(request, 'Modelo/index.html', args)
+    
+    def show(request,id):
+        modelo = Modelo.objects.get(id_md=id)
+        modelo_emp = Empresa.objects.get(id_emp=emp.id_emp_ag.id_ag)
+        args = {
+            "modelo":modelo,
+            "modelo_emp":modelo_emp,
+        }
+        return render(request, 'Modelo/show.html', args)
+    
+    def new(request):
+        modelo_emps = Empresa.objects.filter(bool_emp_eliminado=False)
+        args = {
+            "modelo_emps":modelo_emps,
+        }
+        return render(request, 'Modelo/new.html', args)
+
+    def create(request):
+        ModelForm_form = ModeloForm(request.POST)
+        if ModelForm_form.is_valid():
+            ModelForm_form.save()
+            aviso = "El Modelo se ha creado con éxito!"
+            all = Modelo.objects.filter(bool_md_eliminado=False)
+            args = {
+                "aviso":aviso,
+                "modelos":all
+            }
+            return render(request, 'Modelo/index.html', args)
+        else:
+            modelo_emps = Empresa.objects.filter(bool_emp_eliminado=False)
+            args = {
+                "form":ModelForm_form,
+                "modelo_emps":modelo_emps,
+            }
+            return render(request, 'Modelo/new.html', args)
+            
 class BenchmarkingView(View):
     def index(request):
         all = Benchmarking.objects.filter(bool_bench_eliminado=False)

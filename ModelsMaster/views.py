@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from .forms import AmbitoForm, TipoObjetivoForm
+from .forms import AmbitoForm, TipoObjetivoForm, TipoIntervinienteForm, SectorForm, NAGForm
 from .models import Ambito,TipoObjetivo,Estructura,Riesgo,TipoInterviniente,Sector,Nivel_Area_Geografica
 # Create your views here.
 def index(request):
@@ -10,11 +10,12 @@ class AmbitoView(View):
     def index(request):
         all = Ambito.objects.filter(bool_eliminado=False)
         args = {"ambitos":all}
-        return render(request, 'Ambitos/index.html', {"ambitos":all})
+        return render(request, 'Ambitos/index.html', args)
 
     def show(request,id):
         ambito = Ambito.objects.get(id_Ambito=id)
-        return render(request, 'Ambitos/show.html', {"ambito":ambito})
+        args = {"ambito":ambito}
+        return render(request, 'Ambitos/show.html', args)
     
     def new(request):
         return render(request,'Ambitos/new.html')
@@ -111,29 +112,29 @@ class TipoObjetivoView(View):
 
     def edit(request,id):
         tipo_objetivo = TipoObjetivo.objects.get(id_Tipo_Objetivo=id)
-        args = {
+        arg = {
             "tipo_objetivo":tipo_objetivo
         }
-        return render(request, 'TipoObjetivo/edit.html', {"tipo_objetivo":tipo_objetivo})
+        return render(request, 'TipoObjetivo/edit.html', arg)
 
 
-def update_tipo_objetivo(request,id):
-    nombre = request.POST['nombre']
+    def update(request,id):
+        nombre = request.POST['nombre']
 
-    tipo_objetivo = TipoObjetivo.objects.get(id_Tipo_Objetivo=id)
-    tipo_objetivo.Str_Nombre = nombre
-    tipo_objetivo.save()
-    aviso = "Los datos se han actualizado!"
-    
-    return render(request, 'TipoObjetivo/edit.html', {"aviso":aviso, "tipo_objetivo":tipo_objetivo})
+        tipo_objetivo = TipoObjetivo.objects.get(id_Tipo_Objetivo=id)
+        tipo_objetivo.Str_Nombre = nombre
+        tipo_objetivo.save()
+        aviso = "Los datos se han actualizado!"
+        
+        return render(request, 'TipoObjetivo/edit.html', {"aviso":aviso, "tipo_objetivo":tipo_objetivo})
 
-def delete_tipo_objetivo(request,id):
-    tipo_objetivo = TipoObjetivo.objects.get(id_Tipo_Objetivo=id)
-    tipo_objetivo.bool_eliminado = True
-    tipo_objetivo.save()
-    eliminado = "El tipo objetivo se ha eliminado"
+    def delete(request,id):
+        tipo_objetivo = TipoObjetivo.objects.get(id_Tipo_Objetivo=id)
+        tipo_objetivo.bool_eliminado = True
+        tipo_objetivo.save()
+        eliminado = "El tipo objetivo se ha eliminado"
 
-    return render(request, 'TipoObjetivo/index.html', {"eliminado":eliminado,"tipo_objetivo":tipo_objetivo})
+        return render(request, 'TipoObjetivo/index.html', {"eliminado":eliminado,"tipo_objetivo":tipo_objetivo})
 
 def index_estructura(request):
     all = Estructura.objects.filter(bool_eliminado=False)
@@ -215,132 +216,193 @@ def delete_riesgo(request,id):
     all = Riesgo.objects.filter(bool_eliminado=False)
     eliminado = "El riesgo se ha eliminado"
     return render(request, 'Riesgo/index.html', {"eliminado":eliminado, "riesgos":all})
+class TipoIntervinienteView(View):
+    def index(request):
+        all = TipoInterviniente.objects.filter(bool_eliminado=False)
+        arg = {"tipo_intervinientes":all}
+        return render(request, 'TipoInterviniente/index.html', arg)
 
-def index_tipo_interviniente(request):
-    all = TipoInterviniente.objects.filter(bool_eliminado=False)
-    return render(request, 'TipoInterviniente/index.html', {"tipo_intervinientes":all})
+    def show(request,id):
+        tipo_interviniente = TipoInterviniente.objects.get(id_Tipo_Interviniente=id)
+        arg = {"tipo_interviniente":tipo_interviniente} 
+        return render(request, 'TipoInterviniente/show.html', arg)
 
-def show_tipo_interviniente(request,id):
-    tipo_interviniente = TipoInterviniente.objects.get(id_Tipo_Interviniente=id)
-    return render(request, 'TipoInterviniente/show.html', {"tipo_interviniente":tipo_interviniente})
+    def new(request):
+        return render(request, 'TipoInterviniente/new.html')
 
-def new_tipo_interviniente(request):
-    return render(request, 'TipoInterviniente/new.html')
+    def create(request):
+        form = TipoIntervinienteForm(request.POST)
+        if form.is_valid():
+            form.save()
+            all = TipoInterviniente.objects.filter(bool_eliminado=False)
+            args = {
+                "tipo_intervinientes":all
+                }
+            return render(request, 'TipoInterviniente/index.html', args )
+        else:
+            args = {
+                'form': form
+                }
+            return render (request, 'TipoInterviniente/new.html', args )
 
-def create_tipo_interviniente(request):
-    nombre = request.POST['nombre']
-    tipo_interviniente = TipoInterviniente(Str_Nombre = nombre)
-    tipo_interviniente.save()
-    aviso = "El tipo interviniente se ha creado con éxito!"
+    def edit(request,id):
+        tipo_interviniente = TipoInterviniente.objects.get(id_Tipo_Interviniente=id)
+        arg = {"tipo_interviniente":tipo_interviniente}
+        return render(request, 'TipoInterviniente/edit.html', arg)
 
-    all = TipoInterviniente.objects.filter(bool_eliminado=False)
-    return render(request, 'TipoInterviniente/index.html', {"aviso":aviso, "tipo_intervinientes":all})
+    def update(request,id):
+        tipo_interviniente = TipoInterviniente.objects.get(id_Tipo_Interviniente=id)
+        form = TipoIntervinienteForm(request.POST, instance=tipo_interviniente)
+        if form.is_valid():
+            form.save()
+            aviso = "Se han actualizado los datos"
+            args = {
+                "aviso":aviso,
+                "form":form,
+                "tipo_interviniente":tipo_interviniente
+            }
+            return render(request, 'TipoInterviniente/edit.html', args)
+        else:
+            tipo_interviniente = TipoInterviniente.objects.get(id_Tipo_Interviniente=id)
+            args = {
+                "form":form,
+                "tipo_interviniente":tipo_interviniente
+            }
+            return render(request, 'TipoInterviniente/edit.html',args)
 
-def edit_tipo_interviniente(request,id):
-    tipo_interviniente = TipoInterviniente.objects.get(id_Tipo_Interviniente=id)
-    return render(request, 'TipoInterviniente/edit.html', {"tipo_interviniente":tipo_interviniente})
+    def delete(request,id):
+        tipo_interviniente = TipoInterviniente.objects.get(id_Tipo_Interviniente=id)
+        tipo_interviniente.bool_eliminado = True
+        tipo_interviniente.save()
+        eliminado = "El tipo Interviniente se ha eliminado"
+        all = TipoInterviniente.objects.filter(bool_eliminado=False)
+        arg = {"eliminado":eliminado, "tipo_intervinientes":all}
+        return render(request, 'TipoInterviniente/index.html', arg)
 
-def update_tipo_interviniente(request,id):
-    tipo_interviniente = TipoInterviniente.objects.get(id_Tipo_Interviniente=id)
-    tipo_interviniente.Str_Nombre = request.POST['nombre']
-    tipo_interviniente.save()
-    aviso = "Los datos se han actualizado con éxito"
+class SectorView(View):
+    def index(request):
+        all = Sector.objects.filter(bool_Sc_eliminado=False)
+        arg = {"sectores":all}
+        return render(request, 'Sector/index.html', arg)
 
-    return render(request, 'TipoInterviniente/edit.html', {"aviso":aviso, "tipo_interviniente":tipo_interviniente})
+    def show(request,id):
+        sector = Sector.objects.get(id_Sector=id)
+        arg = {"sector":sector}
+        return render(request, 'Sector/show.html', arg)
 
-def delete_tipo_interviniente(request,id):
-    tipo_interviniente = TipoInterviniente.objects.get(id_Tipo_Interviniente=id)
-    tipo_interviniente.bool_eliminado = True
-    tipo_interviniente.save()
-    eliminado = "El tipo Interviniente se ha eliminado"
-    all = TipoInterviniente.objects.filter(bool_eliminado=False)
+    def new(request):
+        return render(request, 'Sector/new.html')
 
-    return render(request, 'TipoInterviniente/index.html', {"eliminado":eliminado, "tipo_intervinientes":all})
+    def create(request):
+        form = SectorForm(request.POST)
+        if form.is_valid():
+            form.save()
+            all = Sector.objects.filter(bool_Sc_eliminado=False)
+            args = {
+                "sectores":all
+                }
+            return render(request, 'Sector/index.html', args )
+        else:
+            args = {
+                'form': form
+                }
+            return render (request, 'Sector/new.html', args )
 
-def index_sector(request):
-    all = Sector.objects.filter(bool_Sc_eliminado=False)
-    return render(request, 'Sector/index.html', {"sectores":all})
+    def edit(request,id):
+        sector = Sector.objects.get(id_Sector=id)
+        arg = {"sector":sector}
+        return render(request, 'Sector/edit.html', arg)
 
-def show_sector(request,id):
-    sector = Sector.objects.get(id_Sector=id)
-    return render(request, 'Sector/show.html', {"sector":sector})
+    def update(request,id):
+        sector = Sector.objects.get(id_Sector=id)
+        form = SectorForm(request.POST, instance=sector)
+        if form.is_valid():
+            form.save()
+            aviso = "Se han actualizado los datos"
+            args = {
+                "aviso":aviso,
+                "form":form,
+                "sector":sector
+            }
+            return render(request, 'Sector/edit.html', args)
+        else:
+            sector = Sector.objects.get(id_Sector=id)
+            args = {
+                "form":form,
+                "sector":sector
+            }
+            return render(request, 'Sector/edit.html',args)
 
-def new_sector(request):
-    return render(request, 'Sector/new.html')
+    def delete(request,id):
+            sector = Sector.objects.get(id_Sector=id)
+            sector.bool_Sc_eliminado = True
+            sector.save()
+            eliminado = "El sector se ha eliminado"
+            all = Sector.objects.filter(bool_Sc_eliminado=False)
+            arg = {"eliminado":eliminado, "sectores":all}
 
-def create_sector(request):
-    nombre = request.POST['nombre']
-    descripcion = request.POST['descripcion']
-    sector = Sector(Str_Sc_Nombre = nombre, Str_Sc_Descripcion=descripcion)
-    sector.save()
-    aviso = "El sector se ha creado con éxito!"
+            return render(request, 'Sector/index.html', arg)
 
-    all = Sector.objects.filter(bool_Sc_eliminado=False)
-    return render(request, 'Sector/index.html', {"aviso":aviso, "sectores":all})
+class nagView(View):
 
-def edit_sector(request,id):
-    sector = Sector.objects.get(id_Sector=id)
-    return render(request, 'Sector/edit.html', {"sector":sector})
+    def index(request):
+        all = Nivel_Area_Geografica.objects.filter(bool_NG_Eliminado=False)
+        arg = {"nags":all}
+        return render(request, 'Nag/index.html', arg)
 
-def update_sector(request,id):
-    sector = Sector.objects.get(id_Sector=id)
-    sector.Str_Sc_Nombre = request.POST['nombre']
-    sector.Str_Sc_Descripcion = request.POST['descripcion']
-    sector.save()
-    aviso = "Los datos se han actualizado con éxito"
+    def show(request,id):
+        nag = Nivel_Area_Geografica.objects.get(id_Nivel_Area=id)
+        arg = {"nag":nag}
+        return render(request, 'Nag/show.html', arg)
 
-    return render(request, 'Sector/edit.html', {"aviso":aviso, "sector":sector})
+    def new(request):
+        return render(request, 'Nag/new.html')
 
-def delete_sector(request,id):
-    sector = Sector.objects.get(id_Sector=id)
-    sector.bool_eliminado = True
-    sector.save()
-    eliminado = "El sector se ha eliminado"
-    all = Sector.objects.filter(bool_Sc_eliminado=False)
+    def create(request):
+        form = NAGForm(request.POST)
+        if form.is_valid():
+            form.save()
+            all = Nivel_Area_Geografica.objects.filter(bool_NG_Eliminado=False)
+            args = {
+                "nags":all
+                }
+            return render(request, 'Nag/index.html', args )
+        else:
+            args = {
+                'form': form
+                }
+            return render (request, 'Nag/new.html', args )
 
-    return render(request, 'Sector/index.html', {"eliminado":eliminado, "sectores":all})
+    def edit(request,id):
+        nag = Nivel_Area_Geografica.objects.get(id_Nivel_Area=id)
+        arg = {"nag":nag}
+        return render(request, 'Nag/edit.html', arg)
 
-def index_nag(request):
-    all = Nivel_Area_Geografica.objects.filter(bool_NG_Eliminado=False)
-    return render(request, 'Nag/index.html', {"nags":all})
+    def update(request,id):
+        nag = Nivel_Area_Geografica.objects.get(id_Nivel_Area=id)
+        form = NAGForm(request.POST, instance=nag)
+        if form.is_valid():
+            form.save()
+            aviso = "Se han actualizado los datos"
+            args = {
+                "aviso":aviso,
+                "form":form,
+                "nag":nag
+            }
+            return render(request, 'Nag/edit.html', args)
+        else:
+            nag = Nivel_Area_Geografica.objects.get(id_Nivel_Area=id)
+            args = {
+                "form":form,
+                "nag":nag
+            }
+            return render(request, 'Nag/edit.html',args).objects.get(id_Nivel_Area=id)
+        
+    def delete(request,id):
+        nag = Nivel_Area_Geografica.objects.get(id_Nivel_Area=id)
+        nag.bool_NG_Eliminado = True
+        nag.save()
+        eliminado = "El Nivel de Área geográfica se ha eliminado"
+        all = Nivel_Area_Geografica.objects.filter(bool_NG_Eliminado=False)
 
-def show_nag(request,id):
-    nag = Nivel_Area_Geografica.objects.get(id_Nivel_Area=id)
-    return render(request, 'Nag/show.html', {"nag":nag})
-
-def new_nag(request):
-    return render(request, 'Nag/new.html')
-
-def create_nag(request):
-    nivel = request.POST.get('nivel_area')
-    nombre = request.POST['nombre']
-    descripcion = request.POST['descripcion']
-    nag = Nivel_Area_Geografica(Num_NG_Nivel=nivel,Str_NG_Nombre = nombre, Str_NG_Descripcion=descripcion)
-    nag.save()
-    aviso = "El Nivel de Área geográfica se ha creado con éxito!"
-
-    all = Nivel_Area_Geografica.objects.filter(bool_NG_Eliminado=False)
-    return render(request, 'Nag/index.html', {"aviso":aviso, "nags":all})
-
-def edit_nag(request,id):
-    nag = Nivel_Area_Geografica.objects.get(id_Nivel_Area=id)
-    return render(request, 'Nag/edit.html', {"nag":nag})
-
-def update_nag(request,id):
-    nag = Nivel_Area_Geografica.objects.get(id_Nivel_Area=id)
-    nag.Str_NG_Nombre = request.POST['nombre']
-    nag.Str_NG_Descripcion = request.POST['descripcion']
-    nag.Num_NG_Nivel = request.POST.get('nivel_area')
-    nag.save()
-    aviso = "Los datos se han actualizado con éxito"
-
-    return render(request, 'Nag/edit.html', {"aviso":aviso, "nag":nag})
-
-def delete_nag(request,id):
-    nag = Nivel_Area_Geografica.objects.get(id_Nivel_Area=id)
-    nag.bool_NG_Eliminado = True
-    nag.save()
-    eliminado = "El Nivel de Área geográfica se ha eliminado"
-    all = Nivel_Area_Geografica.objects.filter(bool_NG_Eliminado=False)
-
-    return render(request, 'Nag/index.html', {"eliminado":eliminado, "nags":all})
+        return render(request, 'Nag/index.html', {"eliminado":eliminado, "nags":all})

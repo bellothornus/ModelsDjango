@@ -1,27 +1,31 @@
-<html>
-    <head>
+{% extends '../base.html' %}
+    {% block head%}
         <title>Indice de Nivel Área Geográfica</title>
-    </head>
-    <body>
-        {% if aviso %}
-            <h2 style="color:green;">{{aviso}}</h2>
-        {% endif %}
-        {% if eliminado %}
-            <h2 style="color:red;">{{eliminado}}</h2>
-        {% endif %}
-        <a href="/new/nag">Crear un nuevo Nivel de Área geográfica</a>
-        {% if nags %}
-            {% for nag in nags %}
-                <h2>ID: {{nag.id_Nivel_Area}}</h2>
-                <h2>Nombre:</h2>
-                <p>{{nag.Str_NG_Nombre}}</p>
-                <a href="/show/nag/{{nag.id_Nivel_Area}}">para ver los Nivel Área Geográfica</a>
-            {% endfor %}
-        {% else %}
-            <h2>No se ha encontrado ningún Nivel de Área geográfica creado</h2>
-        {% endif %}
-        <br>
-        <br>
+    {% endblock %}
+        {%block thead%}
+            <th> ID: </th>
+            <th> Nivel:</th>
+            <th> Nombre:</th>
+            <th> Descripcion:</th>
+            <th> Editar:</th>
+            <th> Ver:</th>
+            <th> Eliminar:</th>
+        {% endblock %}
+        {% block tbody %}
+            {% if nags %}
+                {% for nag in nags %}
+                    <tr>
+                        <td>{{nag.id_Nivel_Area}}</td>
+                        <td>{{nag.Num_NG_Nivel}}</td>
+                        <td>{{nag.Str_NG_Nombre}}</td>
+                        <td>{{nag.Str_NG_Descripcion}}</td>
+                        <td><a class="btn btn-xs far fa-eye" href="/show/nag/{{nag.id_Nivel_Area}}"></a></td>
+                        <td><a class="btn btn-primary btn-xs fas fa-pen" href="/edit/nag/{{nag.id_Nivel_Area}}"></a></td>
+                        <td><a class="btn btn-danger btn-xs  fas fa-trash-alt  fas fa-trash-alt" href="/delete/nag/{{nag.id_Nivel_Area}}"></a></td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <h2>No se han encontrado ningún NAG creado</h2>
+            {% endif %}
+        {% endblock %}
         <a href="/">Volver atrás</a>
-    </body>
-</html>

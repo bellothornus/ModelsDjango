@@ -1,27 +1,28 @@
-<html>
-    <head>
-        <title>Indice de Sectores</title>
-    </head>
-    <body>
-        {% if aviso %}
-            <h2 style="color:green;">{{aviso}}</h2>
-        {% endif %}
-        {% if eliminado %}
-            <h2 style="color:red;">{{eliminado}}</h2>
-        {% endif %}
-        <a href="/new/sector">Crear un nuevo sector</a>
-        {% if sectores %}
-            {% for sector in sectores %}
-                <h2>ID: {{sector.id_Sector}}</h2>
-                <h2>Nombre:</h2>
-                <p>{{sector.Str_Sc_Nombre}}</p>
-                <a href="/show/sector/{{sector.id_Sector}}">para ver los Tipos Intervinientes</a>
-            {% endfor %}
-        {% else %}
-            <h2>No se ha encontrado ningún Sector creado</h2>
-        {% endif %}
-        <br>
-        <br>
+{% extends '../base.html' %}
+    {% block head%}
+        <title>Indice de Sector</title>
+    {% endblock %}
+        {%block thead%}
+            <th> ID: </th>
+            <th> Nombre:</th>
+            <th> Descripcion:</th>
+            <th> Editar:</th>
+            <th> Eliminar:</th>
+        {% endblock %}
+        {% block tbody %}
+            {% if sectores %}
+                {% for sector in sectores %}
+                    <tr>
+                        <td>{{sector.id_Sector}}</td>
+                        <td>{{sector.Str_Sc_Nombre}}</td>
+                        <td>{{sector.Str_Sc_Descripcion}}</td>
+                        <td><a class="btn btn-xs far fa-eye" href="/show/sector/{{sector.id_Sector}}"></a></td>
+                        <td><a class="btn btn-primary btn-xs fas fa-pen" href="/edit/sector/{{sector.id_Sector}}"></a></td>
+                        <td><a class="btn btn-danger btn-xs  fas fa-trash-alt  fas fa-trash-alt" href="/delete/sector/{{sector.id_Sector}}"></a></td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <h2>No se han encontrado ningún Sector creado</h2>
+            {% endif %}
+        {% endblock %}
         <a href="/">Volver atrás</a>
-    </body>
-</html>

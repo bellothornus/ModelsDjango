@@ -1,12 +1,13 @@
-<html>
-    <head>
+{% extends '../base.html' %}
+    {% block head%}
         <title>edit nag</title>
-    </head>
-    <body>
+        <h1>Edita Nivel Area Geografica</h1>
+    {% endblock %}
+    {% block content %}
         <form action="/update/nag/{{nag.id_Nivel_Area}}" method="POST"> {% csrf_token %}
-        <input type="text" name="nombre" value="{{nag.Str_NG_Nombre}}">
-        <input type="text" name="descripcion" value="{{nag.Str_NG_Descripcion}}">
-        <select name="nivel_area"> 
+        <input type="text" name="Str_NG_Nombre" value="{{nag.Str_NG_Nombre}}">
+        <input type="text" name="Str_NG_Descripcion" value="{{nag.Str_NG_Descripcion}}">
+        <select name="Num_NG_Nivel"> 
             <option  value="1">1</option>
             <option  value="2">2</option>
             <option  value="3">3</option>
@@ -20,6 +21,7 @@
         </select>
         <input type="submit" value="Enviar">
         </form>
+        {% endblock %}
         {% if form.errors %}
             {% for error_field, error_message in form.errors.items %}
             <div class="alert alert-danger " role="alert">

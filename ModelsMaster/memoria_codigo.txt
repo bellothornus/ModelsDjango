@@ -25,5 +25,4 @@
     </tbody>
 </table>
 
-.get('str_ag_nombre')
-.get('str_ag_descripcion')
+

@@ -80,7 +80,16 @@ urlpatterns = [
     path('index/modelo', views.ModeloView.index),
     path('show/modelo/<int:id>', views.ModeloView.show),
     path('new/modelo', views.ModeloView.new),
-    path('create/modelo', views.ModeloView.create)
+    path('create/modelo', views.ModeloView.create),
+
+    path('index/benchmarking', views.BenchmarkingView.index),
+    path('show/benchmarking/<int:id>', views.BenchmarkingView.show),
+    path('new/benchmarking', views.BenchmarkingView.new),
+    path('create/benchmarking', views.BenchmarkingView.create),
+    path('edit/benchmarking/<int:id>', views.BenchmarkingView.edit),
+    path('update/benchmarking/<int:id>', views.BenchmarkingView.update),
+    path('delete/benchmarking/<int:id>', views.BenchmarkingView.delete),
+
 ]
 
 urlpatterns += staticfiles_urlpatterns()

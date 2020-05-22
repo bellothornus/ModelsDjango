@@ -590,14 +590,23 @@ class AreaGeograficaView(View):
 
     def delete(request,id):
         ag = AreaGeografica.objects.get(id_ag=id)
-        ag.bool_ag_eliminado = True
-        ag.save()
-        eliminado = "El Área geográfica se ha eliminado"
-        all = AreaGeografica.objects.filter(bool_ag_eliminado=False)
-        args = {
-            "eliminado":eliminado,
-            "ags":all
-        }
+        ag_child=AreaGeografica.objects.filter(id_ag_parent=ag.id_ag, bool_ag_eliminado=False)
+        if ag_child:
+            all = AreaGeografica.objects.filter(bool_ag_eliminado=False)
+            args = {
+              "eliminado":"No puedes borrar Areas que sean padres de otras, elimina a sus hijas y despues borrala",
+              "ags":all
+            }
+            #return render(request, 'AreaGeografica/index.html', args)
+        else:
+            ag.bool_ag_eliminado = True
+            ag.save()
+            eliminado = "El Área geográfica se ha eliminado"
+            all = AreaGeografica.objects.filter(bool_ag_eliminado=False)
+            args = {
+                "eliminado":eliminado,
+                "ags":all
+            }
         return render(request, 'AreaGeografica/index.html', args)
 
 class EmpresaView(View):
@@ -730,7 +739,7 @@ class ModeloView(View):
                 "modelo_emps":modelo_emps,
             }
             return render(request, 'Modelo/new.html', args)
-            
+
 class BenchmarkingView(View):
     def index(request):
         all = Benchmarking.objects.filter(bool_bench_eliminado=False)

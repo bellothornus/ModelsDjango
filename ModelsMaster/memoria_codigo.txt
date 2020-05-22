@@ -17,10 +17,13 @@
 <br>
 
 <table id="myTable" class="display">
-            <thead>
-                <tr>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
+    <thead>
+        <tr>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+.get('str_ag_nombre')
+.get('str_ag_descripcion')

@@ -60,6 +60,27 @@ urlpatterns = [
     path('edit/nag/<int:id>', views.NivelAreaGeograficaView.edit),
     path('update/nag/<int:id>', views.NivelAreaGeograficaView.update),
     path('delete/nag/<int:id>', views.NivelAreaGeograficaView.delete),
+
+    path('index/area_geografica', views.AreaGeograficaView.index),
+    path('show/area_geografica/<int:id>', views.AreaGeograficaView.show),
+    path('new/area_geografica', views.AreaGeograficaView.new),
+    path('create/area_geografica', views.AreaGeograficaView.create),
+    path('edit/area_geografica/<int:id>', views.AreaGeograficaView.edit),
+    path('update/area_geografica/<int:id>', views.AreaGeograficaView.update),
+    path('delete/area_geografica/<int:id>', views.AreaGeograficaView.delete),
+
+    path('index/empresa', views.EmpresaView.index),
+    path('show/empresa/<int:id>', views.EmpresaView.show),
+    path('new/empresa', views.EmpresaView.new),
+    path('create/empresa', views.EmpresaView.create),
+    path('edit/empresa/<int:id>', views.EmpresaView.edit),
+    path('update/empresa/<int:id>', views.EmpresaView.update),
+    path('delete/empresa/<int:id>', views.EmpresaView.delete),
+
+    path('index/modelo', views.ModeloView.index),
+    path('show/modelo/<int:id>', views.ModeloView.show),
+    path('new/modelo', views.ModeloView.new),
+    path('create/modelo', views.ModeloView.create)
 ]
 
 urlpatterns += staticfiles_urlpatterns()

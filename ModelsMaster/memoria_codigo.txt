@@ -15,3 +15,12 @@
 {% endif %}
 <a href="/new/ambito">Crear un nuevo ambito</a>
 <br>
+
+<table id="myTable" class="display">
+            <thead>
+                <tr>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>

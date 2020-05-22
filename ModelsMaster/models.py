@@ -1,6 +1,6 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
-
+from django.core.exceptions import ValidationError
 # Create your models here.
 class Ambito(models.Model):
     id_am=models.AutoField(primary_key=True, db_column="id_Ambito")
@@ -62,3 +62,37 @@ class NivelAreaGeografica(models.Model):
 
     class Meta:
         db_table = "nivel_areas_geograficas"
+
+class AreaGeografica(models.Model):
+    #id_ag es el id del Area geográfica en sí, cada uno tiene el suyo ,es su identificador único
+    id_ag=models.AutoField(primary_key=True, db_column="id_AreaGeografica") 
+    #id_ag_nag es el id del Nivel de Area Geografica que te indica esa Area geografica en que nivel está
+    id_ag_nag=models.ForeignKey(to=NivelAreaGeografica, db_column="id_NivelArea", null=False, blank=False, on_delete=models.CASCADE)
+    #id_ag_parent es el id que indica si esta area depende de otra, por ejemplo Palma de mallorca pertenece a Baleares, no? pues pones aquí el ID único de Baleares
+    id_ag_parent=models.ForeignKey(to='self', on_delete=models.CASCADE, db_column="id_AreaSuperior", null=True, blank=True)
+    #el nombre del registro
+    str_ag_nombre=models.CharField(max_length=256, db_column="Nombre", null=False,blank=False)
+    #la descripcion del registro
+    str_ag_descripcion=models.CharField(max_length=256, db_column="Descripcion", null=True, blank=True)
+    #columna que sirve para indicar si se ha eliminado o no
+    bool_ag_eliminado=models.BooleanField(default=False, db_column="eliminado")
+    #prueba fallida de validacion
+    """ def clean(self):
+        if self.id_ag_parent < self.end_date:
+            raise ValidationError('El Area geografica padre no puede ser inferior a esta.') 
+        if self.id_ag_parent == "0":
+            self.id_ag_parent = None """
+        
+    class Meta:
+        db_table = "areas_geograficas"
+    
+class Empresa(models.Model):
+    id_emp=models.AutoField(primary_key=True, db_column="id_Empresa")
+    id_emp_sector=models.ForeignKey(to=Sector,on_delete=models.CASCADE, null=False, blank=False, db_column="id_Sector")
+    id_emp_centro_principal=models.ForeignKey(to=AreaGeografica, on_delete=models.CASCADE, db_column="id_CentroPrincipal", null=False, blank=True)
+    str_emp_nombre=models.CharField(max_length=256, db_column="Nombre")
+    str_emp_descripcion=models.CharField(max_length=256,db_column="Descripcion", null=True, blank=True)
+
+    class Meta:
+        db_table = "empresas"
+

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from .forms import AmbitoForm, TipoObjetivoForm, EstructuraForm, RiesgoForm, TipoIntervinienteForm, SectorForm, NivelAreaGeograficaForm
-from .models import Ambito,TipoObjetivo,Estructura,Riesgo,TipoInterviniente,Sector,NivelAreaGeografica
+from .forms import AmbitoForm, TipoObjetivoForm, EstructuraForm, RiesgoForm, TipoIntervinienteForm, SectorForm, NivelAreaGeograficaForm, AreaGeograficaForm, EmpresaForm
+from .models import Ambito, TipoObjetivo, Estructura, Riesgo, TipoInterviniente,Sector, NivelAreaGeografica, AreaGeografica, Empresa
 # Create your views here.
 def index(request):
     return render(request, 'index.html')
@@ -508,3 +508,93 @@ class NivelAreaGeograficaView(View):
             "nags":all
         }
         return render(request, 'Nag/index.html', args)
+
+class AreaGeograficaView(View):
+    def index(request):
+        all = AreaGeografica.objects.filter(bool_ag_eliminado=False)
+        args = {
+            "ags":all
+        }
+        return render(request, 'AreaGeografica/index.html', args)
+
+    def show(request,id):
+        ag = AreaGeografica.objects.get(id_ag=id)
+        try:
+            ag_parent = AreaGeografica.objects.get(id_ag=ag.id_ag_parent.id_ag)
+        except AttributeError:
+            ag_parent = "nope"
+        args = {
+            "ag":ag,
+            "ag_parent":ag_parent
+        }
+        return render(request, 'AreaGeografica/show.html', args)
+
+    def new(request):
+        nags = NivelAreaGeografica.objects.filter(bool_nag_eliminado=False)
+        ags = AreaGeografica.objects.filter(bool_ag_eliminado=False)
+        args ={
+            "nags":nags,
+            "ags":ags
+        }
+        return render(request, 'AreaGeografica/new.html', args)
+
+    def create(request):
+        ModelForm_form = AreaGeograficaForm(request.POST)
+        if ModelForm_form.is_valid():
+            ModelForm_form.save()
+            aviso = "El Área geográfica se ha creado con éxito!"
+            all = AreaGeografica.objects.filter(bool_ag_eliminado=False)
+            args = {
+                "aviso":aviso,
+                "ags":all
+            }
+            return render(request, 'AreaGeografica/index.html', args)
+        else:
+            nags = NivelAreaGeografica.objects.filter(bool_nag_eliminado=False)
+            ags = AreaGeografica.objects.filter(bool_ag_eliminado=False)
+            args = {
+                "form":ModelForm_form,
+                "nags":nags,
+                "ags":ags
+            }
+            return render(request, 'AreaGeografica/new.html', args)
+
+    def edit(request,id):
+        nags = NivelAreaGeografica.objects.filter(bool_nag_eliminado=False)
+        ag = AreaGeografica.objects.get(id_ag=id)
+        ags = AreaGeografica.objects.filter(bool_ag_eliminado=False)
+        args = {
+            "ag":ag,
+            "nags":nags,
+            "ags":ags
+        }
+        return render(request, 'AreaGeografica/edit.html', args)
+
+    def update(request,id):
+        ag = AreaGeografica.objects.get(id_ag=id)
+        ModelForm_form = AreaGeograficaForm(request.POST, instance=ag)
+        if ModelForm_form.is_valid():
+            ModelForm_form.save()
+            aviso = "Los datos se han actualizado con éxito"
+            args = {
+                "aviso":aviso,
+                "ag":ag
+            }
+        else:
+            args = {
+                "form":ModelForm_form,
+                "ag":ag
+            }
+        return render(request, 'AreaGeografica/edit.html', args)
+
+    def delete(request,id):
+        ag = AreaGeografica.objects.get(id_ag=id)
+        ag.bool_ag_eliminado = True
+        ag.save()
+        eliminado = "El Área geográfica se ha eliminado"
+        all = AreaGeografica.objects.filter(bool_ag_eliminado=False)
+        args = {
+            "eliminado":eliminado,
+            "ags":all
+        }
+        return render(request, 'AreaGeografica/index.html', args)

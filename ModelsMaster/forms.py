@@ -1,6 +1,6 @@
 from django.db import models
 from django.forms import ModelForm
-from .models import Ambito, TipoObjetivo, Estructura, Riesgo, TipoInterviniente, Sector, NivelAreaGeografica
+from .models import Ambito, TipoObjetivo, Estructura, Riesgo, TipoInterviniente, Sector, NivelAreaGeografica, AreaGeografica, Empresa
 
 class AmbitoForm(ModelForm):
     class Meta:
@@ -36,3 +36,13 @@ class NivelAreaGeograficaForm(ModelForm):
     class Meta:
         model = NivelAreaGeografica
         fields = ['num_nag_nivel', 'str_nag_nombre', 'str_nag_descripcion']
+
+class AreaGeograficaForm(ModelForm):
+    class Meta:
+        model = AreaGeografica
+        fields = ['id_ag_nag','id_ag_parent','str_ag_nombre','str_ag_descripcion']
+
+class EmpresaForm(ModelForm):
+    class Meta:
+        model = Empresa
+        fields = ['id_emp_sector','id_emp_centro_principal','str_emp_nombre', 'str_emp_descripcion'] 

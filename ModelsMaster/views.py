@@ -598,3 +598,92 @@ class AreaGeograficaView(View):
             "ags":all
         }
         return render(request, 'AreaGeografica/index.html', args)
+
+class EmpresaView(View):
+    def index(request):
+        all = Empresa.objects.filter(bool_emp_eliminado=False)
+        args = {
+            "emps":all
+        }
+        return render(request, 'Empresa/index.html', args)
+    
+    def show(request,id):
+        emp = Empresa.objects.get(id_emp=id)
+        emp_ag = AreaGeografica.objects.get(id_ag=emp.id_emp_ag.id_ag)
+        emp_sc = Sector.objects.get(id_sc=emp.id_emp_sc.id_sc)
+        args = {
+            "emp":emp,
+            "emp_ag":emp_ag,
+            "emp_sc":emp_sc
+        }
+        return render(request, 'Empresa/show.html', args)
+
+    def new(request):
+        emp_scs = Sector.objects.filter(bool_sc_eliminado=False)
+        emp_ags = AreaGeografica.objects.filter(bool_ag_eliminado=False)
+        args = {
+            "emp_scs":emp_scs,
+            "emp_ags":emp_ags
+        }
+        return render(request, 'Empresa/new.html', args)
+    
+    def create(request):
+        ModelForm_form = EmpresaForm(request.POST)
+        if ModelForm_form.is_valid():
+            ModelForm_form.save()
+            aviso = "La empresa se ha creado con éxito!"
+            all = Empresa.objects.filter(bool_emp_eliminado=False)
+            args = {
+                "aviso":aviso,
+                "emps":all
+            }
+            return render(request, 'Empresa/index.html', args)
+        else:
+            emp_scs = Sector.objects.filter(bool_sc_eliminado=False)
+            emp_ags = AreaGeografica.objects.filter(bool_ag_eliminado=False)
+            args = {
+                "form":ModelForm_form,
+                "emp_scs":emp_scs,
+                "emp_ags":emp_ags
+            }
+            return render(request, 'Empresa/new.html', args)
+    def edit(request,id):
+        emp_scs = Sector.objects.filter(bool_sc_eliminado=False)
+        emp = Empresa.objects.get(id_emp=id)
+        emp_ags = AreaGeografica.objects.filter(bool_ag_eliminado=False)
+        args = {
+            "emp":emp,
+            "emp_ags":emp_ags,
+            "emp_scs":emp_scs
+        }
+        return render(request, 'Empresa/edit.html', args)
+    
+    def update(request,id):
+        emp = Empresa.objects.get(id_ag=id)
+        ModelForm_form = EmpresaForm(request.POST, instance=emp)
+        if ModelForm_form.is_valid():
+            ModelForm_form.save()
+            aviso = "Los datos se han actualizado con éxito"
+            args = {
+                "aviso":aviso,
+                "emp":emp
+            }
+        else:
+            args = {
+                "form":ModelForm_form,
+                "emp":emp
+            }
+        return render(request, 'Empresa/edit.html', args)
+
+    def delete(request,id):
+        emp = Empresa.objects.get(id_emp=id)
+        emp.bool_emp_eliminado = True
+        emp.save()
+        eliminado = "la empresa se ha eliminado"
+        all = Empresa.objects.filter(bool_emp_eliminado=False)
+        args = {
+            "eliminado":eliminado,
+            "emps":all
+        }
+        return render(request, 'Empresa/index.html', args)
+    

@@ -45,4 +45,4 @@ class AreaGeograficaForm(ModelForm):
 class EmpresaForm(ModelForm):
     class Meta:
         model = Empresa
-        fields = ['id_emp_sector','id_emp_centro_principal','str_emp_nombre', 'str_emp_descripcion'] 
+        fields = ['id_emp_sc','id_emp_ag','str_emp_nombre', 'str_emp_descripcion'] 

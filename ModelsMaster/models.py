@@ -88,11 +88,12 @@ class AreaGeografica(models.Model):
     
 class Empresa(models.Model):
     id_emp=models.AutoField(primary_key=True, db_column="id_Empresa")
-    id_emp_sector=models.ForeignKey(to=Sector,on_delete=models.CASCADE, null=False, blank=False, db_column="id_Sector")
-    id_emp_centro_principal=models.ForeignKey(to=AreaGeografica, on_delete=models.CASCADE, db_column="id_CentroPrincipal", null=False, blank=True)
+    id_emp_sc=models.ForeignKey(to=Sector,on_delete=models.CASCADE, null=False, blank=False, db_column="id_Sector")
+    id_emp_ag=models.ForeignKey(to=AreaGeografica, on_delete=models.CASCADE, db_column="id_CentroPrincipal", null=False, blank=True)
     str_emp_nombre=models.CharField(max_length=256, db_column="Nombre")
     str_emp_descripcion=models.CharField(max_length=256,db_column="Descripcion", null=True, blank=True)
-
+    bool_emp_eliminado=models.BooleanField(default=False)
+    
     class Meta:
         db_table = "empresas"
 

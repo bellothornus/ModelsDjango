@@ -75,6 +75,15 @@ urlpatterns = [
     path('edit/empresa/<int:id>', views.EmpresaView.edit),
     path('update/empresa/<int:id>', views.EmpresaView.update),
     path('delete/empresa/<int:id>', views.EmpresaView.delete),
+
+    path('index/benchmarking', views.BenchmarkingView.index),
+    path('show/benchmarking/<int:id>', views.BenchmarkingView.show),
+    path('new/benchmarking', views.BenchmarkingView.new),
+    path('create/benchmarking', views.BenchmarkingView.create),
+    path('edit/benchmarking/<int:id>', views.BenchmarkingView.edit),
+    path('update/benchmarking/<int:id>', views.BenchmarkingView.update),
+    path('delete/benchmarking/<int:id>', views.BenchmarkingView.delete),
+
 ]
 
 urlpatterns += staticfiles_urlpatterns()

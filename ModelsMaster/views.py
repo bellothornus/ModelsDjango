@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from .forms import AmbitoForm, TipoObjetivoForm, EstructuraForm, RiesgoForm, TipoIntervinienteForm, SectorForm, NivelAreaGeograficaForm, AreaGeograficaForm, EmpresaForm
-from .models import Ambito, TipoObjetivo, Estructura, Riesgo, TipoInterviniente,Sector, NivelAreaGeografica, AreaGeografica, Empresa
+from .forms import AmbitoForm, TipoObjetivoForm, EstructuraForm, RiesgoForm, TipoIntervinienteForm, SectorForm, NivelAreaGeograficaForm, AreaGeograficaForm, EmpresaForm, BenchmarkingForm
+from .models import Ambito, TipoObjetivo, Estructura, Riesgo, TipoInterviniente,Sector, NivelAreaGeografica, AreaGeografica, Empresa, Benchmarking
 # Create your views here.
 def index(request):
     return render(request, 'index.html')
@@ -686,4 +686,92 @@ class EmpresaView(View):
             "emps":all
         }
         return render(request, 'Empresa/index.html', args)
+
+class BenchmarkingView(View):
+    def index(request):
+        all = Benchmarking.objects.filter(bool_bench_eliminado=False)
+        args = {
+            "benchs":all
+        }
+        return render(request, 'Benchmarking/index.html', args)
+    
+    def show(request,id):
+        bench = Benchmarking.objects.get(id_bench=id)
+        bench_ag = AreaGeografica.objects.get(id_ag=bench.id_bench_ag.id_ag)
+        bench_sc = Sector.objects.get(id_sc=bench.id_bench_sc.id_sc)
+        args = {
+            "bench":bench,
+            "bench_ag":bench_ag,
+            "bench_sc":bench_sc
+        }
+        return render(request, 'Benchmarking/show.html', args)
+
+    def new(request):
+        bench_scs = Sector.objects.filter(bool_sc_eliminado=False)
+        bench_ags = AreaGeografica.objects.filter(bool_ag_eliminado=False)
+        args = {
+            "bench_scs":bench_scs,
+            "bench_ags":bench_ags
+        }
+        return render(request, 'Benchmarking/new.html', args)
+    
+    def create(request):
+        ModelForm_form = BenchmarkingForm(request.POST)
+        if ModelForm_form.is_valid():
+            ModelForm_form.save()
+            aviso = "El Benchmarking se ha creado con éxito!"
+            all = Benchmarking.objects.filter(bool_bench_eliminado=False)
+            args = {
+                "aviso":aviso,
+                "benchs":all
+            }
+            return render(request, 'Benchmarking/index.html', args)
+        else:
+            bench_scs = Sector.objects.filter(bool_sc_eliminado=False)
+            bench_ags = AreaGeografica.objects.filter(bool_ag_eliminado=False)
+            args = {
+                "form":ModelForm_form,
+                "bench_scs":bench_scs,
+                "bench_ags":bench_ags
+            }
+            return render(request, 'Benchmarking/new.html', args)
+    def edit(request,id):
+        bench_scs = Sector.objects.filter(bool_sc_eliminado=False)
+        bench = Benchmarking.objects.get(id_bench=id)
+        bench_ags = AreaGeografica.objects.filter(bool_ag_eliminado=False)
+        args = {
+            "bench":bench,
+            "bench_ags":bench_ags,
+            "bench_scs":bench_scs
+        }
+        return render(request, 'Benchmarking/edit.html', args)
+    
+    def update(request,id):
+        bench = Benchmarking.objects.get(id_bench=id)
+        ModelForm_form = BenchmarkingForm(request.POST, instance=bench)
+        if ModelForm_form.is_valid():
+            ModelForm_form.save()
+            aviso = "Los datos se han actualizado con éxito"
+            args = {
+                "aviso":aviso,
+                "bench":bench
+            }
+        else:
+            args = {
+                "form":ModelForm_form,
+                "bench":bench
+            }
+        return render(request, 'Benchmarking/edit.html', args)
+
+    def delete(request,id):
+        bench = Benchmarking.objects.get(id_bench=id)
+        bench.bool_bench_eliminado = True
+        bench.save()
+        eliminado = "El benchmarking se ha eliminado"
+        all = Benchmarking.objects.filter(bool_bench_eliminado=False)
+        args = {
+            "eliminado":eliminado,
+            "benchs":all
+        }
+        return render(request, 'Benchmarking/index.html', args)
     

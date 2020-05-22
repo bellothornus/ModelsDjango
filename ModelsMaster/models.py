@@ -67,9 +67,9 @@ class AreaGeografica(models.Model):
     #id_ag es el id del Area geográfica en sí, cada uno tiene el suyo ,es su identificador único
     id_ag=models.AutoField(primary_key=True, db_column="id_AreaGeografica") 
     #id_ag_nag es el id del Nivel de Area Geografica que te indica esa Area geografica en que nivel está
-    id_ag_nag=models.ForeignKey(to=NivelAreaGeografica, db_column="id_NivelArea", null=False, blank=False, on_delete=models.CASCADE)
+    id_ag_nag=models.ForeignKey(to=NivelAreaGeografica, db_column="id_NivelArea", null=False, blank=False, on_delete=models.PROTECT)
     #id_ag_parent es el id que indica si esta area depende de otra, por ejemplo Palma de mallorca pertenece a Baleares, no? pues pones aquí el ID único de Baleares
-    id_ag_parent=models.ForeignKey(to='self', on_delete=models.CASCADE, db_column="id_AreaSuperior", null=True, blank=True)
+    id_ag_parent=models.ForeignKey(to='self', on_delete=models.PROTECT, db_column="id_AreaSuperior", null=True, blank=True)
     #el nombre del registro
     str_ag_nombre=models.CharField(max_length=256, db_column="Nombre", null=False,blank=False)
     #la descripcion del registro
@@ -92,8 +92,23 @@ class Empresa(models.Model):
     id_emp_ag=models.ForeignKey(to=AreaGeografica, on_delete=models.CASCADE, db_column="id_CentroPrincipal", null=False, blank=True)
     str_emp_nombre=models.CharField(max_length=256, db_column="Nombre")
     str_emp_descripcion=models.CharField(max_length=256,db_column="Descripcion", null=True, blank=True)
-    bool_emp_eliminado=models.BooleanField(default=False)
-    
+    bool_emp_eliminado=models.BooleanField(default=False, db_column="eliminado")
+
     class Meta:
         db_table = "empresas"
+
+class Benchmarking(models.Model):
+    id_bench=models.AutoField(primary_key=True, db_column="id_Bench")
+    id_bench_sc=models.ForeignKey(to=Sector, null=True, blank=True, db_column="id_Sector", on_delete=models.PROTECT)
+    id_bench_ag=models.ForeignKey(to=AreaGeografica, null=False, blank=False, db_column="id_AreaGeografica", on_delete=models.PROTECT)
+    str_bench_nombre=models.CharField(max_length=256, null=True, blank=True, db_column="Nombre")
+    str_bench_descripcion=models.CharField(max_length=256, null=False, blank=False, db_column="Descripcion")
+    int_bench_valor=models.IntegerField(null=True, blank=True, db_column="Valor")
+    int_bench_año=models.IntegerField(null=True, blank=True, db_column="Año")
+    str_bench_ciclo=models.CharField(max_length=256,null=True, blank=True, db_column="Ciclo")
+    bool_bench_eliminado=models.BooleanField(default=False, db_column="eliminado")
+
+    class Meta:
+        db_table: "benchmarkings"
+
 

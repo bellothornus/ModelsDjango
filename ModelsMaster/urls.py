@@ -53,16 +53,6 @@ urlpatterns = [
     path('update/sector/<int:id>', views.SectorView.update),
     path('delete/sector/<int:id>', views.SectorView.delete),
 
-<<<<<<< HEAD
-    path('index/nag', views.nagView.index),
-    path('show/nag/<int:id>', views.nagView.show),
-    path('new/nag', views.nagView.new),
-    path('create/nag', views.nagView.create),
-    path('edit/nag/<int:id>', views.nagView.edit),
-    path('update/nag/<int:id>', views.nagView.update),
-    path('delete/nag/<int:id>', views.nagView.delete),
-]
-=======
     path('index/nag', views.NivelAreaGeograficaView.index),
     path('show/nag/<int:id>', views.NivelAreaGeograficaView.show),
     path('new/nag', views.NivelAreaGeograficaView.new),
@@ -72,5 +62,4 @@ urlpatterns = [
     path('delete/nag/<int:id>', views.NivelAreaGeograficaView.delete),
 ]
 
->>>>>>> 5b9b79a3da05343d2fa92af8e0a749b72643a84d
 urlpatterns += staticfiles_urlpatterns()

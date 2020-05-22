@@ -1,10 +1,14 @@
-<html>
-    <head>
-        <title>new Tipo Interviniente</title>
-    </head>
-    <body>
+{% extends '../base_form.html '%}
+    {% block head %}
+        <title>new Tipo interviniente</title>
+    {%endblock%}
+    {% block body %}
         <form action="/create/tipo_interviniente" method="POST"> {% csrf_token %}
+<<<<<<< HEAD
         <input type="text" name="Str_Nombre">
+=======
+        <input type="text" name="str_ti_nombre">
+>>>>>>> 5b9b79a3da05343d2fa92af8e0a749b72643a84d
         <input type="submit" value="Enviar">
         </form>
         {% if form.errors %}
@@ -17,5 +21,4 @@
             {% endfor %}
         {% endif %}
         <a href="/index/tipo_interviniente">Volver atrás</a>
-    </body>
-</html>
+    {%endblock%}

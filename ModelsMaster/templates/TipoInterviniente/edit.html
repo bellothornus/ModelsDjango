@@ -1,6 +1,7 @@
-<html>
-    <head>
+{% extends '../base_form.html' %}
+    {% block head%}
         <title>edit Tipo Interviniente</title>
+<<<<<<< HEAD
     </head>
     <body>
         <form action="/update/tipo_interviniente/{{tipo_interviniente.id_Tipo_Interviniente}}" method="POST"> {% csrf_token %}
@@ -22,3 +23,13 @@
         <a href="/show/tipo_interviniente/{{tipo_interviniente.id_Tipo_Interviniente}}">Volver atrás</a>
     </body>
 </html>
+=======
+    {% endblock %}
+    {% block body%}
+        <form action="/update/tipo_interviniente/{{tipo_interviniente.id_ti}}" method="POST"> {% csrf_token %}
+        <input type="text" name="str_ti_nombre" value="{{tipo_interviniente.str_ti_nombre}}">
+        <input type="submit" value="Enviar">
+        </form>
+        <a href="/show/tipo_interviniente/{{tipo_interviniente.id_ti}}">Volver atrás</a>
+    {% endblock %}
+>>>>>>> 5b9b79a3da05343d2fa92af8e0a749b72643a84d

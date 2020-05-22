@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends '../base.html' %}
     {% block head%}
         <title>Indice de Nivel Área Geográfica</title>
@@ -25,3 +26,39 @@
             {% endif %}
         {% endblock %}
         <a href="/">Volver atrás</a>
+=======
+{% extends '../base_index.html' %}
+    {% block head %}
+        <title>Indice de Tipo Interviniente</title>
+    {% endblock %}
+   
+    {% block thead %}
+    <th> ID: </th>
+    <th> Nombre:</th>
+    <th> Ver:</th>
+    <th> Editar:</th>
+    <th> Eliminar:</th>
+    {% endblock %}
+    {% block body %}
+    <a href="/new/tipo_interviniente">Crear nuevo Tipo Interviniente</a>
+    {% endblock %}
+    {% block tbody %}
+        {% if tipo_intervinientes %}
+            {% for tipo_interviniente in tipo_intervinientes %}
+            <tr>
+                <td>{{tipo_interviniente.id_ti}}</td>
+                <td>{{tipo_interviniente.str_ti_nombre}}</td>
+                <td><a class="btn btn-xs glyphicon glyphicon-eye-open" href="/show/tipo_interviniente/{{tipo_interviniente.id_ti}}"></a></td>
+                <td><a class="btn btn-primary btn-xs glyphicon glyphicon-pencil" href="/edit/tipo_interviniente/{{tipo_interviniente.id_ti}}"></a></td>
+                <td><a class="btn btn-danger btn-xs glyphicon glyphicon-trash" href="/delete/tipo_interviniente/{{tipo_interviniente.id_ti}}"></a></td>
+                
+                <!--<td><a href="/show/ambito/{{tipo_interviniente.id_ti}}">Ver</a></td>
+                <td><a href="/edit/ambito/{{tipo_interviniente.id_ti}}">Editar</a></td>
+                <td><a href="/delete/ambito/{{tipo_interviniente.id_ti}}">Eliminar</a></td>-->
+            </tr>
+            {% endfor %}
+        {% else %}
+            <h2>No se han encontrado ningún tipo Interviniente creado</h2>
+        {% endif %}
+    {% endblock %}
+>>>>>>> 5b9b79a3da05343d2fa92af8e0a749b72643a84d

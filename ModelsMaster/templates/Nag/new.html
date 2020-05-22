@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends '../base.html' %}
 
     {% block head %}
@@ -7,6 +8,17 @@
         <input type="text" name="Str_NG_Nombre">
         <input type="text" name="Str_NG_Descripcion">
         <select name="Num_NG_Nivel">
+=======
+{% extends '../base_form.html' %}
+    {% block head %}
+        <title>new Nivel Área geográfica</title>
+    {% endblock %}
+    {% block body %}
+        <form action="/create/nag" method="POST"> {% csrf_token %}
+        <input type="text" name="str_nag_nombre">
+        <input type="text" name="str_nag_descripcion">
+        <select name="num_nag_nivel">
+>>>>>>> 5b9b79a3da05343d2fa92af8e0a749b72643a84d
             <option  value="1">1</option>
             <option  value="2">2</option>
             <option  value="3">3</option>
@@ -20,6 +32,7 @@
         </select>
         <input type="submit" value="Enviar">
         </form>
+<<<<<<< HEAD
         {% if form.errors %}
             {% for error_field, error_message in form.errors.items %}
             <div class="alert alert-danger " role="alert">
@@ -32,3 +45,7 @@
         <a href="/index/tipo_interviniente">Volver atrás</a>
     </body>
 </html>
+=======
+        <a href="/index/nag">Volver atrás</a>
+    {% endblock %}
+>>>>>>> 5b9b79a3da05343d2fa92af8e0a749b72643a84d

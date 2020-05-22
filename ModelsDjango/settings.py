@@ -119,4 +119,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/ModelsMaster/assets/'
+<<<<<<< HEAD
 STATICFILES_DIRS = [os.path.join(BASE_DIR,'ModelsMaster/assets'),]
+=======
+STATICFILES_DIRS = [os.path.join(BASE_DIR,'ModelsMaster/assets'),]
+>>>>>>> 5b9b79a3da05343d2fa92af8e0a749b72643a84d

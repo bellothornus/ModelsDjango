@@ -1,12 +1,11 @@
-<html>
-    <head>
+{% extends '../base_form.html' %}
+    {% block head %}
         <title>new Estructura</title>
-    </head>
-    <body>
+    {% endblock %}
+    {% block body %}
         <form action="/create/estructura" method="POST"> {% csrf_token %}
-        <input type="text" name="nombre">
+        <input type="text" name="str_est_nombre">
         <input type="submit" value="Enviar">
         </form>
         <a href="/index/estructura">Volver atrás</a>
-    </body>
-</html>
+    {% endblock %}

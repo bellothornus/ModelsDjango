@@ -21,21 +21,21 @@ urlpatterns = [
     path('update/tipo_objetivo/<int:id>', views.TipoObjetivoView.update),
     path('delete/tipo_objetivo/<int:id>', views.TipoObjetivoView.delete),
 
-    path('index/estructura', views.index_estructura),
-    path('show/estructura/<int:id>', views.show_estructura),
-    path('new/estructura', views.new_estructura),
-    path('create/estructura', views.create_estructura),
-    path('edit/estructura/<int:id>', views.edit_estructura),
-    path('update/estructura/<int:id>', views.update_estructura),
-    path('delete/estructura/<int:id>', views.delete_estructura),
+    path('index/estructura', views.EstructuraView.index),
+    path('show/estructura/<int:id>', views.EstructuraView.show),
+    path('new/estructura', views.EstructuraView.new),
+    path('create/estructura', views.EstructuraView.create),
+    path('edit/estructura/<int:id>', views.EstructuraView.edit),
+    path('update/estructura/<int:id>', views.EstructuraView.update),
+    path('delete/estructura/<int:id>', views.EstructuraView.delete),
 
-    path('index/riesgo', views.index_riesgo), 
-    path('show/riesgo/<int:id>', views.show_riesgo),
-    path('new/riesgo', views.new_riesgo),
-    path('create/riesgo', views.create_riesgo),
-    path('edit/riesgo/<int:id>', views.edit_riesgo),
-    path('update/riesgo/<int:id>', views.update_riesgo),
-    path('delete/riesgo/<int:id>', views.delete_riesgo),
+    path('index/riesgo', views.RiesgoView.index), 
+    path('show/riesgo/<int:id>', views.RiesgoView.show),
+    path('new/riesgo', views.RiesgoView.new),
+    path('create/riesgo', views.RiesgoView.create),
+    path('edit/riesgo/<int:id>', views.RiesgoView.edit),
+    path('update/riesgo/<int:id>', views.RiesgoView.update),
+    path('delete/riesgo/<int:id>', views.RiesgoView.delete),
 
     path('index/tipo_interviniente', views.TipoIntervinienteView.index),
     path('show/tipo_interviniente/<int:id>', views.TipoIntervinienteView.show),
@@ -53,6 +53,7 @@ urlpatterns = [
     path('update/sector/<int:id>', views.SectorView.update),
     path('delete/sector/<int:id>', views.SectorView.delete),
 
+<<<<<<< HEAD
     path('index/nag', views.nagView.index),
     path('show/nag/<int:id>', views.nagView.show),
     path('new/nag', views.nagView.new),
@@ -61,4 +62,15 @@ urlpatterns = [
     path('update/nag/<int:id>', views.nagView.update),
     path('delete/nag/<int:id>', views.nagView.delete),
 ]
+=======
+    path('index/nag', views.NivelAreaGeograficaView.index),
+    path('show/nag/<int:id>', views.NivelAreaGeograficaView.show),
+    path('new/nag', views.NivelAreaGeograficaView.new),
+    path('create/nag', views.NivelAreaGeograficaView.create),
+    path('edit/nag/<int:id>', views.NivelAreaGeograficaView.edit),
+    path('update/nag/<int:id>', views.NivelAreaGeograficaView.update),
+    path('delete/nag/<int:id>', views.NivelAreaGeograficaView.delete),
+]
+
+>>>>>>> 5b9b79a3da05343d2fa92af8e0a749b72643a84d
 urlpatterns += staticfiles_urlpatterns()

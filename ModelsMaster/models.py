@@ -107,8 +107,8 @@ class Benchmarking(models.Model):
     int_bench_año=models.IntegerField(null=True, blank=True, db_column="Año")
     str_bench_ciclo=models.CharField(max_length=256,null=True, blank=True, db_column="Ciclo")
     bool_bench_eliminado=models.BooleanField(default=False, db_column="eliminado")
-
+    
     class Meta:
-        db_table: "benchmarkings"
+        db_table = "benchmarkings"
 
 

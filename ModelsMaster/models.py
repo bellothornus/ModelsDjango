@@ -121,4 +121,36 @@ class Benchmarking(models.Model):
     class Meta:
         db_table = "benchmarkings"
 
+class PuntosCapitulo(models.Model):
+    id_pc=models.AutoField(primary_key=True, db_column="id_Bench")
+    id_pc_md=models.ForeignKey(to=Modelo, null=True, blank=True, db_column="id_Modelo", on_delete=models.PROTECT)
+    id_pc_am=models.ForeignKey(to=Ambito, null=True, blank=True, db_column="id_Ambito", on_delete=models.PROTECT)
+    str_pc_nombre=models.CharField(max_length=256, null=True, blank=True, db_column="Nombre")
+    str_pc_descripcion=models.CharField(max_length=256, null=True, blank=True, db_column="Descripcion")
+    bool_pc_eliminado=models.BooleanField(default=False, db_column="eliminado")
 
+    class Meta:
+        db_table = "puntos_capitulo"
+
+class Objetivo(models.Model):
+    id_ob=models.AutoField(primary_key=True, db_column="id_ob")
+    id_ob_pc=models.ForeignKey(to=PuntosCapitulo, null=True, blank=True, db_column="id_Capitulo", on_delete=models.PROTECT)
+    id_ob_to=models.ForeignKey(to=TipoObjetivo, null=False, blank=False, db_column="id_Tipo_Objetivo", on_delete=models.PROTECT)
+    str_ob_nombre=models.CharField(max_length=256, null=True, blank=True, db_column="Nombre")
+    str_ob_descripcion=models.CharField(max_length=256, null=False, blank=False, db_column="Descripcion")
+    str_ob_codificacion=models.CharField(max_length=256,null=True, blank=True, db_column="Codificacion")
+    num_ob_any=models.IntegerField(null=True, blank=True, db_column="Año")
+    bool_ob_eliminado=models.BooleanField(default=False, db_column="eliminado")
+
+    class Meta:
+        db_table = "objetivos"
+
+class ObjetivoRelacionado(models.Model):
+    id_or=models.AutoField(primary_key=True, db_column="id_Objetivo_relacionado")
+    id_or_ob=models.ForeignKey(to=Objetivo, related_name="Id_Objetivo", null=True, blank=True, db_column="id_Objetivo", on_delete=models.PROTECT)
+    id_or_ob_asociado=models.ForeignKey(to=Objetivo, related_name="Id_Objetivo_Asociado", null=True, blank=True, db_column="id_Objetivo_Asociado", on_delete=models.PROTECT)
+    str_or_nombre=models.CharField(max_length=256, null=True, blank=True, db_column="Nombre")
+    bool_or_eliminado=models.BooleanField(default=False, db_column="eliminado")
+
+    class Meta:
+        db_table = "objetivo_relacionado"

@@ -81,6 +81,9 @@ urlpatterns = [
     path('show/modelo/<int:id>', views.ModeloView.show),
     path('new/modelo', views.ModeloView.new),
     path('create/modelo', views.ModeloView.create),
+    path('edit/modelo/<int:id>', views.ModeloView.edit),
+    path('update/modelo/<int:id>', views.ModeloView.update),
+    path('delete/modelo/<int:id>', views.ModeloView.delete),
 
     path('index/benchmarking', views.BenchmarkingView.index),
     path('show/benchmarking/<int:id>', views.BenchmarkingView.show),
@@ -90,6 +93,29 @@ urlpatterns = [
     path('update/benchmarking/<int:id>', views.BenchmarkingView.update),
     path('delete/benchmarking/<int:id>', views.BenchmarkingView.delete),
 
+    path('index/puntoscap', views.PuntosCapituloView.index),
+    path('show/puntoscap/<int:id>', views.PuntosCapituloView.show),
+    path('new/puntoscap', views.PuntosCapituloView.new),
+    path('create/puntoscap', views.PuntosCapituloView.create),
+    path('edit/puntoscap/<int:id>', views.PuntosCapituloView.edit),
+    path('update/puntoscap/<int:id>', views.PuntosCapituloView.update),
+    path('delete/puntoscap/<int:id>', views.PuntosCapituloView.delete),
+
+    path('index/objetivo', views.ObjetivoView.index),
+    path('show/objetivo/<int:id>', views.ObjetivoView.show),
+    path('new/objetivo', views.ObjetivoView.new),
+    path('create/objetivo', views.ObjetivoView.create),
+    path('edit/objetivo/<int:id>', views.ObjetivoView.edit),
+    path('update/objetivo/<int:id>', views.ObjetivoView.update),
+    path('delete/objetivo/<int:id>', views.ObjetivoView.delete),
+
+    path('index/objrel', views.ObjetivoRelacionadoView.index),
+    path('show/objrel/<int:id>', views.ObjetivoRelacionadoView.show),
+    path('new/objrel', views.ObjetivoRelacionadoView.new),
+    path('create/objrel', views.ObjetivoRelacionadoView.create),
+    path('edit/objrel/<int:id>', views.ObjetivoRelacionadoView.edit),
+    path('update/objrel/<int:id>', views.ObjetivoRelacionadoView.update),
+    path('delete/objrel/<int:id>', views.ObjetivoRelacionadoView.delete),
 ]
 
 urlpatterns += staticfiles_urlpatterns()

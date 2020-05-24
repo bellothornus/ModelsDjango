@@ -1,0 +1,30 @@
+{% extends '../base_index.html' %}
+    {% block head %}
+        <title>Indice de PuntosCapitulo</title>
+    {% endblock %}
+   
+    {% block thead %}
+    <th> ID: </th>
+    <th> Nombre:</th>
+    <th> Ver:</th>
+    <th> Editar:</th>
+    <th> Eliminar:</th>
+    {% endblock %}
+    {% block body %}
+    <a href="/new/puntoscap">Crear nuevo puntoscap</a>
+    {% endblock %}
+    {% block tbody %}
+        {% if pcs %}
+            {% for pc in pcs %}
+            <tr>
+                <td>{{pc.id_pc}}</td>
+                <td>{{pc.str_pc_nombre}}</td>
+                <td><a class="btn btn-xs far fa-eye" href="/show/puntoscap/{{pc.id_pc}}"></a></td>
+                <td><a class="btn btn-primary btn-xs fas fa-pen" href="/edit/puntoscap/{{pc.id_pc}}"></a></td>
+                <td><a class="btn btn-danger btn-xs  fas fa-trash-alt  fas fa-trash-alt" href="/delete/puntoscap/{{pc.id_pc}}"></a></td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <h2>No se ha encontrado ningún Puntocapitulo creado</h2>
+        {% endif %}
+    {% endblock %}

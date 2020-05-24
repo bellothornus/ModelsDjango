@@ -1,6 +1,6 @@
 from django.db import models
 from django.forms import ModelForm
-from .models import Ambito, TipoObjetivo, Estructura, Riesgo, TipoInterviniente, Sector, NivelAreaGeografica, AreaGeografica, Empresa, Modelo, Benchmarking
+from .models import Ambito, TipoObjetivo, Estructura, Riesgo, TipoInterviniente, Sector, NivelAreaGeografica, AreaGeografica, Empresa, Modelo, Benchmarking, PuntosCapitulo, Objetivo, ObjetivoRelacionado
 
 class AmbitoForm(ModelForm):
     class Meta:
@@ -56,3 +56,18 @@ class BenchmarkingForm(ModelForm):
     class Meta:
         model = Benchmarking
         fields = ['id_bench_sc','id_bench_ag','str_bench_nombre','str_bench_descripcion','str_bench_ciclo','int_bench_año','int_bench_valor']
+
+class PuntosCapituloForm(ModelForm):
+    class Meta:
+        model = PuntosCapitulo
+        fields = ['id_pc_md','id_pc_am','str_pc_nombre']
+
+class ObjetivoForm(ModelForm):
+    class Meta:
+        model = Objetivo
+        fields = ['id_ob_to','id_ob_pc','str_ob_nombre','str_ob_descripcion','str_ob_codificacion','num_ob_any']
+
+class ObjetivoRelacionadoForm(ModelForm):
+    class Meta:
+        model = ObjetivoRelacionado
+        fields = ['id_or_ob','id_or_ob_asociado','str_or_nombre']

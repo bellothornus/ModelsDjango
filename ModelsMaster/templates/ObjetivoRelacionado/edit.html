@@ -1,0 +1,29 @@
+{% extends '../base_form.html' %}
+    {% block head%}
+        <title>edit objetivo relacionado</title>
+    {% endblock %}
+    {% block body %}
+        <form action="/update/objrel/{{or1.id_or}}" method="POST"> {% csrf_token %}
+            <select name="id_or_ob">
+                {% for or1_ob in or1_obs %}
+                    {% if or1_ob.id_ob == or1.id_or_ob.id_ob %}
+                        <option selected value="{{or1_ob.id_ob}}">{{or1_ob.str_ob_nombre}}</option>
+                    {% else %}
+                        <option value="{{or1_ob.id_ob}}">{{or1_ob.str_ob_nombre}}</option>
+                    {%endif%}
+                {% endfor %}
+            </select>
+            <select name="id_or_oba">
+                {% for or1_oba in or1_obas %}
+                    {% if or1_oba.id_ob == or1.id_or_ob.id_ob %}
+                        <option selected value="{{or1_oba.id_ob}}">{{or1_oba.str_ob_nombre}}</option>
+                    {% else %}
+                        <option value="{{or1_oba.id_ob}}">{{or1_oba.str_ob_nombre}}</option>
+                    {%endif%}
+                {% endfor %}
+            </select>
+            <input type="text" name="str_or_nombre" value="{{or1.str_or_nombre}}">
+            <input type="submit" value="Enviar">
+        </form>
+        <a href="/show/objrel/{{or1.id_md}}">Volver atrás</a>
+    {% endblock%}

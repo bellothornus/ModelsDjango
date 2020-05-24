@@ -1,0 +1,30 @@
+{% extends '../base_index.html' %}
+    {% block head %}
+        <title>Indice de ObjetivoRelacionado</title>
+    {% endblock %}
+   
+    {% block thead %}
+    <th> ID: </th>
+    <th> Nombre:</th>
+    <th> Ver:</th>
+    <th> Editar:</th>
+    <th> Eliminar:</th>
+    {% endblock %}
+    {% block body %}
+    <a href="/new/objrel">Crear nuevo ObjetivoRelacionado</a>
+    {% endblock %}
+    {% block tbody %}
+        {% if or1s %}
+            {% for or1 in or1s %}
+            <tr>
+                <td>{{or1.id_or}}</td>
+                <td>{{or1.str_or_nombre}}</td>
+                <td><a class="btn btn-xs far fa-eye" href="/show/objrel/{{or1.id_or}}"></a></td>
+                <td><a class="btn btn-primary btn-xs fas fa-pen" href="/edit/objrel/{{or1.id_or}}"></a></td>
+                <td><a class="btn btn-danger btn-xs  fas fa-trash-alt  fas fa-trash-alt" href="/delete/objrel/{{or1.id_or}}"></a></td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <h2>No se ha encontrado ningún obejtivo ObjetivoRelacionado creado</h2>
+        {% endif %}
+    {% endblock %}

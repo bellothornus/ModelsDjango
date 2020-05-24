@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from .forms import AmbitoForm, TipoObjetivoForm, EstructuraForm, RiesgoForm, TipoIntervinienteForm, SectorForm, NivelAreaGeograficaForm, AreaGeograficaForm, EmpresaForm, ModeloForm, BenchmarkingForm
-from .models import Ambito, TipoObjetivo, Estructura, Riesgo, TipoInterviniente,Sector, NivelAreaGeografica, AreaGeografica, Empresa, Modelo, Benchmarking
+from .forms import AmbitoForm, TipoObjetivoForm, EstructuraForm, RiesgoForm, TipoIntervinienteForm, SectorForm, NivelAreaGeograficaForm, AreaGeograficaForm, EmpresaForm, ModeloForm, BenchmarkingForm, PuntosCapituloForm, ObjetivoForm, ObjetivoRelacionadoForm
+from .models import Ambito, TipoObjetivo, Estructura, Riesgo, TipoInterviniente,Sector, NivelAreaGeografica, AreaGeografica, Empresa, Modelo, Benchmarking, PuntosCapitulo, Objetivo, ObjetivoRelacionado
 
 # Create your views here.
 def index(request):
@@ -590,23 +590,14 @@ class AreaGeograficaView(View):
 
     def delete(request,id):
         ag = AreaGeografica.objects.get(id_ag=id)
-        ag_child=AreaGeografica.objects.filter(id_ag_parent=ag.id_ag, bool_ag_eliminado=False)
-        if ag_child:
-            all = AreaGeografica.objects.filter(bool_ag_eliminado=False)
-            args = {
-              "eliminado":"No puedes borrar Areas que sean padres de otras, elimina a sus hijas y despues borrala",
-              "ags":all
-            }
-            #return render(request, 'AreaGeografica/index.html', args)
-        else:
-            ag.bool_ag_eliminado = True
-            ag.save()
-            eliminado = "El Área geográfica se ha eliminado"
-            all = AreaGeografica.objects.filter(bool_ag_eliminado=False)
-            args = {
-                "eliminado":eliminado,
-                "ags":all
-            }
+        ag.bool_ag_eliminado = True
+        ag.save()
+        eliminado = "El Área geográfica se ha eliminado"
+        all = AreaGeografica.objects.filter(bool_ag_eliminado=False)
+        args = {
+            "eliminado":eliminado,
+            "ags":all
+        }
         return render(request, 'AreaGeografica/index.html', args)
 
 class EmpresaView(View):
@@ -707,7 +698,7 @@ class ModeloView(View):
     
     def show(request,id):
         modelo = Modelo.objects.get(id_md=id)
-        modelo_emp = Empresa.objects.get(id_emp=emp.id_emp_ag.id_ag)
+        modelo_emp = Empresa.objects.get(id_emp=modelo.id_md_emp.id_emp)
         args = {
             "modelo":modelo,
             "modelo_emp":modelo_emp,
@@ -740,6 +731,44 @@ class ModeloView(View):
             }
             return render(request, 'Modelo/new.html', args)
 
+    def edit(request,id):
+        modelo_emps = Empresa.objects.filter(bool_emp_eliminado=False)
+        modelo = Modelo.objects.get(id_md=id)
+        args = {
+            "modelo":modelo,
+            "modelo_emps":modelo_emps,
+        }
+        return render(request, 'Modelo/edit.html', args)
+    
+    def update(request,id):
+        modelo = Modelo.objects.get(id_md=id)
+        ModelForm_form = ModeloForm(request.POST, instance=modelo)
+        if ModelForm_form.is_valid():
+            ModelForm_form.save()
+            aviso = "Los datos se han actualizado con éxito"
+            args = {
+                "aviso":aviso,
+                "modelo":modelo
+            }
+        else:
+            args = {
+                "form":ModelForm_form,
+                "modelo":modelo
+            }
+        return render(request, 'Modelo/edit.html', args)
+
+    def delete(request,id):
+        modelo = Modelo.objects.get(id_md=id)
+        modelo.bool_md_eliminado = True
+        modelo.save()
+        eliminado = "El Modelo se ha eliminado"
+        all = Modelo.objects.filter(bool_md_eliminado=False)
+        args = {
+            "eliminado":eliminado,
+            "modelo":all
+        }
+        return render(request, 'Modelo/index.html', args)
+            
 class BenchmarkingView(View):
     def index(request):
         all = Benchmarking.objects.filter(bool_bench_eliminado=False)
@@ -827,4 +856,274 @@ class BenchmarkingView(View):
             "benchs":all
         }
         return render(request, 'Benchmarking/index.html', args)
+
+class PuntosCapituloView(View):
+
+    def index(request):
+       all=PuntosCapitulo.objects.filter(bool_pc_eliminado=False) 
+       args = {
+           "pcs":all
+       }
+       return render(request, 'PuntosCapitulo/index.html', args)
+
+    def show(request,id):
+        pc = PuntosCapitulo.objects.get(id_pc=id)
+        pc_modelo = Modelo.objects.get(id_md=pc.id_pc_md.id_md)
+        pc_ambito = Ambito.objects.get(id_am=pc.id_pc_am.id_am)
+        args = {
+            "pc":pc,
+            "pc_modelo":pc_modelo,
+            "pc_ambito":pc_ambito
+        }
+        return render(request, 'PuntosCapitulo/show.html', args)
+
+    def new(request):
+        pc_modelos = Modelo.objects.filter(bool_md_eliminado=False)
+        pc_ambitos = Ambito.objects.filter(bool_am_eliminado=False)
+        args = {
+            "pc_modelos":pc_modelos,
+            "pc_ambitos":pc_ambitos
+        }
+        return render(request, 'PuntosCapitulo/new.html', args)
     
+    def create(request):
+        ModelForm_form = PuntosCapituloForm(request.POST)
+        if ModelForm_form.is_valid():
+            ModelForm_form.save()
+            aviso = "El PuntoCapitulo se ha creado con éxito!"
+            all = PuntosCapitulo.objects.filter(bool_pc_eliminado=False)
+            args = {
+                "aviso":aviso,
+                "pcs":all
+            }
+            return render(request, 'PuntosCapitulo/index.html', args)
+        else:
+            pc_modelos = Modelo.objects.filter(bool_md_eliminado=False)
+            pc_ambitos = Ambito.objects.filter(bool_am_eliminado=False)
+            args = {
+                "form":ModelForm_form,
+                "pc_modelos":pc_modelos,
+                "pc_ambitos":pc_ambitos
+            }
+            return render(request, 'PuntosCapitulo/new.html', args)
+
+    def edit(request,id):
+        pc_modelos = Modelo.objects.filter(bool_md_eliminado=False)
+        pc = PuntosCapitulo.objects.get(id_pc=id)
+        pc_ambitos = Ambito.objects.filter(bool_am_eliminado=False)
+        args = {
+            "pc":pc,
+            "pc_modelos":pc_modelos,
+            "pc_ambitos":pc_ambitos
+        }
+        return render(request, 'PuntosCapitulo/edit.html', args)
+
+    def update(request,id):
+        pc = PuntosCapitulo.objects.get(id_pc=id)
+        ModelForm_form = PuntosCapituloForm(request.POST, instance=pc)
+        if ModelForm_form.is_valid():
+            ModelForm_form.save()
+            aviso = "Los datos se han actualizado con éxito"
+            args = {
+                "aviso":aviso,
+                "pc":pc
+            }
+        else:
+            args = {
+                "form":ModelForm_form,
+                "pc":pc
+            }
+        return render(request, 'PuntosCapitulo/edit.html', args)
+    
+    def delete(request,id):
+        pc = PuntosCapitulo.objects.get(id_pc=id)
+        pc.bool_pc_eliminado = True
+        pc.save()
+        eliminado = "El PuntoCapitulo se ha eliminado"
+        all = PuntosCapitulo.objects.filter(bool_pc_eliminado=False)
+        args = {
+            "eliminado":eliminado,
+            "pcs":all
+        }
+        return render(request, 'PuntosCapitulo/index.html', args)
+        
+class ObjetivoView(View):
+
+    def index(request):
+       all=Objetivo.objects.filter(bool_ob_eliminado=False) 
+       args = {
+           "objs":all
+       }
+       return render(request, 'Objetivo/index.html', args)
+
+    def show(request,id):
+        obj = Objetivo.objects.get(id_ob=id)
+        obj_pc = PuntosCapitulo.objects.get(id_pc=obj.id_ob_pc.id_pc)
+        obj_to = TipoObjetivo.objects.get(id_to=obj.id_ob_to.id_to)
+        args = {
+            "obj":obj,
+            "obj_pc":obj_pc,
+            "obj_to":obj_to
+        }
+        return render(request, 'Objetivo/show.html', args)
+
+    def new(request):
+        obj_pcs = PuntosCapitulo.objects.filter(bool_pc_eliminado=False)
+        obj_tos = TipoObjetivo.objects.filter(bool_to_eliminado=False)
+        args = {
+            "obj_pcs":obj_pcs,
+            "obj_tos":obj_tos
+        }
+        return render(request, 'Objetivo/new.html', args)
+    
+    def create(request):
+        ModelForm_form = ObjetivoForm(request.POST)
+        if ModelForm_form.is_valid():
+            ModelForm_form.save()
+            aviso = "El Objetivo se ha creado con éxito!"
+            all = Objetivo.objects.filter(bool_ob_eliminado=False)
+            args = {
+                "aviso":aviso,
+                "objs":all
+            }
+            return render(request, 'Objetivo/index.html', args)
+        else:
+            obj_pcs = PuntosCapitulo.objects.filter(bool_pc_eliminado=False)
+            obj_tos = TipoObjetivo.objects.filter(bool_to_eliminado=False)
+            args = {
+                "form":ModelForm_form,
+                "obj_pcs":obj_pcs,
+                "obj_tos":obj_tos
+            }
+            return render(request, 'Objetivo/new.html', args)
+
+    def edit(request,id):
+        obj_pcs = PuntosCapitulo.objects.filter(bool_pc_eliminado=False)
+        obj = Objetivo.objects.get(id_ob=id)
+        obj_tos = TipoObjetivo.objects.filter(bool_to_eliminado=False)
+        args = {
+            "obj":obj,
+            "obj_pcs":obj_pcs,
+            "obj_tos":obj_tos
+        }
+        return render(request, 'Objetivo/edit.html', args)
+
+    def update(request,id):
+        obj = Objetivo.objects.get(id_ob=id)
+        ModelForm_form = ObjetivoForm(request.POST, instance=obj)
+        if ModelForm_form.is_valid():
+            ModelForm_form.save()
+            aviso = "Los datos se han actualizado con éxito"
+            args = {
+                "aviso":aviso,
+                "obj":obj
+            }
+        else:
+            args = {
+                "form":ModelForm_form,
+                "obj":obj
+            }
+        return render(request, 'Objetivo/edit.html', args)
+    
+    def delete(request,id):
+        obj = Objetivo.objects.get(id_ob=id)
+        obj.bool_ob_eliminado = True
+        obj.save()
+        eliminado = "El Objetivo se ha eliminado"
+        all = Objetivo.objects.filter(bool_ob_eliminado=False)
+        args = {
+            "eliminado":eliminado,
+            "objs":all
+        }
+        return render(request, 'Objetivo/index.html', args)
+
+class ObjetivoRelacionadoView(View):
+
+    def index(request):
+       all=ObjetivoRelacionado.objects.filter(bool_or_eliminado=False) 
+       args = {
+           "or1s":all
+       }
+       return render(request, 'ObjetivoRelacionado/index.html', args)
+
+    def show(request,id):
+        or1=ObjetivoRelacionado.objects.get(id_or=id)
+        or1_ob = Objetivo.objects.get(id_ob=or1.id_or_ob.id_ob)
+        or1_oba = Objetivo.objects.get(id_ob=or1.id_or_ob_asociado.id_ob)
+        args = {
+            "or1":or1,
+            "or1_ob":or1_ob,
+            "or1_oba":or1_oba
+        }
+        return render(request, 'ObjetivoRelacionado/show.html', args)
+
+    def new(request):
+        or1_obs = Objetivo.objects.filter(bool_ob_eliminado=False)
+        or1_obas = Objetivo.objects.filter(bool_ob_eliminado=False)
+        args = {
+            "or1_obs":or1_obs,
+            "or1_obas":or1_obas
+        }
+        return render(request, 'ObjetivoRelacionado/new.html', args)
+    
+    def create(request):
+        ModelForm_form = ObjetivoRelacionadoForm(request.POST)
+        if ModelForm_form.is_valid():
+            ModelForm_form.save()
+            aviso = "El Objetivo Relacionado se ha creado con éxito!"
+            all = ObjetivoRelacionado.objects.filter(bool_or_eliminado=False)
+            args = {
+                "aviso":aviso,
+                "or1s":all
+            }
+            return render(request, 'ObjetivoRelacionado/index.html', args)
+        else:
+            or1_obs = Objetivo.objects.filter(bool_ob_eliminado=False)
+            or1_obas = Objetivo.objects.filter(bool_ob_eliminado=False)
+            args = {
+                "form":ModelForm_form,
+                "or1_obs":or1_obs,
+                "or1_obas":or1_obas
+            }
+            return render(request, 'ObjetivoRelacionado/new.html', args)
+
+    def edit(request,id):
+        or1_obs = Objetivo.objects.filter(bool_ob_eliminado=False)
+        or1 = ObjetivoRelacionado.objects.get(id_or=id)
+        or1_obas = Objetivo.objects.filter(bool_ob_eliminado=False)
+        args = {
+            "or1":or1,
+            "or1_obs":or1_obs,
+            "or1_obas":or1_obas
+        }
+        return render(request, 'ObjetivoRelacionado/edit.html', args)
+
+    def update(request,id):
+        or1 = ObjetivoRelacionado.objects.get(id_or=id)
+        ModelForm_form = ObjetivoRelacionadoForm(request.POST, instance=or1)
+        if ModelForm_form.is_valid():
+            ModelForm_form.save()
+            aviso = "Los datos se han actualizado con éxito"
+            args = {
+                "aviso":aviso,
+                "or1":or1
+            }
+        else:
+            args = {
+                "form":ModelForm_form,
+                "or1":or1
+            }
+        return render(request, 'ObjetivoRelacionado/edit.html', args)
+    
+    def delete(request,id):
+        or1 = ObjetivoRelacionado.objects.get(id_or=id)
+        or1.bool_or_eliminado = True
+        or1.save()
+        eliminado = "El Objetivo relacionado se ha eliminado"
+        all = ObjetivoRelacionado.objects.filter(bool_or_eliminado=False)
+        args = {
+            "eliminado":eliminado,
+            "or1s":all
+        }
+        return render(request, 'ObjetivoRelacionado/index.html', args)
+

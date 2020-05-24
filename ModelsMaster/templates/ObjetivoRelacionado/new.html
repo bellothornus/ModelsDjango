@@ -1,0 +1,36 @@
+{% extends '../base_form.html' %}
+    {% block head %}
+        <title>new objetivo relacionado</title>
+    {% endblock %}
+    {% block body %}
+        <form action="/create/objrel" method="POST"> {% csrf_token %}
+        <div class="form-group row">
+            <label for="nombre" class="col-sm-2 col-form-label">Nombre:</label>
+            <div class="col-sm-10">
+                <input class="form-control" type="text" name="str_or_nombre" id="nombre">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="objetivo" class="col-sm-2 col-form-label">Id Objetivo:</label>
+                <select name="id_or_ob">
+                    {% for or1_ob in or1_obs %}
+                        <option value="{{or1_ob.id_ob}}">{{or1_ob.str_ob_nombre}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="oba" class="col-sm-2 col-form-label">Id Objetivo_Asociado:</label>
+                <select name="id_or_ob_asociado">
+                    {% for or1_oba in or1_obas %}
+                        <option value="{{or1_oba.id_ob}}">{{or1_oba.str_ob_nombre}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <input type="submit" value="Enviar">
+        </form>
+        <a href="/index/objrel">Volver atrás</a>
+        <br>
+        </form>
+    {% endblock %}

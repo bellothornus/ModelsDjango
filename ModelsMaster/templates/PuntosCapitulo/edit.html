@@ -4,7 +4,7 @@
     {% endblock %}
     {% block body %}
         <form action="/update/puntoscap/{{pc.id_pc}}" method="POST"> {% csrf_token %}
-            <select name="id_pc_sc">
+            <select name="id_pc_md">
                 {% for pc_modelo in pc_modelos %}
                     {% if pc_modelo.id_md == pc.id_pc_md.id_md %}
                         <option selected value="{{pc_modelo.id_md}}">{{pc_modelo.str_md_nombre}}</option>
@@ -17,10 +17,10 @@
             <input type="text" name="str_pc_descripcion" value="{% if pc.str_pc_descripcion %}{{pc.str_pc_descripcion}}{%endif%}">
             <select name="id_pc_am">
                 {% for pc_ambito in pc_ambitos %}
-                    {% if pc_ambito.id_md == pc.id_pc_am.id_am %}
-                        <option selected value="{{pc_ambito.id_md}}">{{pc_ambito.str_am_nombre}}</option>
+                    {% if pc_ambito.id_am == pc.id_pc_am.id_am %}
+                        <option selected value="{{pc_ambito.id_am}}">{{pc_ambito.str_am_nombre}}</option>
                     {% else %}
-                        <option value="{{pc_ambito.id_md}}">{{pc_ambito.str_am_nombre}}</option>
+                        <option value="{{pc_ambito.id_am}}">{{pc_ambito.str_am_nombre}}</option>
                     {%endif%}
                 {% endfor %}
             </select>

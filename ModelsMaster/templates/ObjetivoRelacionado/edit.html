@@ -13,7 +13,7 @@
                     {%endif%}
                 {% endfor %}
             </select>
-            <select name="id_or_oba">
+            <select name="id_or_ob_asociado">
                 {% for or1_oba in or1_obas %}
                     {% if or1_oba.id_ob == or1.id_or_ob.id_ob %}
                         <option selected value="{{or1_oba.id_ob}}">{{or1_oba.str_ob_nombre}}</option>
@@ -25,5 +25,5 @@
             <input type="text" name="str_or_nombre" value="{{or1.str_or_nombre}}">
             <input type="submit" value="Enviar">
         </form>
-        <a href="/show/objrel/{{or1.id_md}}">Volver atrás</a>
+        <a href="/show/objrel/{{or1.id_or}}">Volver atrás</a>
     {% endblock%}

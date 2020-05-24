@@ -42,7 +42,7 @@
         <div class="form-group row">
             <label for="pc" class="col-sm-2 col-form-label">Capitulo:</label>
             <div class="col-sm-10">
-                <select class="form-control" name="id_ob_ag" id="pc">
+                <select class="form-control" name="id_ob_pc" id="pc">
                     <option disabled selected value >Elige una opción</option>
                     {% for obj_pc in obj_pcs %}
                         <option value="{{obj_pc.id_pc}}">{{obj_pc.str_pc_nombre}}</option>

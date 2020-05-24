@@ -109,10 +109,10 @@ class Modelo(models.Model):
         
 class Benchmarking(models.Model):
     id_bench=models.AutoField(primary_key=True, db_column="id_Bench")
-    id_bench_sc=models.ForeignKey(to=Sector, null=True, blank=True, db_column="id_Sector", on_delete=models.PROTECT)
-    id_bench_ag=models.ForeignKey(to=AreaGeografica, null=False, blank=False, db_column="id_AreaGeografica", on_delete=models.PROTECT)
-    str_bench_nombre=models.CharField(max_length=256, null=True, blank=True, db_column="Nombre")
-    str_bench_descripcion=models.CharField(max_length=256, null=False, blank=False, db_column="Descripcion")
+    id_bench_sc=models.ForeignKey(to=Sector, db_column="id_Sector", on_delete=models.PROTECT)
+    id_bench_ag=models.ForeignKey(to=AreaGeografica, db_column="id_AreaGeografica", on_delete=models.PROTECT)
+    str_bench_nombre=models.CharField(max_length=256, db_column="Nombre")
+    str_bench_descripcion=models.CharField(max_length=256, null=True, blank=True, db_column="Descripcion")
     int_bench_valor=models.IntegerField(null=True, blank=True, db_column="Valor")
     int_bench_año=models.IntegerField(null=True, blank=True, db_column="Año")
     str_bench_ciclo=models.CharField(max_length=256,null=True, blank=True, db_column="Ciclo")
@@ -122,10 +122,10 @@ class Benchmarking(models.Model):
         db_table = "benchmarkings"
 
 class PuntosCapitulo(models.Model):
-    id_pc=models.AutoField(primary_key=True, db_column="id_Bench")
-    id_pc_md=models.ForeignKey(to=Modelo, null=True, blank=True, db_column="id_Modelo", on_delete=models.PROTECT)
-    id_pc_am=models.ForeignKey(to=Ambito, null=True, blank=True, db_column="id_Ambito", on_delete=models.PROTECT)
-    str_pc_nombre=models.CharField(max_length=256, null=True, blank=True, db_column="Nombre")
+    id_pc=models.AutoField(primary_key=True, db_column="id_Capitulo")
+    id_pc_md=models.ForeignKey(to=Modelo, db_column="id_Modelo", on_delete=models.PROTECT)
+    id_pc_am=models.ForeignKey(to=Ambito, db_column="id_Ambito", on_delete=models.PROTECT)
+    str_pc_nombre=models.CharField(max_length=256, db_column="Nombre")
     str_pc_descripcion=models.CharField(max_length=256, null=True, blank=True, db_column="Descripcion")
     bool_pc_eliminado=models.BooleanField(default=False, db_column="eliminado")
 
@@ -133,12 +133,12 @@ class PuntosCapitulo(models.Model):
         db_table = "puntos_capitulo"
 
 class Objetivo(models.Model):
-    id_ob=models.AutoField(primary_key=True, db_column="id_ob")
-    id_ob_pc=models.ForeignKey(to=PuntosCapitulo, null=True, blank=True, db_column="id_Capitulo", on_delete=models.PROTECT)
-    id_ob_to=models.ForeignKey(to=TipoObjetivo, null=False, blank=False, db_column="id_Tipo_Objetivo", on_delete=models.PROTECT)
-    str_ob_nombre=models.CharField(max_length=256, null=True, blank=True, db_column="Nombre")
-    str_ob_descripcion=models.CharField(max_length=256, null=False, blank=False, db_column="Descripcion")
-    str_ob_codificacion=models.CharField(max_length=256,null=True, blank=True, db_column="Codificacion")
+    id_ob=models.AutoField(primary_key=True, db_column="id_Objetivo")
+    id_ob_pc=models.ForeignKey(to=PuntosCapitulo, db_column="id_Capitulo", on_delete=models.PROTECT)
+    id_ob_to=models.ForeignKey(to=TipoObjetivo, db_column="id_Tipo_Objetivo", on_delete=models.PROTECT)
+    str_ob_nombre=models.CharField(max_length=256, db_column="Nombre")
+    str_ob_descripcion=models.CharField(max_length=256, null=True, blank=True, db_column="Descripcion")
+    str_ob_codificacion=models.CharField(max_length=256, db_column="Codificacion")
     num_ob_any=models.IntegerField(null=True, blank=True, db_column="Año")
     bool_ob_eliminado=models.BooleanField(default=False, db_column="eliminado")
 
@@ -146,9 +146,9 @@ class Objetivo(models.Model):
         db_table = "objetivos"
 
 class ObjetivoRelacionado(models.Model):
-    id_or=models.AutoField(primary_key=True, db_column="id_Objetivo_relacionado")
-    id_or_ob=models.ForeignKey(to=Objetivo, related_name="Id_Objetivo", null=True, blank=True, db_column="id_Objetivo", on_delete=models.PROTECT)
-    id_or_ob_asociado=models.ForeignKey(to=Objetivo, related_name="Id_Objetivo_Asociado", null=True, blank=True, db_column="id_Objetivo_Asociado", on_delete=models.PROTECT)
+    id_or=models.AutoField(primary_key=True, db_column="id_ObjetivoRelacionado")
+    id_or_ob=models.ForeignKey(to=Objetivo, related_name="Id_Objetivo", db_column="id_Objetivo", on_delete=models.PROTECT)
+    id_or_ob_asociado=models.ForeignKey(to=Objetivo, related_name="Id_ObjetivoAsociado", db_column="id_Objetivo_Asociado", on_delete=models.PROTECT)
     str_or_nombre=models.CharField(max_length=256, null=True, blank=True, db_column="Nombre")
     bool_or_eliminado=models.BooleanField(default=False, db_column="eliminado")
 

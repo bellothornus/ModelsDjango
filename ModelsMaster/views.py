@@ -589,15 +589,26 @@ class AreaGeograficaView(View):
         return render(request, 'AreaGeografica/edit.html', args)
 
     def delete(request,id):
-        ag = AreaGeografica.objects.get(id_ag=id)
-        ag.bool_ag_eliminado = True
-        ag.save()
-        eliminado = "El Área geográfica se ha eliminado"
         all = AreaGeografica.objects.filter(bool_ag_eliminado=False)
-        args = {
-            "eliminado":eliminado,
-            "ags":all
-        }
+        ag = AreaGeografica.objects.get(id_ag=id)
+        try:
+            ag_parent = AreaGeografica.objects.get(id_ag_parent=ag.id_ag)
+        except AttributeError:
+            ag_parent = "nope"
+        if ag_parent != "nope":
+            args = {
+                "eliminado": "No puedes borrar este eleemtno porque otros dependen de él, borralos primero",
+                "ags":all
+            }
+        else:
+            ag.bool_ag_eliminado = True
+            ag.save()
+            eliminado = "El Área geográfica se ha eliminado"
+            all = AreaGeografica.objects.filter(bool_ag_eliminado=False)
+            args = {
+                "eliminado":eliminado,
+                "ags":all
+            }
         return render(request, 'AreaGeografica/index.html', args)
 
 class EmpresaView(View):
@@ -743,17 +754,20 @@ class ModeloView(View):
     def update(request,id):
         modelo = Modelo.objects.get(id_md=id)
         ModelForm_form = ModeloForm(request.POST, instance=modelo)
+        modelo_emps = Empresa.objects.filter(bool_emp_eliminado=False)
         if ModelForm_form.is_valid():
             ModelForm_form.save()
             aviso = "Los datos se han actualizado con éxito"
             args = {
                 "aviso":aviso,
-                "modelo":modelo
+                "modelo":modelo,
+                "modelo_emps":modelo_emps
             }
         else:
             args = {
                 "form":ModelForm_form,
-                "modelo":modelo
+                "modelo":modelo,
+                "modelo_emps":modelo_emps
             }
         return render(request, 'Modelo/edit.html', args)
 
@@ -765,7 +779,7 @@ class ModeloView(View):
         all = Modelo.objects.filter(bool_md_eliminado=False)
         args = {
             "eliminado":eliminado,
-            "modelo":all
+            "modelos":all
         }
         return render(request, 'Modelo/index.html', args)
             
@@ -921,17 +935,23 @@ class PuntosCapituloView(View):
     def update(request,id):
         pc = PuntosCapitulo.objects.get(id_pc=id)
         ModelForm_form = PuntosCapituloForm(request.POST, instance=pc)
+        pc_ambitos = Ambito.objects.filter(bool_am_eliminado=False)
+        pc_modelos = Modelo.objects.filter(bool_md_eliminado=False)
         if ModelForm_form.is_valid():
             ModelForm_form.save()
             aviso = "Los datos se han actualizado con éxito"
             args = {
                 "aviso":aviso,
-                "pc":pc
+                "pc":pc,
+                "pc_modelos":pc_modelos,
+                "pc_ambitos":pc_ambitos
             }
         else:
             args = {
                 "form":ModelForm_form,
-                "pc":pc
+                "pc":pc,
+                "pc_modelos":pc_modelos,
+                "pc_ambitos":pc_ambitos
             }
         return render(request, 'PuntosCapitulo/edit.html', args)
     
@@ -1011,17 +1031,23 @@ class ObjetivoView(View):
     def update(request,id):
         obj = Objetivo.objects.get(id_ob=id)
         ModelForm_form = ObjetivoForm(request.POST, instance=obj)
+        obj_tos = TipoObjetivo.objects.filter(bool_to_eliminado=False)
+        obj_pcs = PuntosCapitulo.objects.filter(bool_pc_eliminado=False)
         if ModelForm_form.is_valid():
             ModelForm_form.save()
             aviso = "Los datos se han actualizado con éxito"
             args = {
                 "aviso":aviso,
-                "obj":obj
+                "obj":obj,
+                "obj_pcs":obj_pcs,
+                "obj_tos":obj_tos
             }
         else:
             args = {
                 "form":ModelForm_form,
-                "obj":obj
+                "obj":obj,
+                "obj_pcs":obj_pcs,
+                "obj_tos":obj_tos
             }
         return render(request, 'Objetivo/edit.html', args)
     
@@ -1101,17 +1127,23 @@ class ObjetivoRelacionadoView(View):
     def update(request,id):
         or1 = ObjetivoRelacionado.objects.get(id_or=id)
         ModelForm_form = ObjetivoRelacionadoForm(request.POST, instance=or1)
+        or1_obs = Objetivo.objects.filter(bool_ob_eliminado=False)
+        or1_obas = Objetivo.objects.filter(bool_ob_eliminado=False)
         if ModelForm_form.is_valid():
             ModelForm_form.save()
             aviso = "Los datos se han actualizado con éxito"
             args = {
                 "aviso":aviso,
-                "or1":or1
+                "or1":or1,
+                "or1_obs":or1_obs,
+                "or1_obas":or1_obas
             }
         else:
             args = {
                 "form":ModelForm_form,
-                "or1":or1
+                "or1":or1,
+                "or1_obs":or1_obs,
+                "or1_obas":or1_obas
             }
         return render(request, 'ObjetivoRelacionado/edit.html', args)
     

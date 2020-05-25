@@ -71,14 +71,25 @@ class AmbitoView(View):
 
     def delete(request,id):
         ambito = Ambito.objects.get(id_am=id)
-        ambito.bool_am_eliminado = True
-        ambito.save()
-        eliminado = "El ambito se ha eliminado"
         all = Ambito.objects.filter(bool_am_eliminado=False)
-        args = {
-            "eliminado":eliminado,
-            "ambitos":all
-        }
+        try:
+            am_pc = PuntosCapitulo.objects.filter(id_pc_am=ambito.id_am)
+        except AttributeError:
+            am_pc = "nope"
+        if am_pc != "nope":
+            args = {
+                "eliminado": "No puedes borrar este elemento porque otros dependen de él, borralos primero",
+                "ambitos":all
+            }
+        else:
+            ambito.bool_am_eliminado = True
+            ambito.save()
+            eliminado = "El ambito se ha eliminado"
+            all = Ambito.objects.filter(bool_am_eliminado=False)
+            args = {
+                "eliminado":eliminado,
+                "ambitos":all
+            }
         return render(request, 'Ambitos/index.html', args)
 
 class TipoObjetivoView(View):
@@ -428,15 +439,31 @@ class SectorView(View):
         return render(request, 'Sector/edit.html', args)
 
     def delete(request,id):
-        sector = Sector.objects.get(id_sc=id)
-        sector.bool_sc_eliminado = True
-        sector.save()
-        eliminado = "El sector se ha eliminado"
         all = Sector.objects.filter(bool_sc_eliminado=False)
-        args = {
-            "eliminado":eliminado,
-            "sectores":all
-        }
+        sector = Sector.objects.get(id_sc=id)
+        try:
+            sc_emp = Empresa.objects.filter(id_emp_sc=sector.id_sc)
+        except AttributeError:
+            sc_emp = "nope"
+        try:
+            sc_bench = Benchmarking.objects.filter(id_bench_sc=sector.id_sc)
+        except AttributeError:
+            sc_bench = "nope"
+
+        if sc_emp != "nope" or sc_bench != "nope":
+            args = {
+                "eliminado": "No puedes borrar este elemento porque otros dependen de él, borralos primero",
+                "sectores":all
+            }
+        else:
+            sector.bool_sc_eliminado = True
+            sector.save()
+            eliminado = "El sector se ha eliminado"
+            all = Sector.objects.filter(bool_sc_eliminado=False)
+            args = {
+                "eliminado":eliminado,
+                "sectores":all
+            }
         return render(request, 'Sector/index.html', args)
 
 class NivelAreaGeograficaView(View):
@@ -499,15 +526,26 @@ class NivelAreaGeograficaView(View):
         return render(request, 'Nag/edit.html', args)
 
     def delete(request,id):
-        nag = NivelAreaGeografica.objects.get(id_nag=id)
-        nag.bool_nag_eliminado = True
-        nag.save()
-        eliminado = "El Nivel de Área geográfica se ha eliminado"
         all = NivelAreaGeografica.objects.filter(bool_nag_eliminado=False)
-        args = {
-            "eliminado":eliminado,
-            "nags":all
-        }
+        nag = NivelAreaGeografica.objects.get(id_nag=id)
+        try:
+            nag_ag = AreaGeografica.objects.filter(id_ag_nag=nag.id_nag)
+        except AttributeError:
+            nag_ag = "nope"
+        if nag_ag != "nope":
+            args = {
+                "eliminado":"No puedes borrar este elemento porque otros dependen de él, borralos primero",
+                "nags":all
+            }
+        else:
+            nag.bool_nag_eliminado = True
+            nag.save()
+            eliminado = "El Nivel de Área geográfica se ha eliminado"
+            all = NivelAreaGeografica.objects.filter(bool_nag_eliminado=False)
+            args = {
+                "eliminado":eliminado,
+                "nags":all
+            }
         return render(request, 'Nag/index.html', args)
 
 class AreaGeograficaView(View):
@@ -592,12 +630,20 @@ class AreaGeograficaView(View):
         all = AreaGeografica.objects.filter(bool_ag_eliminado=False)
         ag = AreaGeografica.objects.get(id_ag=id)
         try:
-            ag_parent = AreaGeografica.objects.get(id_ag_parent=ag.id_ag)
+            ag_parent = AreaGeografica.objects.filter(id_ag_parent=ag.id_ag)
         except AttributeError:
             ag_parent = "nope"
-        if ag_parent != "nope":
+        try:
+            bench_ag = Benchmarking.objects.filter(id_bench_ag=ag.id_ag)
+        except AttributeError:
+            bench_ag = "nope"
+        try:
+            emp_ag = Empresa.objects.filter(id_emp_ag=ag.id_ag)
+        except AttributeError:
+            emp_ag = "nope"
+        if ag_parent != "nope" or bench_ag != "nope" or emp_ag != "nope":
             args = {
-                "eliminado": "No puedes borrar este eleemtno porque otros dependen de él, borralos primero",
+                "eliminado": "No puedes borrar este elemento porque otros dependen de él, borralos primero",
                 "ags":all
             }
         else:
@@ -688,15 +734,26 @@ class EmpresaView(View):
         return render(request, 'Empresa/edit.html', args)
 
     def delete(request,id):
-        emp = Empresa.objects.get(id_emp=id)
-        emp.bool_emp_eliminado = True
-        emp.save()
-        eliminado = "la empresa se ha eliminado"
         all = Empresa.objects.filter(bool_emp_eliminado=False)
-        args = {
-            "eliminado":eliminado,
-            "emps":all
-        }
+        emp = Empresa.objects.get(id_emp=id)
+        try:
+            md_emp = Modelo.objects.filter(id_md_emp=emp.id_emp)
+        except AttributeError:
+            md_emp = "nope"
+        if md_emp != "nope":
+            args = {
+                "eliminado": "No puedes borrar este elemento porque otros dependen de él, borralos primero",
+                "emps":all
+            }
+        else:
+            emp.bool_emp_eliminado = True
+            emp.save()
+            eliminado = "la empresa se ha eliminado"
+            all = Empresa.objects.filter(bool_emp_eliminado=False)
+            args = {
+                "eliminado":eliminado,
+                "emps":all
+            }
         return render(request, 'Empresa/index.html', args)
 
 class ModeloView(View):
@@ -772,15 +829,26 @@ class ModeloView(View):
         return render(request, 'Modelo/edit.html', args)
 
     def delete(request,id):
-        modelo = Modelo.objects.get(id_md=id)
-        modelo.bool_md_eliminado = True
-        modelo.save()
-        eliminado = "El Modelo se ha eliminado"
         all = Modelo.objects.filter(bool_md_eliminado=False)
-        args = {
-            "eliminado":eliminado,
-            "modelos":all
-        }
+        modelo = Modelo.objects.get(id_md=id)
+        try:
+            pc_md = PuntosCapitulo.objects.filter(id_pc_md=modelo.id_md)
+        except AttributeError:
+            pc_md = "nope"
+        if pc_md != "nope":
+            args = {
+                "eliminado": "No puedes borrar este elemento porque otros dependen de él, borralos primero",
+                "modelos":all
+            }
+        else:
+            modelo.bool_md_eliminado = True
+            modelo.save()
+            eliminado = "El Modelo se ha eliminado"
+            all = Modelo.objects.filter(bool_md_eliminado=False)
+            args = {
+                "eliminado":eliminado,
+                "modelos":all
+            }
         return render(request, 'Modelo/index.html', args)
             
 class BenchmarkingView(View):
@@ -956,15 +1024,26 @@ class PuntosCapituloView(View):
         return render(request, 'PuntosCapitulo/edit.html', args)
     
     def delete(request,id):
-        pc = PuntosCapitulo.objects.get(id_pc=id)
-        pc.bool_pc_eliminado = True
-        pc.save()
-        eliminado = "El PuntoCapitulo se ha eliminado"
         all = PuntosCapitulo.objects.filter(bool_pc_eliminado=False)
-        args = {
-            "eliminado":eliminado,
-            "pcs":all
-        }
+        pc = PuntosCapitulo.objects.get(id_pc=id)
+        try:
+            Ob_pc = Objetivo.objects.filter(id_ob_pc=pc.id_pc)
+        except AttributeError:
+            ob_pc = "nope"
+        if ob_pc != "nope":
+            args = {
+                "eliminado": "No puedes borrar este elemento porque otros dependen de él, borralos primero",
+                "pcs":all
+            }
+        else:
+            pc.bool_pc_eliminado = True
+            pc.save()
+            eliminado = "El PuntoCapitulo se ha eliminado"
+            all = PuntosCapitulo.objects.filter(bool_pc_eliminado=False)
+            args = {
+                "eliminado":eliminado,
+                "pcs":all
+            }
         return render(request, 'PuntosCapitulo/index.html', args)
         
 class ObjetivoView(View):

@@ -1142,7 +1142,7 @@ class ObjetivoView(View):
         }
         return render(request, 'Objetivo/index.html', args)
 
-class ObjetivoRelacionadoView(View):
+""" class ObjetivoRelacionadoView(View):
 
     def index(request):
        all=ObjetivoRelacionado.objects.filter(bool_or_eliminado=False) 
@@ -1238,3 +1238,4 @@ class ObjetivoRelacionadoView(View):
         }
         return render(request, 'ObjetivoRelacionado/index.html', args)
 
+ """

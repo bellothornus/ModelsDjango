@@ -6,6 +6,7 @@
    
     {% block thead %}
     <th> ID: </th>
+    <th> Nivel Área Geográfica:</th>
     <th> Nombre:</th>
     <th> Ver:</th>
     <th> Editar:</th>
@@ -19,6 +20,7 @@
             {% for ag in ags %}
             <tr>
                 <td>{{ag.id_ag}}</td>
+                <td>{{ag.id_ag_nag.str_nag_nombre}}</td>
                 <td>{{ag.str_ag_nombre}}</td>
                 <td><a class="btn btn-xs far fa-eye" href="/show/area_geografica/{{ag.id_ag}}"></a></td>
                 <td><a class="btn btn-primary btn-xs fas fa-pen" href="/edit/area_geografica/{{ag.id_ag}}"></a></td>

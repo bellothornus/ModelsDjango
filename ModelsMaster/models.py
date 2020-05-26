@@ -135,7 +135,8 @@ class PuntosCapitulo(models.Model):
 class Objetivo(models.Model):
     id_ob=models.AutoField(primary_key=True, db_column="id_Objetivo")
     id_ob_pc=models.ForeignKey(to=PuntosCapitulo, db_column="id_Capitulo", on_delete=models.PROTECT)
-    id_ob_to=models.ForeignKey(to=TipoObjetivo, db_column="id_Tipo_Objetivo", on_delete=models.PROTECT)
+    id_ob_to=models.ForeignKey(to=TipoObjetivo, db_column="id_TipoObjetivo", on_delete=models.PROTECT)
+    id_ob_parent=models.ForeignKey(to='self',null=True,blank=True,db_column="id_ObjetivoPadre", on_delete=models.DO_NOTHING)
     str_ob_nombre=models.CharField(max_length=256, db_column="Nombre")
     str_ob_descripcion=models.CharField(max_length=256, null=True, blank=True, db_column="Descripcion")
     str_ob_codificacion=models.CharField(max_length=256, db_column="Codificacion")
@@ -145,7 +146,7 @@ class Objetivo(models.Model):
     class Meta:
         db_table = "objetivos"
 
-class ObjetivoRelacionado(models.Model):
+""" class ObjetivoRelacionado(models.Model):
     id_or=models.AutoField(primary_key=True, db_column="id_ObjetivoRelacionado")
     id_or_ob=models.ForeignKey(to=Objetivo, related_name="Id_Objetivo", db_column="id_Objetivo", on_delete=models.PROTECT)
     id_or_ob_asociado=models.ForeignKey(to=Objetivo, related_name="Id_ObjetivoAsociado", db_column="id_Objetivo_Asociado", on_delete=models.PROTECT)
@@ -153,4 +154,4 @@ class ObjetivoRelacionado(models.Model):
     bool_or_eliminado=models.BooleanField(default=False, db_column="eliminado")
 
     class Meta:
-        db_table = "objetivo_relacionado"
+        db_table = "objetivo_relacionado" """

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from .forms import AmbitoForm, TipoObjetivoForm, EstructuraForm, RiesgoForm, TipoIntervinienteForm, SectorForm, NivelAreaGeograficaForm, AreaGeograficaForm, EmpresaForm, ModeloForm, BenchmarkingForm, PuntosCapituloForm, ObjetivoForm, ObjetivoRelacionadoForm
-from .models import Ambito, TipoObjetivo, Estructura, Riesgo, TipoInterviniente,Sector, NivelAreaGeografica, AreaGeografica, Empresa, Modelo, Benchmarking, PuntosCapitulo, Objetivo, ObjetivoRelacionado
+from .forms import AmbitoForm, TipoObjetivoForm, EstructuraForm, RiesgoForm, TipoIntervinienteForm, SectorForm, NivelAreaGeograficaForm, AreaGeograficaForm, EmpresaForm, ModeloForm, BenchmarkingForm, PuntosCapituloForm, ObjetivoForm
+from .models import Ambito, TipoObjetivo, Estructura, Riesgo, TipoInterviniente,Sector, NivelAreaGeografica, AreaGeografica, Empresa, Modelo, Benchmarking, PuntosCapitulo, Objetivo
 
 # Create your views here.
 def index(request):
@@ -562,9 +562,11 @@ class AreaGeograficaView(View):
             ag_parent = AreaGeografica.objects.get(id_ag=ag.id_ag_parent.id_ag)
         except AttributeError:
             ag_parent = "nope"
+        ag_childs = AreaGeografica.objects.filter(id_ag_parent=ag.id_ag)
         args = {
             "ag":ag,
-            "ag_parent":ag_parent
+            "ag_parent":ag_parent,
+            "ag_childs":ag_childs
         }
         return render(request, 'AreaGeografica/show.html', args)
 
@@ -1141,100 +1143,3 @@ class ObjetivoView(View):
             "objs":all
         }
         return render(request, 'Objetivo/index.html', args)
-
-class ObjetivoRelacionadoView(View):
-
-    def index(request):
-       all=ObjetivoRelacionado.objects.filter(bool_or_eliminado=False) 
-       args = {
-           "or1s":all
-       }
-       return render(request, 'ObjetivoRelacionado/index.html', args)
-
-    def show(request,id):
-        or1=ObjetivoRelacionado.objects.get(id_or=id)
-        or1_ob = Objetivo.objects.get(id_ob=or1.id_or_ob.id_ob)
-        or1_oba = Objetivo.objects.get(id_ob=or1.id_or_ob_asociado.id_ob)
-        args = {
-            "or1":or1,
-            "or1_ob":or1_ob,
-            "or1_oba":or1_oba
-        }
-        return render(request, 'ObjetivoRelacionado/show.html', args)
-
-    def new(request):
-        or1_obs = Objetivo.objects.filter(bool_ob_eliminado=False)
-        or1_obas = Objetivo.objects.filter(bool_ob_eliminado=False)
-        args = {
-            "or1_obs":or1_obs,
-            "or1_obas":or1_obas
-        }
-        return render(request, 'ObjetivoRelacionado/new.html', args)
-    
-    def create(request):
-        ModelForm_form = ObjetivoRelacionadoForm(request.POST)
-        if ModelForm_form.is_valid():
-            ModelForm_form.save()
-            aviso = "El Objetivo Relacionado se ha creado con éxito!"
-            all = ObjetivoRelacionado.objects.filter(bool_or_eliminado=False)
-            args = {
-                "aviso":aviso,
-                "or1s":all
-            }
-            return render(request, 'ObjetivoRelacionado/index.html', args)
-        else:
-            or1_obs = Objetivo.objects.filter(bool_ob_eliminado=False)
-            or1_obas = Objetivo.objects.filter(bool_ob_eliminado=False)
-            args = {
-                "form":ModelForm_form,
-                "or1_obs":or1_obs,
-                "or1_obas":or1_obas
-            }
-            return render(request, 'ObjetivoRelacionado/new.html', args)
-
-    def edit(request,id):
-        or1_obs = Objetivo.objects.filter(bool_ob_eliminado=False)
-        or1 = ObjetivoRelacionado.objects.get(id_or=id)
-        or1_obas = Objetivo.objects.filter(bool_ob_eliminado=False)
-        args = {
-            "or1":or1,
-            "or1_obs":or1_obs,
-            "or1_obas":or1_obas
-        }
-        return render(request, 'ObjetivoRelacionado/edit.html', args)
-
-    def update(request,id):
-        or1 = ObjetivoRelacionado.objects.get(id_or=id)
-        ModelForm_form = ObjetivoRelacionadoForm(request.POST, instance=or1)
-        or1_obs = Objetivo.objects.filter(bool_ob_eliminado=False)
-        or1_obas = Objetivo.objects.filter(bool_ob_eliminado=False)
-        if ModelForm_form.is_valid():
-            ModelForm_form.save()
-            aviso = "Los datos se han actualizado con éxito"
-            args = {
-                "aviso":aviso,
-                "or1":or1,
-                "or1_obs":or1_obs,
-                "or1_obas":or1_obas
-            }
-        else:
-            args = {
-                "form":ModelForm_form,
-                "or1":or1,
-                "or1_obs":or1_obs,
-                "or1_obas":or1_obas
-            }
-        return render(request, 'ObjetivoRelacionado/edit.html', args)
-    
-    def delete(request,id):
-        or1 = ObjetivoRelacionado.objects.get(id_or=id)
-        or1.bool_or_eliminado = True
-        or1.save()
-        eliminado = "El Objetivo relacionado se ha eliminado"
-        all = ObjetivoRelacionado.objects.filter(bool_or_eliminado=False)
-        args = {
-            "eliminado":eliminado,
-            "or1s":all
-        }
-        return render(request, 'ObjetivoRelacionado/index.html', args)
-

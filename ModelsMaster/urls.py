@@ -109,13 +109,6 @@ urlpatterns = [
     path('update/objetivo/<int:id>', views.ObjetivoView.update),
     path('delete/objetivo/<int:id>', views.ObjetivoView.delete),
 
-    path('index/objrel', views.ObjetivoRelacionadoView.index),
-    path('show/objrel/<int:id>', views.ObjetivoRelacionadoView.show),
-    path('new/objrel', views.ObjetivoRelacionadoView.new),
-    path('create/objrel', views.ObjetivoRelacionadoView.create),
-    path('edit/objrel/<int:id>', views.ObjetivoRelacionadoView.edit),
-    path('update/objrel/<int:id>', views.ObjetivoRelacionadoView.update),
-    path('delete/objrel/<int:id>', views.ObjetivoRelacionadoView.delete),
 ]
 
 urlpatterns += staticfiles_urlpatterns()

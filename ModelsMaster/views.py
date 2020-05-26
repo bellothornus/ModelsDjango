@@ -1061,19 +1061,28 @@ class ObjetivoView(View):
         obj = Objetivo.objects.get(id_ob=id)
         obj_pc = PuntosCapitulo.objects.get(id_pc=obj.id_ob_pc.id_pc)
         obj_to = TipoObjetivo.objects.get(id_to=obj.id_ob_to.id_to)
+        try:
+            obj_parent = Objetivo.objects.get(id_ob=obj.id_ob_parent.id_ob)
+        except:
+            obj_parent={}
+        obj_childs = Objetivo.objects.filter(id_ob_parent=obj.id_ob)
         args = {
             "obj":obj,
             "obj_pc":obj_pc,
-            "obj_to":obj_to
+            "obj_to":obj_to,
+            "obj_parent":obj_parent,
+            "obj_childs":obj_childs
         }
         return render(request, 'Objetivo/show.html', args)
 
     def new(request):
+        all = Objetivo.objects.filter(bool_ob_eliminado=False)
         obj_pcs = PuntosCapitulo.objects.filter(bool_pc_eliminado=False)
         obj_tos = TipoObjetivo.objects.filter(bool_to_eliminado=False)
         args = {
             "obj_pcs":obj_pcs,
-            "obj_tos":obj_tos
+            "obj_tos":obj_tos,
+            "objs":all
         }
         return render(request, 'Objetivo/new.html', args)
     
@@ -1102,10 +1111,12 @@ class ObjetivoView(View):
         obj_pcs = PuntosCapitulo.objects.filter(bool_pc_eliminado=False)
         obj = Objetivo.objects.get(id_ob=id)
         obj_tos = TipoObjetivo.objects.filter(bool_to_eliminado=False)
+        all = Objetivo.objects.filter(bool_ob_eliminado=False)
         args = {
             "obj":obj,
             "obj_pcs":obj_pcs,
-            "obj_tos":obj_tos
+            "obj_tos":obj_tos,
+            "objs":all
         }
         return render(request, 'Objetivo/edit.html', args)
 

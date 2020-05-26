@@ -26,6 +26,15 @@
                     {% endif %}
                 {% endfor %}
             </select>
+            <select name="id_ob_parent">
+                {% for objj in objs %}
+                    {% if objj.id_ob == obj.id_ob %}
+                    <option selected value="{{obj.id_ob}}">{{obj.str_ob_nombre}}</option>
+                    {% else %}
+                    <option value="{{obj.id_ob}}">{{obj.str_ob_nombre}}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
             <input type="submit" value="Enviar">
         </form>
         <a href="/show/objetivo/{{obj.id_ob}}">Volver atrás</a>

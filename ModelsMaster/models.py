@@ -18,7 +18,7 @@ class TipoObjetivo(models.Model):
     bool_to_eliminado=models.BooleanField(default=False, db_column="eliminado")
 
     class Meta:
-        db_table = "tipo_objetivos"
+        db_table = "tipos_objetivos"
 
 class Estructura(models.Model):
     id_est=models.AutoField(primary_key=True, db_column="id_Estructura")
@@ -42,7 +42,7 @@ class TipoInterviniente(models.Model):
     bool_ti_eliminado=models.BooleanField(default=False, db_column="eliminado")
 
     class Meta:
-        db_table = "tipo_intervinientes"
+        db_table = "tipos_intervinientes"
 
 class Sector(models.Model):
     id_sc=models.AutoField(primary_key=True, db_column="id_Sector")
@@ -130,7 +130,7 @@ class PuntosCapitulo(models.Model):
     bool_pc_eliminado=models.BooleanField(default=False, db_column="eliminado")
 
     class Meta:
-        db_table = "puntos_capitulo"
+        db_table = "puntos_capitulos"
 
 class Objetivo(models.Model):
     id_ob=models.AutoField(primary_key=True, db_column="id_Objetivo")

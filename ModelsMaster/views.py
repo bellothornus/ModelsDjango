@@ -94,14 +94,14 @@ class AmbitoView(View):
 
 class TipoObjetivoView(View):
     def index(request):
-        all = TipoObjetivo.objects.filter(bool_to_eliminado=False)
+        all = TipoObjetivo.objects.filter(Eliminado=False)
         args = {
             "tipos_objetivos":all
         }
         return render(request, 'TipoObjetivo/index.html', args)
 
     def show(request,id):
-        tipo_objetivo = TipoObjetivo.objects.get(id_to=id)
+        tipo_objetivo = TipoObjetivo.objects.get(id__name=id)
         args = {
             "tipo_objetivo":tipo_objetivo
         }
@@ -115,7 +115,7 @@ class TipoObjetivoView(View):
         if form.is_valid():
             form.save()
             aviso = "El tipo objetivo se ha creado con éxito"
-            all = TipoObjetivo.objects.filter(bool_to_eliminado=False)
+            all = TipoObjetivo.objects.filter(Eliminado=False)
             args = {
                 "aviso":aviso,
                 "tipos_objetivos":all
@@ -128,14 +128,14 @@ class TipoObjetivoView(View):
             return render(request, 'TipoObjetivo/new.html', args)
 
     def edit(request,id):
-        tipo_objetivo = TipoObjetivo.objects.get(id_to=id)
+        tipo_objetivo = TipoObjetivo.objects.get(id__name=id)
         args = {
             "tipo_objetivo":tipo_objetivo
         }
         return render(request, 'TipoObjetivo/edit.html', args)
 
     def update(request,id):
-        tipo_objetivo = TipoObjetivo.objects.get(id_to=id)
+        tipo_objetivo = TipoObjetivo.objects.get(id__name=id)
         form = TipoObjetivoForm(request.POST, instance = tipo_objetivo)
         if form.is_valid():
             form.save()
@@ -154,11 +154,11 @@ class TipoObjetivoView(View):
             return render(request, 'TipoObjetivo/edit.html', args)
 
     def delete(request,id):
-        tipo_objetivo = TipoObjetivo.objects.get(id_to=id)
+        tipo_objetivo = TipoObjetivo.objects.get(id__name=id)
         tipo_objetivo.bool_to_eliminado = True
         tipo_objetivo.save()
         eliminado = "El tipo objetivo se ha eliminado"
-        all = TipoObjetivo.objects.filter(bool_to_eliminado=False)
+        all = TipoObjetivo.objects.filter(Eliminado=False)
         args = {
             "eliminado":eliminado,
             "tipos_objetivos":all
@@ -167,14 +167,14 @@ class TipoObjetivoView(View):
 
 class EstructuraView(View):
     def index(request):
-        all = Estructura.objects.filter(bool_est_eliminado=False)
+        all = Estructura.objects.filter(Eliminado=False)
         args = {
             "estructuras":all
         }
         return render(request, 'Estructura/index.html', args)
 
     def show(request,id):
-        estructura = Estructura.objects.get(id_est=id)
+        estructura = Estructura.objects.get(id__name=id)
         args = {
             "estructura":estructura
         }
@@ -188,7 +188,7 @@ class EstructuraView(View):
         if form.is_valid():
             form.save()
             aviso = "La estructura se ha creado con éxito"
-            all = Estructura.objects.filter(bool_est_eliminado=False)
+            all = Estructura.objects.filter(Eliminado=False)
             args = {
                 "aviso":aviso,
                 "estructuras":all
@@ -201,14 +201,14 @@ class EstructuraView(View):
             return render(request, 'Estructura/new.html', args)
 
     def edit(request,id):
-        estructura = Estructura.objects.get(id_est=id)
+        estructura = Estructura.objects.get(id__name=id)
         args = {
             "estructura": estructura
         }
         return render(request, 'Estructura/edit.html', args)
 
     def update(request,id):
-        estructura = Estructura.objects.get(id_est=id)
+        estructura = Estructura.objects.get(id__name=id)
         form = EstructuraForm(request.POST, instance=estructura)
         if form.is_valid():
             form.save()
@@ -225,11 +225,11 @@ class EstructuraView(View):
             return render(request, 'Estructura/edit.html', args)
 
     def delete(request,id):
-        estructura = Estructura.objects.get(id_est=id)
+        estructura = Estructura.objects.get(id__name=id)
         estructura.bool_est_eliminado = True
         estructura.save()
         eliminado = "El tipo objetivo se ha eliminado"
-        all = Estructura.objects.filter(bool_est_eliminado=False)
+        all = Estructura.objects.filter(Eliminado=False)
         args = {
             "eliminado":eliminado,
             "estructuras":all
@@ -238,14 +238,14 @@ class EstructuraView(View):
 
 class RiesgoView(View):
     def index(request):
-        all = Riesgo.objects.filter(bool_rg_eliminado=False)
+        all = Riesgo.objects.filter(Eliminado=False)
         args = {
             "riesgos":all
         }
         return render(request, 'Riesgo/index.html', args)
 
     def show(request,id):
-        riesgo = Riesgo.objects.get(id_rg=id)
+        riesgo = Riesgo.objects.get(id__name=id)
         args = {
             "riesgo":riesgo
         }
@@ -259,7 +259,7 @@ class RiesgoView(View):
         if form.is_valid():
             form.save()
             aviso = "El riesgo se ha creado con éxito"
-            all = Riesgo.objects.filter(bool_rg_eliminado=False)
+            all = Riesgo.objects.filter(Eliminado=False)
             args = {
                 "aviso":aviso,
                 "riesgos":all
@@ -272,14 +272,14 @@ class RiesgoView(View):
             return render(request, 'Riesgo/new.html', args)
 
     def edit(request,id):
-        riesgo = Riesgo.objects.get(id_rg=id)
+        riesgo = Riesgo.objects.get(id__name=id)
         args = {
             "riesgo":riesgo
         }
         return render(request, 'Riesgo/edit.html', args)
 
     def update(request,id):
-        riesgo = Riesgo.objects.get(id_rg=id)
+        riesgo = Riesgo.objects.get(id__name=id)
         form = RiesgoForm(request.POST, instance=riesgo)
         if form.is_valid():
             form.save()
@@ -297,10 +297,10 @@ class RiesgoView(View):
             return render(request, 'Riesgo/edit.html', args)
 
     def delete(request,id):
-        riesgo = Riesgo.objects.get(id_rg=id)
+        riesgo = Riesgo.objects.get(id__name=id)
         riesgo.bool_rg_eliminado = True
         riesgo.save()
-        all = Riesgo.objects.filter(bool_rg_eliminado=False)
+        all = Riesgo.objects.filter(Eliminado=False)
         eliminado = "El riesgo se ha eliminado"
         args = {
             "eliminado":eliminado,
@@ -311,14 +311,14 @@ class RiesgoView(View):
 class TipoIntervinienteView(View):
 
     def index(request):
-        all = TipoInterviniente.objects.filter(bool_ti_eliminado=False)
+        all = TipoInterviniente.objects.filter(Eliminado=False)
         args = {
             "tipo_intervinientes":all
         }
         return render(request, 'TipoInterviniente/index.html', args)
 
     def show(request,id):
-        tipo_interviniente = TipoInterviniente.objects.get(id_ti=id)
+        tipo_interviniente = TipoInterviniente.objects.get(id__name=id)
         args = {
             "tipo_interviniente":tipo_interviniente
         }
@@ -332,7 +332,7 @@ class TipoIntervinienteView(View):
         if ModelForm_form.is_valid():
             ModelForm_form.save()
             aviso = "El tipo interviniente se ha creado con éxito!"
-            all = TipoInterviniente.objects.filter(bool_ti_eliminado=False)
+            all = TipoInterviniente.objects.filter(Eliminado=False)
             args ={
                 "aviso":aviso,
                 "tipo_intervinientes":all
@@ -345,14 +345,14 @@ class TipoIntervinienteView(View):
             return render(request, 'TipoInterviniente/new.html', args)
 
     def edit(request,id):
-        tipo_interviniente = TipoInterviniente.objects.get(id_ti=id)
+        tipo_interviniente = TipoInterviniente.objects.get(id__name=id)
         args = {
             "tipo_interviniente":tipo_interviniente
         }
         return render(request, 'TipoInterviniente/edit.html', args)
 
     def update(request,id):
-        tipo_interviniente = TipoInterviniente.objects.get(id_ti=id)
+        tipo_interviniente = TipoInterviniente.objects.get(id__name=id)
         ModelForm_form = TipoIntervinienteForm(request.POST, instance=tipo_interviniente)
         if ModelForm_form.is_valid():
             aviso = "Los datos se han actualizado con éxito"
@@ -368,11 +368,11 @@ class TipoIntervinienteView(View):
         return render(request, 'TipoInterviniente/edit.html', args)
 
     def delete(request,id):
-        tipo_interviniente = TipoInterviniente.objects.get(id_ti=id)
-        tipo_interviniente.bool_ti_eliminado = True
+        tipo_interviniente = TipoInterviniente.objects.get(id__name=id)
+        tipo_interviniente.Eliminado = True
         tipo_interviniente.save()
         eliminado = "El tipo Interviniente se ha eliminado"
-        all = TipoInterviniente.objects.filter(bool_ti_eliminado=False)
+        all = TipoInterviniente.objects.filter(Eliminado=False)
         args = {
             "eliminado":eliminado,
             "tipo_intervinientes":all
@@ -382,14 +382,14 @@ class TipoIntervinienteView(View):
 class SectorView(View):
 
     def index(request):
-        all = Sector.objects.filter(bool_sc_eliminado=False)
+        all = Sector.objects.filter(Eliminado=False)
         args = {
             "sectores":all
         }
         return render(request, 'Sector/index.html', args)
 
     def show(request,id):
-        sector = Sector.objects.get(id_sc=id)
+        sector = Sector.objects.get(id__name=id)
         args = {
             "sector":sector
         }
@@ -403,7 +403,7 @@ class SectorView(View):
         if ModelForm_form.is_valid():
             ModelForm_form.save()
             aviso = "El sector se ha creado con éxito!"
-            all = Sector.objects.filter(bool_sc_eliminado=False)
+            all = Sector.objects.filter(Eliminado=False)
             args = {
                 "aviso":aviso,
                 "sectores":all
@@ -415,14 +415,14 @@ class SectorView(View):
             }
             return render(request, 'Sector/new.html', args)
     def edit(request,id):
-        sector = Sector.objects.get(id_sc=id)
+        sector = Sector.objects.get(id__name=id)
         args = {
             "sector":sector
         }
         return render(request, 'Sector/edit.html', args)
 
     def update(request,id):
-        sector = Sector.objects.get(id_sc=id)
+        sector = Sector.objects.get(id__name=id)
         ModelForm_form = SectorForm(request.POST, instance=sector)
         if ModelForm_form.is_valid():
             ModelForm_form.save()
@@ -439,14 +439,14 @@ class SectorView(View):
         return render(request, 'Sector/edit.html', args)
 
     def delete(request,id):
-        all = Sector.objects.filter(bool_sc_eliminado=False)
-        sector = Sector.objects.get(id_sc=id)
+        all = Sector.objects.filter(Eliminado=False)
+        sector = Sector.objects.get(id__name=id)
         try:
-            sc_emp = Empresa.objects.filter(id_emp_sc=sector.id_sc)
+            sc_emp = Empresa.objects.filter(id__name=sector.id_sc)
         except AttributeError:
             sc_emp = "nope"
         try:
-            sc_bench = Benchmarking.objects.filter(id_bench_sc=sector.id_sc)
+            sc_bench = Benchmarking.objects.filter(id__name=sector.id_sc)
         except AttributeError:
             sc_bench = "nope"
 
@@ -456,10 +456,10 @@ class SectorView(View):
                 "sectores":all
             }
         else:
-            sector.bool_sc_eliminado = True
+            sector.Eliminado = True
             sector.save()
             eliminado = "El sector se ha eliminado"
-            all = Sector.objects.filter(bool_sc_eliminado=False)
+            all = Sector.objects.filter(Eliminado=False)
             args = {
                 "eliminado":eliminado,
                 "sectores":all
@@ -468,14 +468,14 @@ class SectorView(View):
 
 class NivelAreaGeograficaView(View):
     def index(request):
-        all = NivelAreaGeografica.objects.filter(bool_nag_eliminado=False)
+        all = NivelAreaGeografica.objects.filter(Eliminado=False)
         args = {
             "nags":all
         }
         return render(request, 'Nag/index.html', args)
 
     def show(request,id):
-        nag = NivelAreaGeografica.objects.get(id_nag=id)
+        nag = NivelAreaGeografica.objects.get(id__name=id)
         args = {
             "nag":nag
         }
@@ -489,7 +489,7 @@ class NivelAreaGeograficaView(View):
         if ModelForm_form.is_valid():
             ModelForm_form.save()
             aviso = "El Nivel de Área geográfica se ha creado con éxito!"
-            all = NivelAreaGeografica.objects.filter(bool_nag_eliminado=False)
+            all = NivelAreaGeografica.objects.filter(Eliminado=False)
             args = {
                 "aviso":aviso,
                 "nags":all
@@ -502,14 +502,14 @@ class NivelAreaGeograficaView(View):
             return render (request, 'Nag/new.html', args)
 
     def edit(request,id):
-        nag = NivelAreaGeografica.objects.get(id_nag=id)
+        nag = NivelAreaGeografica.objects.get(id__name=id)
         args = {
             "nag":nag
         }
         return render(request, 'Nag/edit.html', args)
 
     def update(request,id):
-        nag = NivelAreaGeografica.objects.get(id_nag=id)
+        nag = NivelAreaGeografica.objects.get(id__name=id)
         ModelForm_form = NivelAreaGeograficaForm(request.POST, instance=nag)
         if ModelForm_form.is_valid():
             ModelForm_form.save()
@@ -526,8 +526,8 @@ class NivelAreaGeograficaView(View):
         return render(request, 'Nag/edit.html', args)
 
     def delete(request,id):
-        all = NivelAreaGeografica.objects.filter(bool_nag_eliminado=False)
-        nag = NivelAreaGeografica.objects.get(id_nag=id)
+        all = NivelAreaGeografica.objects.filter(Eliminado=False)
+        nag = NivelAreaGeografica.objects.get(id__name=id)
         try:
             nag_ag = AreaGeografica.objects.filter(id_ag_nag=nag.id_nag)
         except AttributeError:
@@ -538,10 +538,10 @@ class NivelAreaGeograficaView(View):
                 "nags":all
             }
         else:
-            nag.bool_nag_eliminado = True
+            nag.Eliminado = True
             nag.save()
             eliminado = "El Nivel de Área geográfica se ha eliminado"
-            all = NivelAreaGeografica.objects.filter(bool_nag_eliminado=False)
+            all = NivelAreaGeografica.objects.filter(Eliminado=False)
             args = {
                 "eliminado":eliminado,
                 "nags":all
@@ -550,19 +550,19 @@ class NivelAreaGeograficaView(View):
 
 class AreaGeograficaView(View):
     def index(request):
-        all = AreaGeografica.objects.filter(bool_ag_eliminado=False)
+        all = AreaGeografica.objects.filter(Eliminado=False)
         args = {
             "ags":all
         }
         return render(request, 'AreaGeografica/index.html', args)
 
     def show(request,id):
-        ag = AreaGeografica.objects.get(id_ag=id)
+        ag = AreaGeografica.objects.get(id__name=id)
         try:
-            ag_parent = AreaGeografica.objects.get(id_ag=ag.id_ag_parent.id_ag)
+            ag_parent = AreaGeografica.objects.get(id__name=ag.id_ag_parent.Id)
         except AttributeError:
             ag_parent = "nope"
-        ag_childs = AreaGeografica.objects.filter(id_ag_parent=ag.id_ag)
+        ag_childs = AreaGeografica.objects.filter(id_ag_parent=ag.Id)
         args = {
             "ag":ag,
             "ag_parent":ag_parent,
@@ -571,8 +571,8 @@ class AreaGeograficaView(View):
         return render(request, 'AreaGeografica/show.html', args)
 
     def new(request):
-        nags = NivelAreaGeografica.objects.filter(bool_nag_eliminado=False)
-        ags = AreaGeografica.objects.filter(bool_ag_eliminado=False)
+        nags = NivelAreaGeografica.objects.filter(Eliminado=False)
+        ags = AreaGeografica.objects.filter(Eliminado=False)
         args ={
             "nags":nags,
             "ags":ags
@@ -584,15 +584,15 @@ class AreaGeograficaView(View):
         if ModelForm_form.is_valid():
             ModelForm_form.save()
             aviso = "El Área geográfica se ha creado con éxito!"
-            all = AreaGeografica.objects.filter(bool_ag_eliminado=False)
+            all = AreaGeografica.objects.filter(Eliminado=False)
             args = {
                 "aviso":aviso,
                 "ags":all
             }
             return render(request, 'AreaGeografica/index.html', args)
         else:
-            nags = NivelAreaGeografica.objects.filter(bool_nag_eliminado=False)
-            ags = AreaGeografica.objects.filter(bool_ag_eliminado=False)
+            nags = NivelAreaGeografica.objects.filter(Eliminadoo=False)
+            ags = AreaGeografica.objects.filter(Eliminado=False)
             args = {
                 "form":ModelForm_form,
                 "nags":nags,
@@ -601,9 +601,9 @@ class AreaGeograficaView(View):
             return render(request, 'AreaGeografica/new.html', args)
 
     def edit(request,id):
-        nags = NivelAreaGeografica.objects.filter(bool_nag_eliminado=False)
-        ag = AreaGeografica.objects.get(id_ag=id)
-        ags = AreaGeografica.objects.filter(bool_ag_eliminado=False)
+        nags = NivelAreaGeografica.objects.filter(Eliminado=False)
+        ag = AreaGeografica.objects.get(id__name=id)
+        ags = AreaGeografica.objects.filter(Eliminado=False)
         args = {
             "ag":ag,
             "nags":nags,
@@ -612,7 +612,7 @@ class AreaGeograficaView(View):
         return render(request, 'AreaGeografica/edit.html', args)
 
     def update(request,id):
-        ag = AreaGeografica.objects.get(id_ag=id)
+        ag = AreaGeografica.objects.get(id__name=id)
         ModelForm_form = AreaGeograficaForm(request.POST, instance=ag)
         if ModelForm_form.is_valid():
             ModelForm_form.save()
@@ -629,18 +629,18 @@ class AreaGeograficaView(View):
         return render(request, 'AreaGeografica/edit.html', args)
 
     def delete(request,id):
-        all = AreaGeografica.objects.filter(bool_ag_eliminado=False)
-        ag = AreaGeografica.objects.get(id_ag=id)
+        all = AreaGeografica.objects.filter(Eliminado=False)
+        ag = AreaGeografica.objects.get(id__name=id)
         try:
-            ag_parent = AreaGeografica.objects.filter(id_ag_parent=ag.id_ag)
+            ag_parent = AreaGeografica.objects.filter(id_ag_parent=ag.Id)
         except AttributeError:
             ag_parent = "nope"
         try:
-            bench_ag = Benchmarking.objects.filter(id_bench_ag=ag.id_ag)
+            bench_ag = Benchmarking.objects.filter(id_bench_ag=ag.Id)
         except AttributeError:
             bench_ag = "nope"
         try:
-            emp_ag = Empresa.objects.filter(id_emp_ag=ag.id_ag)
+            emp_ag = Empresa.objects.filter(id_emp_ag=ag.Id)
         except AttributeError:
             emp_ag = "nope"
         if ag_parent != "nope" or bench_ag != "nope" or emp_ag != "nope":
@@ -649,10 +649,10 @@ class AreaGeograficaView(View):
                 "ags":all
             }
         else:
-            ag.bool_ag_eliminado = True
+            ag.Eliminado = True
             ag.save()
             eliminado = "El Área geográfica se ha eliminado"
-            all = AreaGeografica.objects.filter(bool_ag_eliminado=False)
+            all = AreaGeografica.objects.filter(Eliminado=False)
             args = {
                 "eliminado":eliminado,
                 "ags":all
@@ -661,16 +661,16 @@ class AreaGeograficaView(View):
 
 class EmpresaView(View):
     def index(request):
-        all = Empresa.objects.filter(bool_emp_eliminado=False)
+        all = Empresa.objects.filter(Eliminado=False)
         args = {
             "emps":all
         }
         return render(request, 'Empresa/index.html', args)
     
     def show(request,id):
-        emp = Empresa.objects.get(id_emp=id)
-        emp_ag = AreaGeografica.objects.get(id_ag=emp.id_emp_ag.id_ag)
-        emp_sc = Sector.objects.get(id_sc=emp.id_emp_sc.id_sc)
+        emp = Empresa.objects.get(id__name=id)
+        emp_ag = AreaGeografica.objects.get(id_ag=emp.id_emp_ag.Id)
+        emp_sc = Sector.objects.get(id_sc=emp.id_emp_sc.Id)
         args = {
             "emp":emp,
             "emp_ag":emp_ag,
@@ -679,8 +679,8 @@ class EmpresaView(View):
         return render(request, 'Empresa/show.html', args)
 
     def new(request):
-        emp_scs = Sector.objects.filter(bool_sc_eliminado=False)
-        emp_ags = AreaGeografica.objects.filter(bool_ag_eliminado=False)
+        emp_scs = Sector.objects.filter(Eliminado=False)
+        emp_ags = AreaGeografica.objects.filter(Eliminado=False)
         args = {
             "emp_scs":emp_scs,
             "emp_ags":emp_ags
@@ -692,15 +692,15 @@ class EmpresaView(View):
         if ModelForm_form.is_valid():
             ModelForm_form.save()
             aviso = "La empresa se ha creado con éxito!"
-            all = Empresa.objects.filter(bool_emp_eliminado=False)
+            all = Empresa.objects.filter(Eliminado=False)
             args = {
                 "aviso":aviso,
                 "emps":all
             }
             return render(request, 'Empresa/index.html', args)
         else:
-            emp_scs = Sector.objects.filter(bool_sc_eliminado=False)
-            emp_ags = AreaGeografica.objects.filter(bool_ag_eliminado=False)
+            emp_scs = Sector.objects.filter(Eliminado=False)
+            emp_ags = AreaGeografica.objects.filter(Eliminado=False)
             args = {
                 "form":ModelForm_form,
                 "emp_scs":emp_scs,
@@ -708,9 +708,9 @@ class EmpresaView(View):
             }
             return render(request, 'Empresa/new.html', args)
     def edit(request,id):
-        emp_scs = Sector.objects.filter(bool_sc_eliminado=False)
-        emp = Empresa.objects.get(id_emp=id)
-        emp_ags = AreaGeografica.objects.filter(bool_ag_eliminado=False)
+        emp_scs = Sector.objects.filter(Eliminado=False)
+        emp = Empresa.objects.get(id__name=id)
+        emp_ags = AreaGeografica.objects.filter(Eliminado=False)
         args = {
             "emp":emp,
             "emp_ags":emp_ags,
@@ -719,7 +719,7 @@ class EmpresaView(View):
         return render(request, 'Empresa/edit.html', args)
     
     def update(request,id):
-        emp = Empresa.objects.get(id_ag=id)
+        emp = Empresa.objects.get(id__name=id)
         ModelForm_form = EmpresaForm(request.POST, instance=emp)
         if ModelForm_form.is_valid():
             ModelForm_form.save()
@@ -736,10 +736,10 @@ class EmpresaView(View):
         return render(request, 'Empresa/edit.html', args)
 
     def delete(request,id):
-        all = Empresa.objects.filter(bool_emp_eliminado=False)
-        emp = Empresa.objects.get(id_emp=id)
+        all = Empresa.objects.filter(Eliminado=False)
+        emp = Empresa.objects.get(id__name=id)
         try:
-            md_emp = Modelo.objects.filter(id_md_emp=emp.id_emp)
+            md_emp = Modelo.objects.filter(id_md_emp=emp.Id)
         except AttributeError:
             md_emp = "nope"
         if md_emp != "nope":
@@ -748,10 +748,10 @@ class EmpresaView(View):
                 "emps":all
             }
         else:
-            emp.bool_emp_eliminado = True
+            emp.Eliminado = True
             emp.save()
             eliminado = "la empresa se ha eliminado"
-            all = Empresa.objects.filter(bool_emp_eliminado=False)
+            all = Empresa.objects.filter(Eliminado=False)
             args = {
                 "eliminado":eliminado,
                 "emps":all
@@ -761,14 +761,14 @@ class EmpresaView(View):
 class ModeloView(View):
 
     def index(request):
-        all=Modelo.objects.filter(bool_md_eliminado=False)
+        all=Modelo.objects.filter(Eliminado=False)
         args= {"modelos":all}
 
         return render(request, 'Modelo/index.html', args)
     
     def show(request,id):
-        modelo = Modelo.objects.get(id_md=id)
-        modelo_emp = Empresa.objects.get(id_emp=modelo.id_md_emp.id_emp)
+        modelo = Modelo.objects.get(id__name=id)
+        modelo_emp = Empresa.objects.get(id__name=modelo.id_md_emp.Id)
         args = {
             "modelo":modelo,
             "modelo_emp":modelo_emp,
@@ -776,7 +776,7 @@ class ModeloView(View):
         return render(request, 'Modelo/show.html', args)
     
     def new(request):
-        modelo_emps = Empresa.objects.filter(bool_emp_eliminado=False)
+        modelo_emps = Empresa.objects.filter(Eliminado=False)
         args = {
             "modelo_emps":modelo_emps,
         }
@@ -787,14 +787,14 @@ class ModeloView(View):
         if ModelForm_form.is_valid():
             ModelForm_form.save()
             aviso = "El Modelo se ha creado con éxito!"
-            all = Modelo.objects.filter(bool_md_eliminado=False)
+            all = Modelo.objects.filter(Eliminado=False)
             args = {
                 "aviso":aviso,
                 "modelos":all
             }
             return render(request, 'Modelo/index.html', args)
         else:
-            modelo_emps = Empresa.objects.filter(bool_emp_eliminado=False)
+            modelo_emps = Empresa.objects.filter(Eliminado=False)
             args = {
                 "form":ModelForm_form,
                 "modelo_emps":modelo_emps,
@@ -802,8 +802,8 @@ class ModeloView(View):
             return render(request, 'Modelo/new.html', args)
 
     def edit(request,id):
-        modelo_emps = Empresa.objects.filter(bool_emp_eliminado=False)
-        modelo = Modelo.objects.get(id_md=id)
+        modelo_emps = Empresa.objects.filter(Eliminado=False)
+        modelo = Modelo.objects.get(id__name=id)
         args = {
             "modelo":modelo,
             "modelo_emps":modelo_emps,
@@ -811,9 +811,9 @@ class ModeloView(View):
         return render(request, 'Modelo/edit.html', args)
     
     def update(request,id):
-        modelo = Modelo.objects.get(id_md=id)
+        modelo = Modelo.objects.get(id__name=id)
         ModelForm_form = ModeloForm(request.POST, instance=modelo)
-        modelo_emps = Empresa.objects.filter(bool_emp_eliminado=False)
+        modelo_emps = Empresa.objects.filter(Eliminado=False)
         if ModelForm_form.is_valid():
             ModelForm_form.save()
             aviso = "Los datos se han actualizado con éxito"
@@ -831,10 +831,10 @@ class ModeloView(View):
         return render(request, 'Modelo/edit.html', args)
 
     def delete(request,id):
-        all = Modelo.objects.filter(bool_md_eliminado=False)
-        modelo = Modelo.objects.get(id_md=id)
+        all = Modelo.objects.filter(Eliminado=False)
+        modelo = Modelo.objects.get(id__name=id)
         try:
-            pc_md = PuntosCapitulo.objects.filter(id_pc_md=modelo.id_md)
+            pc_md = PuntosCapitulo.objects.filter(id_pc_md=modelo.Id)
         except AttributeError:
             pc_md = "nope"
         if pc_md != "nope":
@@ -843,10 +843,10 @@ class ModeloView(View):
                 "modelos":all
             }
         else:
-            modelo.bool_md_eliminado = True
+            modelo.Eliminado = True
             modelo.save()
             eliminado = "El Modelo se ha eliminado"
-            all = Modelo.objects.filter(bool_md_eliminado=False)
+            all = Modelo.objects.filter(Eliminado=False)
             args = {
                 "eliminado":eliminado,
                 "modelos":all
@@ -855,16 +855,16 @@ class ModeloView(View):
             
 class BenchmarkingView(View):
     def index(request):
-        all = Benchmarking.objects.filter(bool_bench_eliminado=False)
+        all = Benchmarking.objects.filter(Eliminado=False)
         args = {
             "benchs":all
         }
         return render(request, 'Benchmarking/index.html', args)
     
     def show(request,id):
-        bench = Benchmarking.objects.get(id_bench=id)
-        bench_ag = AreaGeografica.objects.get(id_ag=bench.id_bench_ag.id_ag)
-        bench_sc = Sector.objects.get(id_sc=bench.id_bench_sc.id_sc)
+        bench = Benchmarking.objects.get(id__name=id)
+        bench_ag = AreaGeografica.objects.get(id__name=bench.id_bench_ag.Id)
+        bench_sc = Sector.objects.get(id__name=bench.id_bench_sc.Id)
         args = {
             "bench":bench,
             "bench_ag":bench_ag,
@@ -873,8 +873,8 @@ class BenchmarkingView(View):
         return render(request, 'Benchmarking/show.html', args)
 
     def new(request):
-        bench_scs = Sector.objects.filter(bool_sc_eliminado=False)
-        bench_ags = AreaGeografica.objects.filter(bool_ag_eliminado=False)
+        bench_scs = Sector.objects.filter(Eliminado=False)
+        bench_ags = AreaGeografica.objects.filter(Eliminado=False)
         args = {
             "bench_scs":bench_scs,
             "bench_ags":bench_ags
@@ -886,15 +886,15 @@ class BenchmarkingView(View):
         if ModelForm_form.is_valid():
             ModelForm_form.save()
             aviso = "El Benchmarking se ha creado con éxito!"
-            all = Benchmarking.objects.filter(bool_bench_eliminado=False)
+            all = Benchmarking.objects.filter(Eliminado=False)
             args = {
                 "aviso":aviso,
                 "benchs":all
             }
             return render(request, 'Benchmarking/index.html', args)
         else:
-            bench_scs = Sector.objects.filter(bool_sc_eliminado=False)
-            bench_ags = AreaGeografica.objects.filter(bool_ag_eliminado=False)
+            bench_scs = Sector.objects.filter(Eliminado=False)
+            bench_ags = AreaGeografica.objects.filter(Eliminado=False)
             args = {
                 "form":ModelForm_form,
                 "bench_scs":bench_scs,
@@ -902,9 +902,9 @@ class BenchmarkingView(View):
             }
             return render(request, 'Benchmarking/new.html', args)
     def edit(request,id):
-        bench_scs = Sector.objects.filter(bool_sc_eliminado=False)
-        bench = Benchmarking.objects.get(id_bench=id)
-        bench_ags = AreaGeografica.objects.filter(bool_ag_eliminado=False)
+        bench_scs = Sector.objects.filter(Eliminado=False)
+        bench = Benchmarking.objects.get(id__name=id)
+        bench_ags = AreaGeografica.objects.filter(Eliminado=False)
         args = {
             "bench":bench,
             "bench_ags":bench_ags,
@@ -913,7 +913,7 @@ class BenchmarkingView(View):
         return render(request, 'Benchmarking/edit.html', args)
     
     def update(request,id):
-        bench = Benchmarking.objects.get(id_bench=id)
+        bench = Benchmarking.objects.get(id__name=id)
         ModelForm_form = BenchmarkingForm(request.POST, instance=bench)
         if ModelForm_form.is_valid():
             ModelForm_form.save()
@@ -930,11 +930,11 @@ class BenchmarkingView(View):
         return render(request, 'Benchmarking/edit.html', args)
 
     def delete(request,id):
-        bench = Benchmarking.objects.get(id_bench=id)
-        bench.bool_bench_eliminado = True
+        bench = Benchmarking.objects.get(id__name=id)
+        bench.Eliminado = True
         bench.save()
         eliminado = "El benchmarking se ha eliminado"
-        all = Benchmarking.objects.filter(bool_bench_eliminado=False)
+        all = Benchmarking.objects.filter(Eliminado=False)
         args = {
             "eliminado":eliminado,
             "benchs":all
@@ -944,16 +944,16 @@ class BenchmarkingView(View):
 class PuntosCapituloView(View):
 
     def index(request):
-       all=PuntosCapitulo.objects.filter(bool_pc_eliminado=False) 
+       all=PuntosCapitulo.objects.filter(Eliminado=False) 
        args = {
            "pcs":all
        }
        return render(request, 'PuntosCapitulo/index.html', args)
 
     def show(request,id):
-        pc = PuntosCapitulo.objects.get(id_pc=id)
-        pc_modelo = Modelo.objects.get(id_md=pc.id_pc_md.id_md)
-        pc_ambito = Ambito.objects.get(id_am=pc.id_pc_am.id_am)
+        pc = PuntosCapitulo.objects.get(id__name=id)
+        pc_modelo = Modelo.objects.get(id__name=pc.id_pc_md.Id)
+        pc_ambito = Ambito.objects.get(id__name=pc.id_pc_am.Id)
         args = {
             "pc":pc,
             "pc_modelo":pc_modelo,
@@ -962,8 +962,8 @@ class PuntosCapituloView(View):
         return render(request, 'PuntosCapitulo/show.html', args)
 
     def new(request):
-        pc_modelos = Modelo.objects.filter(bool_md_eliminado=False)
-        pc_ambitos = Ambito.objects.filter(bool_am_eliminado=False)
+        pc_modelos = Modelo.objects.filter(Eliminado=False)
+        pc_ambitos = Ambito.objects.filter(Eliminado=False)
         args = {
             "pc_modelos":pc_modelos,
             "pc_ambitos":pc_ambitos
@@ -975,15 +975,15 @@ class PuntosCapituloView(View):
         if ModelForm_form.is_valid():
             ModelForm_form.save()
             aviso = "El PuntoCapitulo se ha creado con éxito!"
-            all = PuntosCapitulo.objects.filter(bool_pc_eliminado=False)
+            all = PuntosCapitulo.objects.filter(Eliminado=False)
             args = {
                 "aviso":aviso,
                 "pcs":all
             }
             return render(request, 'PuntosCapitulo/index.html', args)
         else:
-            pc_modelos = Modelo.objects.filter(bool_md_eliminado=False)
-            pc_ambitos = Ambito.objects.filter(bool_am_eliminado=False)
+            pc_modelos = Modelo.objects.filter(Eliminado=False)
+            pc_ambitos = Ambito.objects.filter(Eliminado=False)
             args = {
                 "form":ModelForm_form,
                 "pc_modelos":pc_modelos,
@@ -992,9 +992,9 @@ class PuntosCapituloView(View):
             return render(request, 'PuntosCapitulo/new.html', args)
 
     def edit(request,id):
-        pc_modelos = Modelo.objects.filter(bool_md_eliminado=False)
-        pc = PuntosCapitulo.objects.get(id_pc=id)
-        pc_ambitos = Ambito.objects.filter(bool_am_eliminado=False)
+        pc_modelos = Modelo.objects.filter(Eliminado=False)
+        pc = PuntosCapitulo.objects.get(id__name=id)
+        pc_ambitos = Ambito.objects.filter(Eliminado=False)
         args = {
             "pc":pc,
             "pc_modelos":pc_modelos,
@@ -1003,10 +1003,10 @@ class PuntosCapituloView(View):
         return render(request, 'PuntosCapitulo/edit.html', args)
 
     def update(request,id):
-        pc = PuntosCapitulo.objects.get(id_pc=id)
+        pc = PuntosCapitulo.objects.get(id__name=id)
         ModelForm_form = PuntosCapituloForm(request.POST, instance=pc)
-        pc_ambitos = Ambito.objects.filter(bool_am_eliminado=False)
-        pc_modelos = Modelo.objects.filter(bool_md_eliminado=False)
+        pc_ambitos = Ambito.objects.filter(Eliminado=False)
+        pc_modelos = Modelo.objects.filter(Eliminado=False)
         if ModelForm_form.is_valid():
             ModelForm_form.save()
             aviso = "Los datos se han actualizado con éxito"
@@ -1026,10 +1026,10 @@ class PuntosCapituloView(View):
         return render(request, 'PuntosCapitulo/edit.html', args)
     
     def delete(request,id):
-        all = PuntosCapitulo.objects.filter(bool_pc_eliminado=False)
-        pc = PuntosCapitulo.objects.get(id_pc=id)
+        all = PuntosCapitulo.objects.filter(Eliminado=False)
+        pc = PuntosCapitulo.objects.get(id__name=id)
         try:
-            Ob_pc = Objetivo.objects.filter(id_ob_pc=pc.id_pc)
+            ob_pc = Objetivo.objects.filter(id_ob_pc=pc.Id)
         except AttributeError:
             ob_pc = "nope"
         if ob_pc != "nope":
@@ -1038,10 +1038,10 @@ class PuntosCapituloView(View):
                 "pcs":all
             }
         else:
-            pc.bool_pc_eliminado = True
+            pc.Eliminado = True
             pc.save()
             eliminado = "El PuntoCapitulo se ha eliminado"
-            all = PuntosCapitulo.objects.filter(bool_pc_eliminado=False)
+            all = PuntosCapitulo.objects.filter(Eliminado=False)
             args = {
                 "eliminado":eliminado,
                 "pcs":all
@@ -1051,21 +1051,21 @@ class PuntosCapituloView(View):
 class ObjetivoView(View):
 
     def index(request):
-       all=Objetivo.objects.filter(bool_ob_eliminado=False) 
+       all=Objetivo.objects.filter(Eliminado=False) 
        args = {
            "objs":all
        }
        return render(request, 'Objetivo/index.html', args)
 
     def show(request,id):
-        obj = Objetivo.objects.get(id_ob=id)
-        obj_pc = PuntosCapitulo.objects.get(id_pc=obj.id_ob_pc.id_pc)
-        obj_to = TipoObjetivo.objects.get(id_to=obj.id_ob_to.id_to)
+        obj = Objetivo.objects.get(id__name=id)
+        obj_pc = PuntosCapitulo.objects.get(id__name=obj.id_ob_pc.Id)
+        obj_to = TipoObjetivo.objects.get(id__name=obj.id_ob_to.Id)
         try:
-            obj_parent = Objetivo.objects.get(id_ob=obj.id_ob_parent.id_ob)
+            obj_parent = Objetivo.objects.get(id__name=obj.IdParent.Id)
         except:
             obj_parent={}
-        obj_childs = Objetivo.objects.filter(id_ob_parent=obj.id_ob)
+        obj_childs = Objetivo.objects.filter(IdParent=obj.Id)
         args = {
             "obj":obj,
             "obj_pc":obj_pc,
@@ -1076,9 +1076,9 @@ class ObjetivoView(View):
         return render(request, 'Objetivo/show.html', args)
 
     def new(request):
-        all = Objetivo.objects.filter(bool_ob_eliminado=False)
-        obj_pcs = PuntosCapitulo.objects.filter(bool_pc_eliminado=False)
-        obj_tos = TipoObjetivo.objects.filter(bool_to_eliminado=False)
+        all = Objetivo.objects.filter(Eliminado=False)
+        obj_pcs = PuntosCapitulo.objects.filter(Eliminado=False)
+        obj_tos = TipoObjetivo.objects.filter(Eliminado=False)
         args = {
             "obj_pcs":obj_pcs,
             "obj_tos":obj_tos,

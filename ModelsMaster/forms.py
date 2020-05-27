@@ -10,62 +10,62 @@ class AmbitoForm(ModelForm):
 class TipoObjetivoForm(ModelForm):
     class Meta:
         model = TipoObjetivo
-        fields = ['str_to_nombre'] 
+        fields = ['Nombre'] 
 
 class EstructuraForm(ModelForm):
     class Meta:
         model = Estructura
-        fields = ['str_est_nombre' ]
+        fields = ['Nombre' ]
 
 class RiesgoForm(ModelForm):
     class Meta:
         model = Riesgo
-        fields = ['str_rg_nombre']
+        fields = ['Nombre']
 
 class TipoIntervinienteForm(ModelForm):
     class Meta:
         model = TipoInterviniente
-        fields = ['str_ti_nombre']
+        fields = ['Nombre']
 
 class SectorForm(ModelForm):
     class Meta:
         model = Sector
-        fields = ['str_sc_nombre', 'str_sc_descripcion']
+        fields = ['Nombre', 'Descripcion']
 
 class NivelAreaGeograficaForm(ModelForm):
     class Meta:
         model = NivelAreaGeografica
-        fields = ['num_nag_nivel', 'str_nag_nombre', 'str_nag_descripcion']
+        fields = ['Nivel', 'Nombre', 'Descripcion']
 
 class AreaGeograficaForm(ModelForm):
     class Meta:
         model = AreaGeografica
-        fields = ['id_ag_nag','id_ag_parent','str_ag_nombre','str_ag_descripcion']
+        fields = ['IdNag','IdParent','Nombre','Descripcion']
 
 class EmpresaForm(ModelForm):
     class Meta:
         model = Empresa
-        fields = ['id_emp_sc','id_emp_ag','str_emp_nombre', 'str_emp_descripcion'] 
+        fields = ['IdSc','IdAg','Nombre', 'Descripcion'] 
 
 class ModeloForm(ModelForm):
     class Meta:
         model = Modelo
-        fields = ['id_md_emp','str_md_nombre','str_md_descripcion']
+        fields = ['IdEmp','Nombre','Descripcion']
         
 class BenchmarkingForm(ModelForm):
     class Meta:
         model = Benchmarking
-        fields = ['id_bench_sc','id_bench_ag','str_bench_nombre','str_bench_descripcion','str_bench_ciclo','int_bench_año','int_bench_valor']
+        fields = ['IdSc','IdAg','Nombre','Descripcion','Ciclo','Anyo','Valor']
 
 class PuntosCapituloForm(ModelForm):
     class Meta:
         model = PuntosCapitulo
-        fields = ['id_pc_md','id_pc_am','str_pc_nombre']
+        fields = ['IdMd','IdAm','Nombre']
 
 class ObjetivoForm(ModelForm):
     class Meta:
         model = Objetivo
-        fields = ['id_ob_to','id_ob_pc','id_ob_parent','str_ob_nombre','str_ob_descripcion','str_ob_codificacion','num_ob_any']
+        fields = ['IdTo','IdPc','IdParent','Nombre','descirpcion','Codificacion','Anyo']
 
 """ class ObjetivoRelacionadoForm(ModelForm):
     class Meta:

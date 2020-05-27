@@ -54,7 +54,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterModelTable(
             name='puntoscapitulo',
-            table='puntos_capitulo',
+            table='puntos_capitulos',
         ),
         migrations.AlterModelTable(
             name='tipointerviniente',
@@ -64,4 +64,9 @@ class Migration(migrations.Migration):
             name='tipoobjetivo',
             table='tipo_objetivos',
         ),
+        migrations.AlterField(
+            model_name='puntoscapitulo',
+            name='id_pc_am',
+            field=models.ForeignKey(to='ModelsMaster.Ambito', to_field='Id', db_column="CP_Id_Ambito", on_delete=models.DO_NOTHING),
+        )
     ]

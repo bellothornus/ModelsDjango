@@ -4,9 +4,9 @@
     {% endblock %}
     {% block body %}
         <form action="/create/nag" method="POST"> {% csrf_token %}
-        <input type="text" name="str_nag_nombre">
-        <input type="text" name="str_nag_descripcion">
-        <select name="num_nag_nivel">
+        <input type="text" name="Nombre">
+        <input type="text" name="Descripcion">
+        <select name="Nivel">
             <option  value="1">1</option>
             <option  value="2">2</option>
             <option  value="3">3</option>

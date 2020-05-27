@@ -24,7 +24,6 @@
     <body>
         <div class="container">
             {% block body %}
-            <a class="btn btn-primary" href="/new/{{titulo}}">Crear nuevo {{titulo_view}}</a>
             {% endblock %}
             {% if aviso %}
             <div class="alert alert-success" role="alert" style="position: absolute; bottom:0;">
@@ -40,33 +39,15 @@
             <table id="myTable" class="display">
                 <thead>
                     <tr>
-                        <th> ID: </th>
-                        {% if titulo == "area_geografica" %}
-                        <th> Nivel Área Geográfica:</th>
-                        {% endif %}
-                        <th> Nombre:</th>
-                        <th> Ver:</th>
-                        <th> Editar:</th>
-                        <th> Eliminar:</th>
+                    {% block thead %}
+
+                    {% endblock %}
                     </tr>
                 </thead>
                 <tbody>
-                    {% if querys %}
-                        {% for query in querys %}
-                        <tr>
-                            <td>{{query.Id}}</td>
-                            {% if titulo == "area_geografica" %}
-                            <td>{{query.IdNag.Nombre}}</td>
-                            {% endif %}
-                            <td>{{query.Nombre}}</td>
-                            <td><a class="btn btn-xs far fa-eye" href="/show/{{titulo}}/{{query.Id}}"></a></td>
-                            <td><a class="btn btn-primary btn-xs fas fa-pen" href="/edit/{{titulo}}/{{query.Id}}"></a></td>
-                            <td><a class="btn btn-danger btn-xs fas fa-trash-alt  fas fa-trash-alt" href="/delete/{{titulo}}/{{query.Id}}"></a></td>
-                        </tr>
-                        {% endfor %}
-                    {% else %}
-                        <h2>No se han encontrado ningún {{titulo_view}} creado</h2>
-                    {% endif %}
+                    {% block tbody %}
+
+                    {% endblock %}
                 </tbody>
             </table>
             <a href="/">Volver atrás</a>

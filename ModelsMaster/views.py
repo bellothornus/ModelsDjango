@@ -1,20 +1,88 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from .forms import AmbitoForm, TipoObjetivoForm, EstructuraForm, RiesgoForm, TipoIntervinienteForm, SectorForm, NivelAreaGeograficaForm, AreaGeograficaForm, EmpresaForm, ModeloForm, BenchmarkingForm, PuntosCapituloForm, ObjetivoForm
-from .models import Ambito, TipoObjetivo, Estructura, Riesgo, TipoInterviniente,Sector, NivelAreaGeografica, AreaGeografica, Empresa, Modelo, Benchmarking, PuntosCapitulo, Objetivo
+from .forms import AmbitoForm, TipoObjetivoForm, SectorForm, NivelAreaGeograficaForm, AreaGeograficaForm, EmpresaForm, ModeloForm, BenchmarkingForm, PuntosCapituloForm, ObjetivoForm
+from .models import Ambito, TipoObjetivo, Sector, NivelAreaGeografica, AreaGeografica, Empresa, Modelo, Benchmarking, PuntosCapitulo, Objetivo
 
 # Create your views here.
 def index(request):
     return render(request, 'index.html')
 
+def prueba1(request):
+    args = {
+    }
+    return render(request, 'Prueba/index.html', args)
+
+def prueba2(request):
+    querys = Ambito.objects.all()
+    args = {
+        "querys":querys,
+        "titulo":"ambito"
+    }
+    return render(request, 'Prueba/index.html', args)
+
+def prueba3(request):
+    querys = Sector.objects.all()
+    args = {
+        "querys":querys,
+        "titulo":"sector"
+    }
+    return render(request, 'Prueba/index.html', args)
+
+def prueba4(request):
+    querys = NivelAreaGeografica.objects.all()
+    columns = NivelAreaGeografica._meta.fields
+    args = {
+        "querys":querys,
+        "titulo":"nag"
+    }
+    return render(request, 'Prueba/index.html', args)
+
+def prueba5(request):
+    querys = Ambito.objects.all()
+    columns = Ambito._meta.fields
+    args = {
+        "querys":querys,
+        "titulo":"ambito",
+        "columns":columns,
+        "titulo_view":"Ambito"
+    }
+    return render(request, 'Prueba/form.html', args)
+
+def prueba6(request):
+    relacionados1 = NivelAreaGeografica.objects.filter(Eliminado=False)
+    padres = AreaGeografica.objects.filter(Eliminado=False)
+    columns = AreaGeografica._meta.fields
+    args = {
+        "relacionados1":relacionados1,
+        "padres":padres,
+        "titulo":"area_geografica",
+        "columns":columns,
+        "titulo_view":"Áreas Geográficas"
+    }
+    return render(request, 'base_prueba_form.html', args)
+
+def prueba7(request):
+    relacionados1 = PuntosCapitulo.objects.all()
+    relacionados2 = TipoObjetivo.objects.all()
+    columns = Objetivo._meta.fields
+    args = {
+        "relacionados1":relacionados1,
+        "titulo":"objetivo",
+        "columns":columns,
+        "titulo_view":"Objetivos"
+    }
+    return render(request, 'base_prueba_form.html', args)
+
 class AmbitoView(View):
     def index(request):
         all = Ambito.objects.filter(Eliminado=False)
         args = {
-            "ambitos":all
+            "querys":all,
+            "titulo":"ambito",
+            "titulo_view":"Ambito"
         }
-        return render(request, 'Ambitos/index.html', args)
-
+        #return render(request, 'Ambitos/index.html', args)
+        return render(request, 'base_index.html', args)
     def show(request,id):
         ambito = Ambito.objects.get(Id__name=id)
         args = {
@@ -23,7 +91,14 @@ class AmbitoView(View):
         return render(request, 'Ambitos/show.html', args)
     
     def new(request):
-        return render(request,'Ambitos/new.html')
+        columns = Ambito._meta.fields
+        args = {
+            "titulo":"ambito",
+            "columns":columns,
+            "titulo_view":"Ambitos"
+        }
+        #return render(request,'Ambitos/new.html')
+        return render(request, 'base_prueba_form.html',args)
 
     def create(request):
         form = AmbitoForm(request.POST)
@@ -72,11 +147,13 @@ class AmbitoView(View):
     def delete(request,id):
         ambito = Ambito.objects.get(Id__name=id)
         all = Ambito.objects.filter(Eliminado=False)
-        am_pc = PuntosCapitulo.objects.filter(id_pc_am=ambito.Id)
+        am_pc = PuntosCapitulo.objects.filter(IdAm=ambito.Id)
         if am_pc:
             args = {
                 "eliminado": "No puedes borrar este elemento porque otros dependen de él, borralos primero",
-                "ambitos":all
+                "querys":all,
+                "titulo":"ambito",
+                "titulo_view":"Ambito"
             }
         else:
             ambito.Eliminado = True
@@ -85,18 +162,23 @@ class AmbitoView(View):
             all = Ambito.objects.filter(Eliminado=False)
             args = {
                 "eliminado":eliminado,
-                "ambitos":all
+                "querys":all,
+                "titulo":"ambito",
+                "titulo_view":"Ambito"
             }
-        return render(request, 'Ambitos/index.html', args)
+        return render(request, 'base_index.html', args)
 
 class TipoObjetivoView(View):
     def index(request):
         all = TipoObjetivo.objects.filter(Eliminado=False)
         args = {
-            "tipos_objetivos":all
+            #"tipos_objetivos":all
+            "querys":all,
+            "titulo":"tipo_objetivo",
+            "titulo_view":"Tipo Objetivo"
         }
-        return render(request, 'TipoObjetivo/index.html', args)
-
+        #return render(request, 'TipoObjetivo/index.html', args)
+        return render(request, 'base_index.html', args)
     def show(request,id):
         tipo_objetivo = TipoObjetivo.objects.get(Id__name=id)
         args = {
@@ -105,7 +187,14 @@ class TipoObjetivoView(View):
         return render(request, 'TipoObjetivo/show.html', args)
 
     def new(request):
-        return render(request, 'TipoObjetivo/new.html')
+        columns = TipoObjetivo._meta.fields
+        args = {
+            "titulo":"tipo_objetivo",
+            "columns":columns,
+            "titulo_view":"Tipo Objetivo"
+        }
+        #return render(request, 'TipoObjetivo/new.html')
+        return render(request, 'base_prueba_form.html',args)
 
     def create(request):
         form = TipoObjetivoForm(request.POST)
@@ -158,17 +247,23 @@ class TipoObjetivoView(View):
         all = TipoObjetivo.objects.filter(Eliminado=False)
         args = {
             "eliminado":eliminado,
-            "tipos_objetivos":all
+            "querys":all,
+            "titulo":"tipo_objetivo",
+            "titulo_view":"Tipo Objetivo"
         }
-        return render(request, 'TipoObjetivo/index.html', args)
+        return render(request, 'base_index.html', args)
 
 class EstructuraView(View):
     def index(request):
         all = Estructura.objects.filter(Eliminado=False)
         args = {
-            "estructuras":all
+            #"estructuras":all
+            "querys":all,
+            "titulo":"estructura",
+            "titulo_view":"Estructura"
         }
-        return render(request, 'Estructura/index.html', args)
+        #return render(request, 'Estructura/index.html', args)
+        return render(request, 'base_index.html', args)
 
     def show(request,id):
         estructura = Estructura.objects.get(Id__name=id)
@@ -178,7 +273,14 @@ class EstructuraView(View):
         return render(request, 'Estructura/show.html', args)
 
     def new(request):
-        return render(request, 'Estructura/new.html')
+        columns = Estructura._meta.fields
+        args = {
+            "titulo":"estructura",
+            "columns":columns,
+            "titulo_view":"Estructuras"
+        }
+        #return render(request, 'Estructura/new.html')
+        return render(request,'base_prueba_form.html',args)
 
     def create(request):
         form = EstructuraForm(request.POST)
@@ -229,17 +331,23 @@ class EstructuraView(View):
         all = Estructura.objects.filter(Eliminado=False)
         args = {
             "eliminado":eliminado,
-            "estructuras":all
+            "querys":all,
+            "titulo":"estructura",
+            "titulo_view":"Estructura"
         }
-        return render(request, 'Estructura/index.html', args)
+        return render(request, 'base_index.html', args)
 
 class RiesgoView(View):
     def index(request):
         all = Riesgo.objects.filter(Eliminado=False)
         args = {
-            "riesgos":all
+            #"riesgos":all
+            "querys":all,
+            "titulo":"riesgo",
+            "titulo_view":"Riesgo"
         }
-        return render(request, 'Riesgo/index.html', args)
+        #return render(request, 'Riesgo/index.html', args)
+        return render(request, 'base_index.html', args)
 
     def show(request,id):
         riesgo = Riesgo.objects.get(Id__name=id)
@@ -301,18 +409,24 @@ class RiesgoView(View):
         eliminado = "El riesgo se ha eliminado"
         args = {
             "eliminado":eliminado,
-            "riesgos":all
+            "querys":all,
+            "titulo":"riesgo",
+            "titulo_view":"Riesgo"
         }
-        return render(request, 'Riesgo/index.html', args)
+        return render(request, 'base_indexindex.html', args)
 
 class TipoIntervinienteView(View):
 
     def index(request):
         all = TipoInterviniente.objects.filter(Eliminado=False)
         args = {
-            "tipo_intervinientes":all
+            #"tipo_intervinientes":all
+            "querys":all,
+            "titulo":"tipo_interviniente",
+            "titulo_view":"Tipo Interviniente"
         }
-        return render(request, 'TipoInterviniente/index.html', args)
+        #return render(request, 'TipoInterviniente/index.html', args)
+        return render(request, 'base_index.html', args)
 
     def show(request,id):
         tipo_interviniente = TipoInterviniente.objects.get(Id__name=id)
@@ -372,18 +486,24 @@ class TipoIntervinienteView(View):
         all = TipoInterviniente.objects.filter(Eliminado=False)
         args = {
             "eliminado":eliminado,
-            "tipo_intervinientes":all
+            "querys":all,
+            "titulo":"tipo_interviniente",
+            "titulo_view":"Tipo Interviniente"
         }
-        return render(request, 'TipoInterviniente/index.html', args)
+        return render(request, 'base_index.html', args)
 
 class SectorView(View):
 
     def index(request):
         all = Sector.objects.filter(Eliminado=False)
         args = {
-            "sectores":all
+            #"sectores":all
+            "querys":all,
+            "titulo":"sector",
+            "titulo_view":"Sector"
         }
-        return render(request, 'Sector/index.html', args)
+        #return render(request, 'Sector/index.html', args)
+        return render(request, 'base_index.html', args)
 
     def show(request,id):
         sector = Sector.objects.get(Id__name=id)
@@ -393,7 +513,13 @@ class SectorView(View):
         return render(request, 'Sector/show.html', args)
 
     def new(request):
-        return render(request, 'Sector/new.html')
+        columns = Sector._meta.fields
+        args = {
+            "titulo":"sector",
+            "columns":columns,
+            "titulo_view":"Sector"
+        }
+        return render(request, 'base_prueba_form.html',args)
 
     def create(request):
         ModelForm_form = SectorForm(request.POST)
@@ -438,12 +564,14 @@ class SectorView(View):
     def delete(request,id):
         all = Sector.objects.filter(Eliminado=False)
         sector = Sector.objects.get(Id__name=id)
-        sc_emp = Empresa.objects.filter(Id__name=sector.id_sc)
-        sc_bench = Benchmarking.objects.filter(Id__name=sector.id_sc)
+        sc_emp = Empresa.objects.filter(Id__name=sector.Id)
+        sc_bench = Benchmarking.objects.filter(Id__name=sector.Id)
         if sc_emp or sc_bench:
             args = {
                 "eliminado": "No puedes borrar este elemento porque otros dependen de él, borralos primero",
-                "sectores":all
+                "querys":all,
+                "titulo":"sector",
+                "titulo_view":"Sector"
             }
         else:
             sector.Eliminado = True
@@ -452,7 +580,9 @@ class SectorView(View):
             all = Sector.objects.filter(Eliminado=False)
             args = {
                 "eliminado":eliminado,
-                "sectores":all
+                "querys":all,
+                "titulo":"sector",
+                "titulo_view":"Sector"
             }
         return render(request, 'Sector/index.html', args)
 
@@ -460,9 +590,13 @@ class NivelAreaGeograficaView(View):
     def index(request):
         all = NivelAreaGeografica.objects.filter(Eliminado=False)
         args = {
-            "nags":all
+            #"nags":all
+            "querys":all,
+            "titulo":"nag",
+            "titulo_view":"Nivel Área Geográfica"
         }
-        return render(request, 'Nag/index.html', args)
+        #return render(request, 'Nag/index.html', args)
+        return render(request, 'base_index.html', args)
 
     def show(request,id):
         nag = NivelAreaGeografica.objects.get(Id__name=id)
@@ -472,7 +606,13 @@ class NivelAreaGeograficaView(View):
         return render(request, 'Nag/show.html', args)
 
     def new(request):
-        return render(request, 'Nag/new.html')
+        columns = NivelAreaGeografica._meta.fields
+        args = {
+            "titulo":"nag",
+            "columns":columns,
+            "titulo_view":"Nivel Área Geográfica"
+        }
+        return render(request, 'base_prueba_form.html',args)
 
     def create(request):
         ModelForm_form = NivelAreaGeograficaForm(request.POST)
@@ -517,12 +657,14 @@ class NivelAreaGeograficaView(View):
 
     def delete(request,id):
         all = NivelAreaGeografica.objects.filter(Eliminado=False)
-        nag = NivelAreaGeografica.objects.get(Id__name=id)
+        nag = NivelAreaGeografica.objects.get(Id=id)
         nag_ag = AreaGeografica.objects.filter(IdNag=nag.Id)
         if nag_ag:
             args = {
                 "eliminado":"No puedes borrar este elemento porque otros dependen de él, borralos primero",
-                "nags":all
+                "querys":all,
+                "titulo":"nag",
+                "titulo_view":"Nivel Área Geográfica"
             }
         else:
             nag.Eliminado = True
@@ -531,17 +673,23 @@ class NivelAreaGeograficaView(View):
             all = NivelAreaGeografica.objects.filter(Eliminado=False)
             args = {
                 "eliminado":eliminado,
-                "nags":all
+                "querys":all,
+                "titulo":"nag",
+                "titulo_view":"Nivel Área Geográfica"
             }
-        return render(request, 'Nag/index.html', args)
+        return render(request, 'base_index.html', args)
 
 class AreaGeograficaView(View):
     def index(request):
         all = AreaGeografica.objects.filter(Eliminado=False)
         args = {
-            "ags":all
+            #"ags":all
+            "querys":all,
+            "titulo":"area_geografica",
+            "titulo_view":"Área Geográfica"
         }
-        return render(request, 'AreaGeografica/index.html', args)
+        #return render(request, 'AreaGeografica/index.html', args)
+        return render(request, 'base_index.html', args)
 
     def show(request,id):
         ag = AreaGeografica.objects.get(Id__name=id)
@@ -560,11 +708,16 @@ class AreaGeograficaView(View):
     def new(request):
         nags = NivelAreaGeografica.objects.filter(Eliminado=False)
         ags = AreaGeografica.objects.filter(Eliminado=False)
-        args ={
-            "nags":nags,
-            "ags":ags
+        columns = AreaGeografica._meta.fields
+        args = {
+            "relacionados1":nags,
+            "padres":ags,
+            "titulo":"area_geografica",
+            "titulo_view":"Área Geográfica",
+            "columns":columns
         }
-        return render(request, 'AreaGeografica/new.html', args)
+        #return render(request, 'AreaGeografica/new.html', args)
+        return render(request,'base_prueba_form.html',args)
 
     def create(request):
         ModelForm_form = AreaGeograficaForm(request.POST)
@@ -624,7 +777,9 @@ class AreaGeograficaView(View):
         if ag_parent or bench_ag or emp_ag:
             args = {
                 "eliminado": "No puedes borrar este elemento porque otros dependen de él, borralos primero",
-                "ags":all
+                "querys":all,
+                "titulo":"area_geografica",
+                "titulo_view":"Área Geográfica"
             }
         else:
             ag.Eliminado = True
@@ -633,17 +788,23 @@ class AreaGeograficaView(View):
             all = AreaGeografica.objects.filter(Eliminado=False)
             args = {
                 "eliminado":eliminado,
-                "ags":all
+                "querys":all,
+                "titulo":"area_geografica",
+                "titulo_view":"Área Geográfica"
             }
-        return render(request, 'AreaGeografica/index.html', args)
+        return render(request, 'base_index.html', args)
 
 class EmpresaView(View):
     def index(request):
         all = Empresa.objects.filter(Eliminado=False)
         args = {
-            "emps":all
+            #"emps":all
+            "querys":all,
+            "titulo":"empresa",
+            "titulo_view":"Empresa"
         }
-        return render(request, 'Empresa/index.html', args)
+        #return render(request, 'Empresa/index.html', args)
+        return render(request, 'base_index.html', args)
     
     def show(request,id):
         emp = Empresa.objects.get(Id__name=id)
@@ -716,14 +877,13 @@ class EmpresaView(View):
     def delete(request,id):
         all = Empresa.objects.filter(Eliminado=False)
         emp = Empresa.objects.get(Id__name=id)
-        try:
-            md_emp = Modelo.objects.filter(IdEmp=emp.Id)
-        except AttributeError:
-            md_emp = "nope"
-        if md_emp != "nope":
+        md_emp = Modelo.objects.filter(IdEmp=emp.Id)
+        if md_emp:
             args = {
                 "eliminado": "No puedes borrar este elemento porque otros dependen de él, borralos primero",
-                "emps":all
+                "querys":all,
+                "titulo":"empresa",
+                "titulo_view":"Empresa"
             }
         else:
             emp.Eliminado = True
@@ -732,17 +892,24 @@ class EmpresaView(View):
             all = Empresa.objects.filter(Eliminado=False)
             args = {
                 "eliminado":eliminado,
-                "emps":all
+                "querys":all,
+                "titulo":"empresa",
+                "titulo_view":"Empresa"
             }
-        return render(request, 'Empresa/index.html', args)
+        return render(request, 'base_index.html', args)
 
 class ModeloView(View):
 
     def index(request):
         all=Modelo.objects.filter(Eliminado=False)
-        args= {"modelos":all}
-
-        return render(request, 'Modelo/index.html', args)
+        args= {
+            #"modelos":all
+            "querys":all,
+            "titulo":"modelo",
+            "titulo_view":"Modelo"
+        }
+        #return render(request, 'Modelo/index.html', args)
+        return render(request, 'base_index.html', args)
     
     def show(request,id):
         modelo = Modelo.objects.get(Id__name=id)
@@ -811,11 +978,13 @@ class ModeloView(View):
     def delete(request,id):
         all = Modelo.objects.filter(Eliminado=False)
         modelo = Modelo.objects.get(Id__name=id)
-        pc_md = PuntosCapitulo.objects.filter(id_pc_md=modelo.Id)
+        pc_md = PuntosCapitulo.objects.filter(IdMd=modelo.Id)
         if pc_md:
             args = {
                 "eliminado": "No puedes borrar este elemento porque otros dependen de él, borralos primero",
-                "modelos":all
+                "querys":all,
+                "titulo":"modelo",
+                "titulo_view":"Modelo"
             }
         else:
             modelo.Eliminado = True
@@ -824,17 +993,23 @@ class ModeloView(View):
             all = Modelo.objects.filter(Eliminado=False)
             args = {
                 "eliminado":eliminado,
-                "modelos":all
+                "querys":all,
+                "titulo":"modelo",
+                "titulo_view":"Modelo"
             }
-        return render(request, 'Modelo/index.html', args)
+        return render(request, 'base_index.html', args)
             
 class BenchmarkingView(View):
     def index(request):
         all = Benchmarking.objects.filter(Eliminado=False)
         args = {
-            "benchs":all
+            #"benchs":all
+            "querys":all,
+            "titulo":"benchmarking",
+            "titulo_view":"Benchmarking"
         }
-        return render(request, 'Benchmarking/index.html', args)
+        #return render(request, 'Benchmarking/index.html', args)
+        return render(request, 'base_index.html', args)
     
     def show(request,id):
         bench = Benchmarking.objects.get(Id__name=id)
@@ -912,18 +1087,24 @@ class BenchmarkingView(View):
         all = Benchmarking.objects.filter(Eliminado=False)
         args = {
             "eliminado":eliminado,
-            "benchs":all
+            "querys":all,
+            "titulo":"benchmarking",
+            "titulo_view":"Benchmarking"
         }
-        return render(request, 'Benchmarking/index.html', args)
+        return render(request, 'base_index.html', args)
 
 class PuntosCapituloView(View):
 
     def index(request):
        all=PuntosCapitulo.objects.filter(Eliminado=False) 
        args = {
-           "pcs":all
+           #"pcs":all
+           "querys":all,
+           "titulo":"puntoscap",
+           "titulo_view":"Puntos Capitulo"
        }
-       return render(request, 'PuntosCapitulo/index.html', args)
+       #return render(request, 'PuntosCapitulo/index.html', args)
+       return render(request, 'base_index.html', args)
 
     def show(request,id):
         pc = PuntosCapitulo.objects.get(Id__name=id)
@@ -1007,7 +1188,9 @@ class PuntosCapituloView(View):
         if ob_pc:
             args = {
                 "eliminado": "No puedes borrar este elemento porque otros dependen de él, borralos primero",
-                "pcs":all
+                "pcs":all,
+                "titulo":"puntoscap",
+            "titulo_view":"Puntos Capitulo"
             }
         else:
             pc.Eliminado = True
@@ -1016,7 +1199,9 @@ class PuntosCapituloView(View):
             all = PuntosCapitulo.objects.filter(Eliminado=False)
             args = {
                 "eliminado":eliminado,
-                "pcs":all
+                "pcs":all,
+                "titulo":"puntoscap",
+                "titulo_view":"Puntos Capitulo"
             }
         return render(request, 'PuntosCapitulo/index.html', args)
         
@@ -1025,9 +1210,13 @@ class ObjetivoView(View):
     def index(request):
        all=Objetivo.objects.filter(Eliminado=False) 
        args = {
-           "objs":all
+           #"objs":all
+           "querys":all,
+           "titulo":"objetivo",
+           "titulo_view":"Objetivo"
        }
-       return render(request, 'Objetivo/index.html', args)
+       #return render(request, 'Objetivo/index.html', args)
+       return render(request, 'base_index.html', args)
 
     def show(request,id):
         obj = Objetivo.objects.get(Id__name=id)
@@ -1123,6 +1312,8 @@ class ObjetivoView(View):
         all = Objetivo.objects.filter(Eliminado=False)
         args = {
             "eliminado":eliminado,
-            "objs":all
+            "querys":all,
+            "titulo":"objetivo",
+            "titulo_view":"Objetivo"
         }
-        return render(request, 'Objetivo/index.html', args)
+        return render(request, 'base_index.html', args)

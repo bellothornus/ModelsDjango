@@ -17,7 +17,7 @@ class TipoObjetivo(models.Model):
     Eliminado=models.BooleanField(default=False, db_column="TO_Eliminado")
 
     class Meta:
-        db_table = "tipo_objetivos"
+        db_table = "tipos_objetivos"
 
 """ class Estructura(models.Model):
     Id=models.AutoField(primary_key=True, db_column="ES_Id_Estructura")

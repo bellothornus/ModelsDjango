@@ -4,8 +4,8 @@
     {%endblock%}
     {% block body %}
         <form action="/create/sector" method="POST"> {% csrf_token %}
-        <input type="text" name="str_sc_nombre">
-        <input type="text" name="str_sc_descripcion">
+        <input type="text" name="Nombre">
+        <input type="text" name="Descripcion">
         <input type="submit" value="Enviar">
         </form>
         {% if form.errors %}

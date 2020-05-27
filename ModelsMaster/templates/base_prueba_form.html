@@ -1,0 +1,66 @@
+{% load static %}
+<html>
+    <head>
+        <!-- Jquery-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <!-- Bootstrap 4 css-->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+        <!-- Popper-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <!-- Bootstrap 4 javascript-->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+        <!-- Datatables css-->
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+        <!-- Datatables Javascript-->
+        <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+        <!-- Fontawesome.css (iconos de Bootstrap 4)-->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+        <!-- Archivo local javascript para invocar el Datatable-->
+        <script type="text/javascript" src="{%static 'js/tabla_datos.js'%}" ></script>
+        {% block head %}
+
+        {% endblock %}
+    </head>
+    <body>
+        <h2>Creando un nuevo {{titulo_view}}:</h2>
+        <div class="container">
+            <form style="margin-top:30px;"action="/create/{{titulo}}" method="POST"> {% csrf_token %}
+            {% for column in columns %}
+                {% if column.name == "Nombre" or column.name == "Descripcion" or column.name == "Anyo" or column.name == "Codificacion"%}
+                    <div class="form-group row">
+                        <label for="{{column.name}}" class="col-sm-2 col-form-label">{%if column.name == "Anyo"%}Año{%else%}{{column.name}}{%endif%}:</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" type="text" name="{{column.name}}" id="{{column.name}}">
+                        </div>
+                    </div>
+                {% endif %}
+                {% if column.name == "Nivel" or column.name == "IdParent" or column.name == "IdNag"%}
+                    <div class="form-group row">
+                        <label for="{{column.name}}" class="col-sm-2 col-form-label">{%if column.name == "IdParent"%}Padre{%elif column.name == "IdNag"%}Nivel Area Geográfica{%else%}{{column.name}}{%endif%}</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" name="{{column.name}}" id="{{column.name}}">
+                            <option disabled selected value>Elige una opción</option>
+                            {%if column.name == "IdParent"%}
+                            {% for data in padres %}
+                                <option value="{{data.Id}}">{{data.Nombre}}</option>
+                            {% endfor %}
+                            {%endif%}
+                            {%if column.name == "IdNag"%}
+                            {% for data in relacionados1 %}
+                                <option data-area-level="{{data.Nivel}}"value="{{data.Id}}">{{data.Nombre}}</option>
+                            {% endfor %}
+                            {%endif%}
+                            </select>
+                        </div>
+                    </div>
+                {%endif%}
+            {% endfor%}
+            <div class="row">
+                <a class="btn btn-primary col-sm-3 mx-4" href="/index/{{titulo}}">Volver al Índice</a>
+                <a class="btn btn-primary col-sm-3 mx-4" href="/new/{{titulo}}">Deshacer</a>
+                <input class="btn btn-primary col-sm-4 mx-4"type="submit" value="Enviar">
+            </div>
+        </div>
+    </form>
+    </body>
+</html>

@@ -9,14 +9,14 @@ def index(request):
 
 class AmbitoView(View):
     def index(request):
-        all = Ambito.objects.filter(bool_am_eliminado=False)
+        all = Ambito.objects.filter(Eliminado=False)
         args = {
             "ambitos":all
         }
         return render(request, 'Ambitos/index.html', args)
 
     def show(request,id):
-        ambito = Ambito.objects.get(id_am=id)
+        ambito = Ambito.objects.get(Id__name=id)
         args = {
             "ambito":ambito
         }
@@ -30,7 +30,7 @@ class AmbitoView(View):
         if form.is_valid():
             form.save()
             aviso = "El ambito se ha creado con éxito"
-            all = Ambito.objects.filter(bool_am_eliminado=False)
+            all = Ambito.objects.filter(Eliminado=False)
             args = {
                 "aviso":aviso,
                 "ambitos":all
@@ -43,14 +43,14 @@ class AmbitoView(View):
             return render (request, 'Ambitos/new.html', args )
 
     def edit(request,id):
-        ambito = Ambito.objects.get(id_am=id)
+        ambito = Ambito.objects.get(Id__name=id)
         args = {
             "ambito":ambito
             }
         return render(request, 'Ambitos/edit.html', args)
 
     def update(request,id):
-        ambito = Ambito.objects.get(id_am=id)
+        ambito = Ambito.objects.get(Id__name=id)
         form = AmbitoForm(request.POST, instance=ambito)
         if form.is_valid():
             form.save()
@@ -62,7 +62,7 @@ class AmbitoView(View):
             }
             return render(request, 'Ambitos/edit.html', args)
         else:
-            ambito = Ambito.objects.get(id_am=id)
+            ambito = Ambito.objects.get(Id__name=id)
             args = {
                 "form":form,
                 "ambito":ambito
@@ -70,10 +70,10 @@ class AmbitoView(View):
             return render(request, 'Ambitos/edit.html',args)
 
     def delete(request,id):
-        ambito = Ambito.objects.get(id_am=id)
-        all = Ambito.objects.filter(bool_am_eliminado=False)
+        ambito = Ambito.objects.get(Id__name=id)
+        all = Ambito.objects.filter(Eliminado=False)
         try:
-            am_pc = PuntosCapitulo.objects.filter(id_pc_am=ambito.id_am)
+            am_pc = PuntosCapitulo.objects.filter(id_pc_am=ambito.Id)
         except AttributeError:
             am_pc = "nope"
         if am_pc != "nope":
@@ -85,7 +85,7 @@ class AmbitoView(View):
             ambito.bool_am_eliminado = True
             ambito.save()
             eliminado = "El ambito se ha eliminado"
-            all = Ambito.objects.filter(bool_am_eliminado=False)
+            all = Ambito.objects.filter(Eliminado=False)
             args = {
                 "eliminado":eliminado,
                 "ambitos":all

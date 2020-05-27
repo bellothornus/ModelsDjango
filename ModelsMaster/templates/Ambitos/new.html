@@ -4,8 +4,8 @@
     {% endblock %}
     {% block body %}
         <form action="/create/ambito" method="POST"> {% csrf_token %}
-        <input type="text" name="str_am_nombre">
-        <input type="text" name="str_am_descripcion">
+        <input type="text" name="Nombre">
+        <input type="text" name="Descripcion">
         <input type="submit" value="Enviar">
         </form>
         <a href="/index/ambito">Volver atrás</a>

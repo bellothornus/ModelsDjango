@@ -5,7 +5,7 @@ from .models import Ambito, TipoObjetivo, Estructura, Riesgo, TipoInterviniente,
 class AmbitoForm(ModelForm):
     class Meta:
         model = Ambito
-        fields = ['str_am_nombre', 'str_am_descripcion']
+        fields = ['Nombre', 'Descripcion']
 
 class TipoObjetivoForm(ModelForm):
     class Meta:
@@ -65,7 +65,7 @@ class PuntosCapituloForm(ModelForm):
 class ObjetivoForm(ModelForm):
     class Meta:
         model = Objetivo
-        fields = ['id_ob_to','id_ob_pc','id_ob_parents','str_ob_nombre','str_ob_descripcion','str_ob_codificacion','num_ob_any']
+        fields = ['id_ob_to','id_ob_pc','id_ob_parent','str_ob_nombre','str_ob_descripcion','str_ob_codificacion','num_ob_any']
 
 """ class ObjetivoRelacionadoForm(ModelForm):
     class Meta:

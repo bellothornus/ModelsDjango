@@ -3,13 +3,13 @@
         <title>edit Ambito</title>
     {% endblock %}
     {% block body %}
-        <form action="/update/ambito/{{ambito.id_am}}" method="POST"> {% csrf_token %}
-            <input type="text" name="str_am_nombre" value="{{ambito.str_am_nombre}}">
-            <input type="text" name="str_am_descripcion" value="
-            {% if ambito.str_am_descripcion %}
-                {{ambito.str_am_descripcion}}
+        <form action="/update/ambito/{{ambito.Id}}" method="POST"> {% csrf_token %}
+            <input type="text" name="Nombre" value="{{ambito.Nombre}}">
+            <input type="text" name="Descripcion" value="
+            {% if ambito.Descripcion %}
+                {{ambito.Descripcion}}
                 {%endif%}">
             <input type="submit" value="Enviar">
         </form>
-        <a href="/show/ambito/{{ambito.id_am}}">Volver atrás</a>
+        <a href="/show/ambito/{{ambito.Id}}">Volver atrás</a>
     {% endblock%}

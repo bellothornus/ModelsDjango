@@ -3,11 +3,10 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.exceptions import ValidationError
 # Create your models here.
 class Ambito(models.Model):
-    id_am=models.AutoField(primary_key=True, db_column="id_Ambito")
-    #Str_Nombre=models.CharField(max_length=256, null=False, blank=False)
-    str_am_nombre=models.CharField(max_length=256, null=False, blank=False, db_column="Nombre")
-    str_am_descripcion=models.CharField(max_length=256, null=True, blank=True, db_column="Descripcion")
-    bool_am_eliminado=models.BooleanField(default=False, db_column="eliminado")
+    Id=models.AutoField(primary_key=True, db_column="AM_Id_Ambito")
+    Nombre=models.CharField(max_length=256, null=False, blank=False, db_column="AM_Nombre")
+    Descripcion=models.CharField(max_length=256, null=True, blank=True, db_column="AM_Descripcion")
+    Eliminado=models.BooleanField(default=False, db_column="AM_Eliminado")
 
     class Meta:
         db_table = "ambitos"
@@ -122,7 +121,7 @@ class Benchmarking(models.Model):
         db_table = "benchmarkings"
 
 class PuntosCapitulo(models.Model):
-    id_pc=models.AutoField(primary_key=True, db_column="id_Capitulo")
+    Id=models.AutoField(primary_key=True, db_column="id_Capitulo")
     id_pc_md=models.ForeignKey(to=Modelo, db_column="id_Modelo", on_delete=models.DO_NOTHING)
     id_pc_am=models.ForeignKey(to=Ambito, db_column="id_Ambito", on_delete=models.DO_NOTHING)
     str_pc_nombre=models.CharField(max_length=256, db_column="Nombre")

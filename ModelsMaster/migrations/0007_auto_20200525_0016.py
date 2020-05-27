@@ -36,7 +36,7 @@ class Migration(migrations.Migration):
                 ('id_pc_md', models.ForeignKey(blank=True, db_column='id_Modelo', null=True, on_delete=django.db.models.deletion.PROTECT, to='ModelsMaster.Modelo')),
             ],
             options={
-                'db_table': 'puntos_capitulos',
+                'db_table': 'puntos_capitulo',
             },
         ),
         migrations.CreateModel(
@@ -49,7 +49,7 @@ class Migration(migrations.Migration):
                 ('id_or_ob_asociado', models.ForeignKey(blank=True, db_column='id_Objetivo_Asociado', null=True, on_delete=django.db.models.deletion.PROTECT, related_name='Id_Objetivo_Asociado', to='ModelsMaster.Objetivo')),
             ],
             options={
-                'db_table': 'objetivos_relacionados',
+                'db_table': 'objetivo_relacionado',
             },
         ),
         migrations.AddField(

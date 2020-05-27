@@ -17,7 +17,7 @@ class TipoObjetivo(models.Model):
     bool_to_eliminado=models.BooleanField(default=False, db_column="eliminado")
 
     class Meta:
-        db_table = "tipo_objetivos"
+        db_table = "tipos_objetivos"
 
 class Estructura(models.Model):
     id_est=models.AutoField(primary_key=True, db_column="id_Estructura")
@@ -41,7 +41,7 @@ class TipoInterviniente(models.Model):
     bool_ti_eliminado=models.BooleanField(default=False, db_column="eliminado")
 
     class Meta:
-        db_table = "tipo_intervinientes"
+        db_table = "tipos_intervinientes"
 
 class Sector(models.Model):
     id_sc=models.AutoField(primary_key=True, db_column="id_Sector")
@@ -129,13 +129,13 @@ class PuntosCapitulo(models.Model):
     bool_pc_eliminado=models.BooleanField(default=False, db_column="eliminado")
 
     class Meta:
-        db_table = "puntos_capitulo"
+        db_table = "puntos_capitulos"
 
 class Objetivo(models.Model):
     id_ob=models.AutoField(primary_key=True, db_column="id_Objetivo")
     id_ob_pc=models.ForeignKey(to=PuntosCapitulo, db_column="id_Capitulo", on_delete=models.DO_NOTHING)
     id_ob_to=models.ForeignKey(to=TipoObjetivo, db_column="id_Tipo_Objetivo", on_delete=models.DO_NOTHING)
-    id_ob_parent=models.ForeignKey(to="self", db_column="Id_Objetivo_Padre", on_delete=models.DO_NOTHING)
+    id_ob_parent=models.ForeignKey(to="self",null=True,blank=True,db_column="id_ObjetivoPadre", on_delete=models.DO_NOTHING)
     str_ob_nombre=models.CharField(max_length=256, db_column="Nombre")
     str_ob_descripcion=models.CharField(max_length=256, null=True, blank=True, db_column="Descripcion")
     str_ob_codificacion=models.CharField(max_length=256, db_column="Codificacion")
@@ -153,5 +153,4 @@ class Objetivo(models.Model):
     bool_or_eliminado=models.BooleanField(default=False, db_column="eliminado")
 
     class Meta:
-        db_table = "objetivo_relacionado"
- """
+        db_table = "objetivo_relacionado" """

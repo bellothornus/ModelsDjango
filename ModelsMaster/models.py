@@ -125,7 +125,7 @@ class PuntosCapitulo(models.Model):
     IdMd=models.ForeignKey(to=Modelo, db_column="CP_Id_Modelo", on_delete=models.DO_NOTHING)
     IdAm=models.ForeignKey(to=Ambito, to_field='Id', db_column="CP_Id_Ambito", on_delete=models.DO_NOTHING)
     Nombre=models.CharField(max_length=256, db_column="CP_Nombre")
-    descripcion=models.CharField(max_length=256, null=True, blank=True, db_column="CP_Descripcion")
+    Descripcion=models.CharField(max_length=256, null=True, blank=True, db_column="CP_Descripcion")
     Eliminado=models.BooleanField(default=False, db_column="CP_Eliminado")
 
     class Meta:

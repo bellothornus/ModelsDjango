@@ -1,3 +1,4 @@
+{% extends 'navbar.html' %}
 {% load static %}
 <html>
     <head>
@@ -22,6 +23,8 @@
         {% endblock %}
     </head>
     <body>
+        {%block navbar%}
+        {%endblock%}
         <h2>Creando un nuevo {{titulo_view}}:</h2>
         <div class="container">
             <form style="margin-top:30px;"action="/create/{{titulo}}" method="POST"> {% csrf_token %}

@@ -1,6 +1,10 @@
 from django.db import models
+from ModelsMaster import validators
+#from django.contrib.auth.forms import UserCreationForm
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.exceptions import ValidationError
+#class User(AbstractUser):
+
 # Create your models here.
 class Ambito(models.Model):
     Id=models.AutoField(primary_key=True,db_column="AM_Id_Ambito")
@@ -8,16 +12,22 @@ class Ambito(models.Model):
     Descripcion=models.CharField(max_length=256, null=True, blank=True, db_column="AM_Descripcion")
     Eliminado=models.BooleanField(default=False, db_column="AM_Eliminado")
 
+    def __str__(self):
+        self.Nombre
+
     class Meta:
-        db_table = "ambitos"
+        db_table = "T_Ambitos"
 
 class TipoObjetivo(models.Model):
     Id=models.AutoField(primary_key=True, db_column="TO_Id_Tipo_Objetivo")
     Nombre=models.CharField(max_length=256, null=False, blank=False, db_column="TO_Nombre")
     Eliminado=models.BooleanField(default=False, db_column="TO_Eliminado")
 
+    def __str__(self):
+        self.Nombre
+
     class Meta:
-        db_table = "tipos_objetivos"
+        db_table = "T_Tipo_Objetivo"
 
 """ class Estructura(models.Model):
     Id=models.AutoField(primary_key=True, db_column="ES_Id_Estructura")
@@ -49,8 +59,11 @@ class Sector(models.Model):
     Descripcion=models.CharField(max_length=256, db_column="SC_Descripcion",null=True, blank=True)
     Eliminado=models.BooleanField(default=False, db_column="SC_Eliminado")
 
+    def __str__(self):
+        return self.Nombre
+
     class Meta:
-        db_table = "sectores"
+        db_table = "T_Sector"
 
 class NivelAreaGeografica(models.Model):
     Id=models.AutoField(primary_key=True, db_column="NG_Id_Nivel_Area_Geo")
@@ -59,8 +72,11 @@ class NivelAreaGeografica(models.Model):
     Descripcion=models.CharField(max_length=256,null=True,blank=True, db_column="NG_Descripcion")
     Eliminado=models.BooleanField(default=False, db_column="NG_Eliminado")
 
+    def __str__(self):
+        return self.Nombre
+
     class Meta:
-        db_table = "nivel_areas_geograficas"
+        db_table = "T_Nivel_Area_Geografica"
 
 class AreaGeografica(models.Model):
     #id_ag es el id del Area geográfica en sí, cada uno tiene el suyo ,es su identificador único
@@ -82,19 +98,25 @@ class AreaGeografica(models.Model):
         if self.id_ag_parent == "0":
             self.id_ag_parent = None """
         
+    def __str__(self):
+        return self.Nombre
+
     class Meta:
-        db_table = "areas_geograficas"
+        db_table = "T_Area_Geografica"
     
 class Empresa(models.Model):
     Id=models.AutoField(primary_key=True, db_column="EM_Id_Empresa")
     IdSc=models.ForeignKey(to=Sector,on_delete=models.DO_NOTHING, null=False, blank=False, db_column="EM_Id_Sector")
-    IdAg=models.ForeignKey(to=AreaGeografica, on_delete=models.DO_NOTHING, db_column="Em_Centro_Principal", null=False, blank=True)
+    IdAg=models.ForeignKey(to=AreaGeografica, on_delete=models.DO_NOTHING, db_column="Em_Centro_Principal", null=False, blank=False)
     Nombre=models.CharField(max_length=256, db_column="EM_Nombre")
     Descripcion=models.CharField(max_length=256,db_column="EM_Descripcion", null=True, blank=True)
     Eliminado=models.BooleanField(default=False, db_column="EM_Eliminado")
 
+    def __str__(self):
+        return "%s > %s" % (self.IdSc, self.IdAg)
+
     class Meta:
-        db_table = "empresas"
+        db_table = "T_Empresa"
 
 class Modelo(models.Model):
     Id=models.AutoField(primary_key=True, db_column="MD_Id_Modelo")
@@ -103,8 +125,11 @@ class Modelo(models.Model):
     Descripcion=models.CharField(max_length=256, blank=True, null=True, db_column="MD_Descripcion")
     Eliminado=models.BooleanField(default=False, db_column="MD_Eliminado")
     
+    def __str__(self):
+        self.Nombre 
+
     class Meta:
-        db_table= "modelos"
+        db_table= "T_Modelo"
         
 class Benchmarking(models.Model):
     Id=models.AutoField(primary_key=True, db_column="BH_Id_Bench")
@@ -117,8 +142,11 @@ class Benchmarking(models.Model):
     Ciclo=models.CharField(max_length=256,null=True, blank=True, db_column="BH_Ciclo")
     Eliminado=models.BooleanField(default=False, db_column="BH_Eliminado")
     
+    def __str__(self):
+        self.Nombre
+
     class Meta:
-        db_table = "benchmarkings"
+        db_table = "T_Benchmarkig"
 
 class PuntosCapitulo(models.Model):
     Id=models.AutoField(primary_key=True, db_column="CP_Id_Capitulo")
@@ -128,8 +156,11 @@ class PuntosCapitulo(models.Model):
     Descripcion=models.CharField(max_length=256, null=True, blank=True, db_column="CP_Descripcion")
     Eliminado=models.BooleanField(default=False, db_column="CP_Eliminado")
 
+    def __str__(self):
+        self.Nombre
+
     class Meta:
-        db_table = "puntos_capitulos"
+        db_table = "T_Puntos_Capitulo"
 
 class Objetivo(models.Model):
     Id=models.AutoField(primary_key=True, db_column="OB_Id_Objetivo")
@@ -142,8 +173,11 @@ class Objetivo(models.Model):
     Anyo=models.IntegerField(null=True, blank=True, db_column="OB_Año")
     Eliminado=models.BooleanField(default=False, db_column="OB_Eliminado")
 
+    def __str__(self):
+        self.Nombre
+
     class Meta:
-        db_table = "objetivos"
+        db_table = "T_Objetivo"
 
 """ class ObjetivoRelacionado(models.Model):
     id_or=models.AutoField(primary_key=True, db_column="id_ObjetivoRelacionado")
@@ -154,4 +188,54 @@ class Objetivo(models.Model):
 
     class Meta:
         db_table = "objetivo_relacionado"
+ """
+
+class Meta(models.Model):
+    Id=models.AutoField(primary_key=True, db_column="MT_Id_Meta")
+    IdObj=models.ForeignKey(to=Objetivo, db_column="MT_Id_Objetivo", on_delete=models.DO_NOTHING)
+    IdParent=models.ForeignKey(to='self', db_column="MT_Id_Padre", on_delete=models.DO_NOTHING)
+    Codificacion=models.CharField(max_length=256, db_column="MT_Codificacion")
+    Nombre=models.CharField(max_length=256, db_column="MT_Nombre")
+    Descripcion=models.TextField(max_length=256, db_column="MT_Descripcion", null=True, blank=True)
+
+    class Meta:
+        db_table = "T_Meta"
+
+class AccionMeta(models.Model):
+    Id=models.AutoField(primary_key=True, db_column="AT_Id_AccMeta")
+    IdMeta=models.ForeignKey(to=Meta, db_column="AT_Id_Meta", on_delete=models.DO_NOTHING)
+    Nombre=models.CharField(max_length=256, db_column="AT_Nombre")
+    Estado=models.CharField(max_length=256,db_column="AT_Estado_Avance", null=True, blank=False)
+    Plazo=models.CharField(max_length=256,db_column="AT_Plazo")
+
+    class Meta:
+        db_table = "T_Acciones_Meta"
+
+class IndicadorAccionProceso(models.Model):
+    Id=models.AutoField(primary_key=True, db_column="IA_Id_Indicador_Accion")
+    IdAcc=models.ForeignKey(to=AccionMeta, db_column="IA_Id_Accion_Meta", on_delete=models.DO_NOTHING)
+    IdProc=models.ForeignKey(to=Proceso, db_column="IA_Id_Proceso", null=True, balnk=True)
+    Nombre=models.CharField(max_length=256, db_column="IA_Nombre")
+    Descripcion=models.CharField(max_length=256, db_column="IA_Descripcion", null=True, balnk=True)
+    Periodo=models.CharField(max_length=256, db_column="IA_Periodo")
+    Estado=models.CharField(max_length=256, db_column="IA_Estado", null=True, blank=True)
+    ValorObjetivo=models.CharField(max_length=256, db_column="IA_Valor_Objetivo")
+    ValorConseguido=models.CharField(max_length=256, db_column="IA_Valor_conseguido")
+    Plazo=models.CharField(max_length=256, db_column="IA_Plazo_Seguimiento", validators=[validators.plazo_filtro])
+
+    class Meta:
+        db_table = "T_Indicador_Accion_proceso"
+
+class SeguimientoIndicadores(models.Model):
+    Id=models.AutoField(primary_key=True, db_column="IS_Id_Indicador")
+    IdAccMeta=models.ForeignKey(to=IndicadorAccionProceso, db_column="IS_Id_Indicador_Accion")
+    IdDoc=models.ForeignKey(to=DocumentosSistema, db_column="IS_Id_Documento", null=True, blank=True)
+    Fecha=models.DateField(db_column="Is_Fecha_Seguimiento", validators=[validators.fecha_filtro])
+    Seguimiento=models.IntegerField(db_column="IS_Valor_Seguimiento")
+
+    class Meta:
+        db_table = "T_Seguimiento_Indicador"
+
+""" class DocumentosSistema(models.Model):
+
  """

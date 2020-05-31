@@ -117,6 +117,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
-
-STATIC_URL = '/ModelsMaster/assets/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR,'ModelsMaster/assets'),]
+MEDIA_URL= '/ModelsMaster/media/'
+MEDIA_ROOT= os.path.join(BASE_DIR,'/ModelsMaster/media')
+STATIC_URL = '/ModelsMaster/static/'
+STATIC_ROOT = os.path.join(BASE_DIR,'ModelsMaster/static')

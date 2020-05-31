@@ -16,7 +16,10 @@
         <!-- Fontawesome.css (iconos de Bootstrap 4)-->
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
         <!-- Archivo local javascript para invocar el Datatable-->
-        <script type="text/javascript" src="{%static 'js/tabla_datos.js'%}" ></script>
+        <script type="text/javascript" src="{%static 'js/tabla_datos.js' %}" ></script>
+        {% if titulo == "area_geografica" %}
+            <script type="text/javascript" src="{% static 'js/filtro_ag.js' %}"></script>
+        {% endif %}
         {% block head %}
 
         {% endblock %}
@@ -38,6 +41,18 @@
             </div>
             {% endif %}
             <br>
+            {% if titulo == "area_geografica" %}
+                <div class="row" style="padding:10px;">
+                    <label for="ag" class="col-form-label col-sm-2">Nivel Área Geográfica a buscar:</label>
+                    <select name="filtro" id="ag" class="form-control col-sm-4">
+                        <option value="">TODOS</option>
+                        {% for f in filtro %}
+                        <option value="{{f.Id}}">{{f.Nombre}}</option>
+                        {% endfor %}
+                    </select>
+                    <div class="col-sm-6"></div>
+                </div>
+            {% endif %}
             <table id="myTable" class="display">
                 <thead>
                     <tr>

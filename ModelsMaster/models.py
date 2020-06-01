@@ -13,7 +13,7 @@ class Ambito(models.Model):
     Eliminado=models.BooleanField(default=False, db_column="AM_Eliminado")
 
     def __str__(self):
-        self.Nombre
+        return self.Nombre
 
     class Meta:
         db_table = "T_Ambitos"
@@ -24,18 +24,18 @@ class TipoObjetivo(models.Model):
     Eliminado=models.BooleanField(default=False, db_column="TO_Eliminado")
 
     def __str__(self):
-        self.Nombre
+        return self.Nombre
 
     class Meta:
         db_table = "T_Tipo_Objetivo"
 
-""" class Estructura(models.Model):
+class Estructura(models.Model):
     Id=models.AutoField(primary_key=True, db_column="ES_Id_Estructura")
     Nombre=models.CharField(max_length=256, db_column="ES_Nombre")
     Eliminado=models.BooleanField(default=False, db_column="ES_Eliminado")
 
     class Meta:
-        db_table = "estructuras" """
+        db_table = "T_Estructura"
 
 """ class Riesgo(models.Model):
     Id=models.AutoField(primary_key=True, db_column="RG_Id_Riesgo")
@@ -91,12 +91,6 @@ class AreaGeografica(models.Model):
     Descripcion=models.CharField(max_length=256, db_column="AG_Descripcion", null=True, blank=True)
     #columna que sirve para indicar si se ha eliminado o no
     Eliminado=models.BooleanField(default=False, db_column="AG_Eliminado")
-    #prueba fallida de validacion
-    """ def clean(self):
-        if self.id_ag_parent < self.end_date:
-            raise ValidationError('El Area geografica padre no puede ser inferior a esta.') 
-        if self.id_ag_parent == "0":
-            self.id_ag_parent = None """
         
     def __str__(self):
         return self.Nombre
@@ -126,7 +120,7 @@ class Modelo(models.Model):
     Eliminado=models.BooleanField(default=False, db_column="MD_Eliminado")
     
     def __str__(self):
-        self.Nombre 
+        return self.Nombre 
 
     class Meta:
         db_table= "T_Modelo"
@@ -143,7 +137,7 @@ class Benchmarking(models.Model):
     Eliminado=models.BooleanField(default=False, db_column="BH_Eliminado")
     
     def __str__(self):
-        self.Nombre
+        return self.Nombre
 
     class Meta:
         db_table = "T_Benchmarkig"
@@ -157,7 +151,7 @@ class PuntosCapitulo(models.Model):
     Eliminado=models.BooleanField(default=False, db_column="CP_Eliminado")
 
     def __str__(self):
-        self.Nombre
+        return self.Nombre
 
     class Meta:
         db_table = "T_Puntos_Capitulo"
@@ -174,7 +168,7 @@ class Objetivo(models.Model):
     Eliminado=models.BooleanField(default=False, db_column="OB_Eliminado")
 
     def __str__(self):
-        self.Nombre
+        return self.Nombre
 
     class Meta:
         db_table = "T_Objetivo"
@@ -197,6 +191,10 @@ class Meta(models.Model):
     Codificacion=models.CharField(max_length=256, db_column="MT_Codificacion")
     Nombre=models.CharField(max_length=256, db_column="MT_Nombre")
     Descripcion=models.TextField(max_length=256, db_column="MT_Descripcion", null=True, blank=True)
+    Eliminado=models.BooleanField(default=False, db_column="MT_Eliminado")
+
+    def __str__(self):
+        return self.Nombre
 
     class Meta:
         db_table = "T_Meta"
@@ -207,6 +205,10 @@ class AccionMeta(models.Model):
     Nombre=models.CharField(max_length=256, db_column="AT_Nombre")
     Estado=models.CharField(max_length=256,db_column="AT_Estado_Avance", null=True, blank=False)
     Plazo=models.CharField(max_length=256,db_column="AT_Plazo")
+    Eliminado=models.BooleanField(default=False, db_column="AT_Eliminado")
+
+    def __str__(self):
+        return self.Nombre
 
     class Meta:
         db_table = "T_Acciones_Meta"
@@ -214,28 +216,62 @@ class AccionMeta(models.Model):
 class IndicadorAccionProceso(models.Model):
     Id=models.AutoField(primary_key=True, db_column="IA_Id_Indicador_Accion")
     IdAcc=models.ForeignKey(to=AccionMeta, db_column="IA_Id_Accion_Meta", on_delete=models.DO_NOTHING)
-    IdProc=models.ForeignKey(to=Proceso, db_column="IA_Id_Proceso", null=True, balnk=True)
+    IdProc=models.ForeignKey(to='Proceso', db_column="IA_Id_Proceso", null=True, blank=True, on_delete=models.DO_NOTHING)
     Nombre=models.CharField(max_length=256, db_column="IA_Nombre")
-    Descripcion=models.CharField(max_length=256, db_column="IA_Descripcion", null=True, balnk=True)
+    Descripcion=models.CharField(max_length=256, db_column="IA_Descripcion", null=True, blank=True)
     Periodo=models.CharField(max_length=256, db_column="IA_Periodo")
     Estado=models.CharField(max_length=256, db_column="IA_Estado", null=True, blank=True)
     ValorObjetivo=models.CharField(max_length=256, db_column="IA_Valor_Objetivo")
     ValorConseguido=models.CharField(max_length=256, db_column="IA_Valor_conseguido")
     Plazo=models.CharField(max_length=256, db_column="IA_Plazo_Seguimiento", validators=[validators.plazo_filtro])
+    Eliminado=models.BooleanField(default=False, db_column="IA_Eliminado")
+
+    def __str__(self):
+        return self.Nombre
 
     class Meta:
         db_table = "T_Indicador_Accion_proceso"
 
+class DocumentosSistema(models.Model):
+    Id=models.AutoField(primary_key=True, db_column="DC_Id_Documento_Sistema")
+    IdPc=models.ForeignKey(to=PuntosCapitulo, db_column="DC_Id_Puntos_Capitulo", on_delete=models.DO_NOTHING)
+    #no lo intorducirá el usuario sino que será automático
+    Nombre=models.CharField(max_length=256, db_column="DC_Nombre")
+    Codificacion=models.CharField(max_length=256, db_column="DC_Codificacion")
+    Eliminado=models.BooleanField(default=False, db_column="DC_Eliminado")
+
+    def __str__(self):
+        return self.Nombre
+
+    class Meta:
+        db_table = "T_Documento_Sistema"
+
 class SeguimientoIndicadores(models.Model):
     Id=models.AutoField(primary_key=True, db_column="IS_Id_Indicador")
-    IdAccMeta=models.ForeignKey(to=IndicadorAccionProceso, db_column="IS_Id_Indicador_Accion")
-    IdDoc=models.ForeignKey(to=DocumentosSistema, db_column="IS_Id_Documento", null=True, blank=True)
+    IdAccMeta=models.ForeignKey(to=IndicadorAccionProceso, db_column="IS_Id_Indicador_Accion", on_delete=models.DO_NOTHING)
+    IdDoc=models.ForeignKey(to=DocumentosSistema, db_column="IS_Id_Documento", null=True, blank=True, on_delete=models.DO_NOTHING)
     Fecha=models.DateField(db_column="Is_Fecha_Seguimiento", validators=[validators.fecha_filtro])
     Seguimiento=models.IntegerField(db_column="IS_Valor_Seguimiento")
+    Eliminado=models.BooleanField(default=False, db_column="IS_Eliminado")
+
+    def __str__(self):
+        return self.Nombre
 
     class Meta:
         db_table = "T_Seguimiento_Indicador"
 
-""" class DocumentosSistema(models.Model):
+class proceso(models.Model):
+    Id=models.AutoField(primary_key=True, db_column="PR_Id_Proceso")
+    IdPc=models.ForeignKey(to=PuntosCapitulo, db_column="PR_Id_Punto_Capitulo", on_delete=models.DO_NOTHING)
+    IdEst=models.ForeignKey(to=Estructura, db_column="PR_Id_Estructura", on_delete=models.DO_NOTHING)
+    Nombre=models.CharField(max_length=256, db_column="PR_Nombre")
+    Descripcion=models.CharField(max_length=256, db_column="PR_Descripcion", null=True, blank=True)
+    Codificacion=models.CharField(max_length=256, db_column="PR_Codificacion")
+    Eliminado=models.BooleanField(default=False, db_column="PR_Eliminado")
 
- """
+    def __str__(self):
+        return self.Nombre
+
+    class Meta:
+        db_table = "T_Proceso"
+

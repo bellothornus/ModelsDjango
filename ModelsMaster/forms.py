@@ -1,6 +1,6 @@
 from django.db import models
 from django.forms import ModelForm
-from .models import Ambito, TipoObjetivo, Sector, NivelAreaGeografica, AreaGeografica, Empresa, Modelo, Benchmarking, PuntosCapitulo, Objetivo
+from .models import Ambito, TipoObjetivo, Sector, NivelAreaGeografica, AreaGeografica, Empresa, Modelo, Benchmarking, PuntosCapitulo, Objetivo, Estructura, Meta, AccionMeta, Proceso,
  
 
 class AmbitoForm(ModelForm):
@@ -152,3 +152,14 @@ class ObjetivoForm(ModelForm):
     class Meta:
         model = ObjetivoRelacionado
         fields = ['id_or_ob','id_or_ob_asociado','str_or_nombre'] """
+class EstructuraForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(EstructuraForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+
+    class Meta:
+        model = Estructura
+        fields = ['Nombre']
+
+class MetaForm()

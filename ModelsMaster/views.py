@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from .forms import AmbitoForm, TipoObjetivoForm, SectorForm, NivelAreaGeograficaForm, AreaGeograficaForm, EmpresaForm, ModeloForm, BenchmarkingForm, PuntosCapituloForm, ObjetivoForm
-from .models import Ambito, TipoObjetivo, Sector, NivelAreaGeografica, AreaGeografica, Empresa, Modelo, Benchmarking, PuntosCapitulo, Objetivo
+from .forms import AmbitoForm, TipoObjetivoForm, SectorForm, NivelAreaGeograficaForm, AreaGeograficaForm, EmpresaForm, ModeloForm, BenchmarkingForm, PuntosCapituloForm, ObjetivoForm, EstructuraForm
+from .models import Ambito, TipoObjetivo, Sector, NivelAreaGeografica, AreaGeografica, Empresa, Modelo, Benchmarking, PuntosCapitulo, Objetivo, Estructura, Meta, Proceso, DocumentosSistema, IndicadorAccionProceso, AccionMeta, SeguimientoIndicadores
 
 # Create your views here.
 def index(request):
@@ -227,16 +227,19 @@ class EstructuraView(View):
 
     def show(request,id):
         estructura = Estructura.objects.get(Id=id)
+        form = EstructuraForm()
         args = {
-            "estructura":estructura
+            "estructura":estructura,
+            "titulo":"estructura",
+            "titulo_view":"Estructura"
         }
-        return render(request, 'Estructura/show.html', args)
+        return render(request, 'base_prueba_form.html', args)
 
     def new(request):
-        columns = Estructura._meta.fields
+        form = EstructuraForm()
         args = {
+            "form":form,
             "titulo":"estructura",
-            "columns":columns,
             "titulo_view":"Estructuras"
         }
         #return render(request, 'Estructura/new.html')
@@ -250,21 +253,28 @@ class EstructuraView(View):
             all = Estructura.objects.filter(Eliminado=False)
             args = {
                 "aviso":aviso,
-                "estructuras":all
+                "querys":all,
+                "titulo":"estructura",
+                "titulo_view":"Estructuras"
             }
-            return render(request, 'Estructura/index.html', args)
+            return render(request, 'base_index.html', args)
         else:
             args = {
-                "form":form
+                "form":form,
+                "titulo":"estructura",
+                "titulo_view":"Estructuras"
             }
-            return render(request, 'Estructura/new.html', args)
+            return render(request, 'base_prueba_form.html', args)
 
     def edit(request,id):
         estructura = Estructura.objects.get(Id=id)
+        form = EstructuraForm(instance=estructura)
         args = {
-            "estructura": estructura
+            "estructura": estructura,
+            "titulo":"estructura",
+            "titulo_view":"Estructuras"
         }
-        return render(request, 'Estructura/edit.html', args)
+        return render(request, 'base_prueba_form.html', args)
 
     def update(request,id):
         estructura = Estructura.objects.get(Id=id)
@@ -274,16 +284,20 @@ class EstructuraView(View):
             aviso = "Los datos se han actualizado!"
             args = {
                 "aviso":aviso,
-                "estructura":estructura
+                "form":form,
+                "titulo":"estructura",
+                "titulo_view":"Estructuras"
             }
-            return render(request, 'Estructura/edit.html', args)
         else:
             args = {
-                "form":form
+                "form":form,
+                "titulo":"estructura",
+                "titulo_view":"Estructuras"
             }
-            return render(request, 'Estructura/edit.html', args)
+        return render(request, 'base_prueba_form.html', args)
 
     def delete(request,id):
+        #TODO:
         estructura = Estructura.objects.get(Id=id)
         estructura.Eliminado = True
         estructura.save()
@@ -681,10 +695,13 @@ class AreaGeograficaView(View):
     def show(request,id):
         ag = AreaGeografica.objects.get(Id=id)
         form = AreaGeograficaForm(instance=ag)
+        nags = NivelAreaGeografica.objects.filter(Eliminado=False)
+        
         args = {
             "form":form,
             "titulo":"area_geografica",
-            "titulo_view":"Área Geográfica"
+            "titulo_view":"Área Geográfica",
+            "nags":nags
         }
         return render(request, 'base_show.html', args)
 
@@ -1177,6 +1194,8 @@ class PuntosCapituloView(View):
         return render(request, 'base_prueba_form.html', args)
     
     def delete(request,id):
+        # TODO:
+        #pendiente de Actulaizar
         all = PuntosCapitulo.objects.filter(Eliminado=False)
         pc = PuntosCapitulo.objects.get(Id=id)
         ob_pc = Objetivo.objects.filter(IdPc=pc.Id)
@@ -1224,11 +1243,13 @@ class ObjetivoView(View):
         return render(request, 'Objetivo/show.html', args)
 
     def new(request):
-        all = Objetivo.objects.filter(Eliminado=False)
+        form = ObjetivoForm()
         args = {
-            "querys":all
+            "form":form,
+            "titulo":"objetivo",
+            "titulo_view":"Objetivo"
         }
-        return render(request, 'base_index.html', args)
+        return render(request, 'base_prueba_form.html', args)
     
     def create(request):
         ModelForm_form = ObjetivoForm(request.POST)
@@ -1238,52 +1259,52 @@ class ObjetivoView(View):
             all = Objetivo.objects.filter(Eliminado=False)
             args = {
                 "aviso":aviso,
-                "querys":all
+                "querys":all,
+                "titulo":"objetivo",
+                "titulo_view":"Objetivo"    
             }
             return render(request, 'base_index.html', args)
         else:
             args = {
-                "form":ModelForm_form
+                "form":ModelForm_form,
+                "titulo":"objetivo",
+                "titulo_view":"Objetivo"
             }
             return render(request, 'base_prueba_form.html', args)
 
     def edit(request,id):
-        obj_pcs = PuntosCapitulo.objects.filter(Eliminado=False)
         obj = Objetivo.objects.get(Id=id)
-        obj_tos = TipoObjetivo.objects.filter(Eliminado=False)
-        all = Objetivo.objects.filter(Eliminado=False)
+        form = AmbitoForm(instance=obj)
         args = {
-            "obj":obj,
-            "obj_pcs":obj_pcs,
-            "obj_tos":obj_tos,
-            "objs":all
+            "form":form,
+            "titulo":"objetivo",
+            "titulo_view":"Objetivo"
         }
-        return render(request, 'Objetivo/edit.html', args)
+        return render(request, 'base_prueba_form.html', args)
 
     def update(request,id):
         obj = Objetivo.objects.get(Id=id)
         ModelForm_form = ObjetivoForm(request.POST, instance=obj)
-        obj_tos = TipoObjetivo.objects.filter(Eliminado=False)
-        obj_pcs = PuntosCapitulo.objects.filter(Eliminado=False)
         if ModelForm_form.is_valid():
             ModelForm_form.save()
             aviso = "Los datos se han actualizado con éxito"
             args = {
                 "aviso":aviso,
-                "obj":obj,
-                "obj_pcs":obj_pcs,
-                "obj_tos":obj_tos
+                "form":ModelForm_form,
+                "titulo":"objetivo",
+                "titulo_view":"Objetivo"
             }
         else:
             args = {
                 "form":ModelForm_form,
-                "obj":obj,
-                "obj_pcs":obj_pcs,
-                "obj_tos":obj_tos
+                "titulo":"objetivo",
+                "titulo_view":"Objetivo"
             }
-        return render(request, 'Objetivo/edit.html', args)
+        return render(request, 'base_prueba_form.html', args)
     
     def delete(request,id):
+        # TODO:
+        #pendiente de actualizar
         obj = Objetivo.objects.get(Id=id)
         obj.Eliminado = True
         obj.save()
@@ -1296,3 +1317,7 @@ class ObjetivoView(View):
             "titulo_view":"Objetivo"
         }
         return render(request, 'base_index.html', args)
+
+class MetaView(View):
+    def index(request):
+        all = Meta.objects.filter(Eliminado=False)

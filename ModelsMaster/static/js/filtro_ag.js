@@ -8,13 +8,8 @@ $(document).ready(function() {
                 //para depurar
                 //alert("Has seleccionado - " + ag_seleccionado + nivel_area);
                 return true;
-            } else if (ag_seleccionado=="TODOS"){ //para filtrar todo
-                //alert("Hola ");
-                return false;
-            /* } else { //para depurar
-                alert("Hola " + ag_seleccionado + nivel_area)
-           */
-            }  
+            }
+            console.log("Hola");
             return false;
         }
     );
@@ -22,10 +17,9 @@ $(document).ready(function() {
     $("select#ag").change(function(){
 
         //var ag_seleccionada = $(this).children("option:selected").text();
-
-        //alert("You have selected the country - " + ag_seleccionada);
-
-        table.draw();
-
+        table
+        .search( '' )
+        .draw();
+        //table.draw();
     });
 } );

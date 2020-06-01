@@ -109,7 +109,38 @@ urlpatterns = [
     path('update/objetivo/<int:id>', views.ObjetivoView.update),
     path('delete/objetivo/<int:id>', views.ObjetivoView.delete),
     
-    
+    path('index/meta', views.MetaView.index),
+    path('show/meta/<int:id>', views.MetaView.show),
+    path('new/meta', views.MetaView.new),
+    path('create/meta', views.MetaView.create),
+    path('edit/meta/<int:id>', views.MetaView.edit),
+    path('update/meta/<int:id>', views.MetaView.update),
+    path('delete/meta/<int:id>', views.MetaView.delete),
+
+    path('index/accionmeta', views.AccionMetaView.index),
+    path('show/accionmeta/<int:id>', views.AccionMetaView.show),
+    path('new/accionmeta', views.AccionMetaView.new),
+    path('create/accionmeta', views.AccionMetaView.create),
+    path('edit/accionmeta/<int:id>', views.AccionMetaView.edit),
+    path('update/accionmeta/<int:id>', views.AccionMetaView.update),
+    path('delete/accionmeta/<int:id>', views.AccionMetaView.delete),
+
+    path('index/documentos_sistema', views.DocumentosSistemaView.index),
+    path('show/documentos_sistema/<int:id>', views.DocumentosSistemaView.show),
+    path('new/documentos_sistema', views.DocumentosSistemaView.new),
+    path('create/documentos_sistema', views.DocumentosSistemaView.create),
+    path('edit/documentos_sistema/<int:id>', views.DocumentosSistemaView.edit),
+    path('update/documentos_sistema/<int:id>', views.DocumentosSistemaView.update),
+    path('delete/documentos_sistema/<int:id>', views.DocumentosSistemaView.delete),
+
+    path('index/indicador_accion_proceso', views.IndicadorAccionProcesoView.index),
+    path('show/indicador_accion_proceso/<int:id>', views.IndicadorAccionProcesoView.show),
+    path('new/indicador_accion_proceso', views.IndicadorAccionProcesoView.new),
+    path('create/indicador_accion_proceso', views.IndicadorAccionProcesoView.create),
+    path('edit/indicador_accion_proceso/<int:id>', views.IndicadorAccionProcesoView.edit),
+    path('update/indicador_accion_proceso/<int:id>', views.IndicadorAccionProcesoView.update),
+    path('delete/indicador_accion_proceso/<int:id>', views.IndicadorAccionProcesoView.delete),
+
 ]
 
 urlpatterns += staticfiles_urlpatterns()

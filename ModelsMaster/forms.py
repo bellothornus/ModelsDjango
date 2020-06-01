@@ -1,6 +1,6 @@
 from django.db import models
 from django.forms import ModelForm
-from .models import Ambito, TipoObjetivo, Sector, NivelAreaGeografica, AreaGeografica, Empresa, Modelo, Benchmarking, PuntosCapitulo, Objetivo, Estructura, Meta, AccionMeta, Proceso,
+from .models import Ambito, TipoObjetivo, Sector, NivelAreaGeografica, AreaGeografica, Empresa, Modelo, Benchmarking, PuntosCapitulo, Objetivo, Estructura, Meta, AccionMeta, Proceso, IndicadorAccionProceso, SeguimientoIndicadores, DocumentosSistema
  
 
 class AmbitoForm(ModelForm):
@@ -148,10 +148,7 @@ class ObjetivoForm(ModelForm):
             'IdParent':'Objetivo Padre',
             'Anyo':'Año'
         }
-""" class ObjetivoRelacionadoForm(ModelForm):
-    class Meta:
-        model = ObjetivoRelacionado
-        fields = ['id_or_ob','id_or_ob_asociado','str_or_nombre'] """
+
 class EstructuraForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(EstructuraForm, self).__init__(*args, **kwargs)
@@ -162,4 +159,94 @@ class EstructuraForm(ModelForm):
         model = Estructura
         fields = ['Nombre']
 
-class MetaForm()
+class MetaForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(MetaForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+        self.fields['IdObj'].queryset = Objetivo.objects.filter(Eliminado=False)
+        self.fields['IdParent'].queryset = Meta.objects.filter(Eliminado=False)
+    
+    class Meta:
+        model = Meta
+        fields = ['IdObj','IdParent','Codificacion','Nombre','Descripcion']
+        labels = {
+            'IdObj':'Objetivo',
+            'IdParent':'Meta padre'
+        }
+
+class AccionMetaForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(AccionMetaForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+        self.fields['IdMeta'].queryset = Meta.objects.filter(Eliminado=False)
+    
+    class Meta:
+        model = AccionMeta
+        fields = ['IdMeta','Nombre','Estado','Plazo']
+        labels = {
+            'IdMeta':'Meta'
+        }
+
+class IndicadorAccionProcesoForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(IndicadorAccionProcesoForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+        self.fields['IdAcc'].queryset = AccionMeta.objects.filter(Eliminado=False)
+        self.fields['IdProc'].queryset = Proceso.objects.filter(Eliminado=False)
+    
+    class Meta:
+        model = IndicadorAccionProceso
+        fields = ['IdAcc','IdProc','Nombre','Descripcion','Periodo','Estado','ValorObjetivo','ValorConseguido','Plazo']
+        labels = {
+            'IdAcc':'Accion Meta',
+            'IdProc':'Proceso'
+        }
+
+class SeguimientoIndicadoresForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(SeguimientoIndicadoresForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+        self.fields['IdAccMeta'].queryset = IndicadorAccionProceso.objects.filter(Eliminado=False)
+        self.fields['IdDoc'].queryset = DocumentosSistema.objects.filter(Eliminado=False)
+    
+    class Meta:
+        model = SeguimientoIndicadores
+        fields = ['IdAccMeta','IdDoc','Fecha','Seguimiento']
+        labels = {
+            'IdAccMeta':'IndicadorAccionProceso',
+            'IdDoc':'Documento'
+        }
+
+class DocumentosSistemaForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(DocumentosSistemaForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+        self.fields['IdPc'].queryset = AccionMeta.objects.filter(Eliminado=False)
+    
+    class Meta:
+        model = DocumentosSistema
+        fields = ['IdPc','Nombre','Codificacion']
+        labels = {
+            'IdPc':'Puntos Capitulo'
+        }
+
+class ProcesoForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(ProcesoForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+        self.fields['IdPc'].queryset = AccionMeta.objects.filter(Eliminado=False)
+        self.fields['IdEst'].queryset = Estructura.objects.filter(Eliminado=False)
+    
+    class Meta:
+        model = Proceso
+        fields = ['IdPc','IdEst','Nombre','Codificacion']
+        labels = {
+            'IdPc':'Puntos Capitulo',
+            'IdEst':'Estructura'
+        }

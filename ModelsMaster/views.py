@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from .forms import AmbitoForm, TipoObjetivoForm, SectorForm, NivelAreaGeograficaForm, AreaGeograficaForm, EmpresaForm, ModeloForm, BenchmarkingForm, PuntosCapituloForm, ObjetivoForm, EstructuraForm
+from .forms import AmbitoForm, TipoObjetivoForm, SectorForm, NivelAreaGeograficaForm, AreaGeograficaForm, EmpresaForm, ModeloForm, BenchmarkingForm, PuntosCapituloForm, ObjetivoForm, EstructuraForm, MetaForm, ProcesoForm, DocumentosSistemaForm, IndicadorAccionProcesoForm, AccionMetaForm, SeguimientoIndicadoresForm
 from .models import Ambito, TipoObjetivo, Sector, NivelAreaGeografica, AreaGeografica, Empresa, Modelo, Benchmarking, PuntosCapitulo, Objetivo, Estructura, Meta, Proceso, DocumentosSistema, IndicadorAccionProceso, AccionMeta, SeguimientoIndicadores
 
 # Create your views here.
@@ -50,14 +50,14 @@ class AmbitoView(View):
                 "querys":all,
                 "titulo":"ambito",
                 "titulo_view":"Ambito"
-                }
+            }
             return render(request, 'base_index.html', args )
         else:
             args = {
                 'form': form,
                 "titulo":"ambito",
                 "titulo_view":"Ambito"
-                }
+            }
             return render (request, 'base_prueba_form.html', args )
 
     def edit(request,id):
@@ -185,7 +185,6 @@ class TipoObjetivoView(View):
             args = {
                 "aviso":aviso,
                 "form":form,
-                "tipo_objetivo":tipo_objetivo,
                 "titulo":"tipo_objetivo",
                 "titulo_view":"Tipo Objetivo"
             }
@@ -193,7 +192,6 @@ class TipoObjetivoView(View):
         else:
             args = {
                 "form":form,
-                "tipo_objetivo":tipo_objetivo,
                 "titulo":"tipo_objetivo",
                 "titulo_view":"Tipo Objetivo"
             }
@@ -1138,7 +1136,9 @@ class PuntosCapituloView(View):
     def new(request):
         form = PuntosCapituloForm()
         args = {
-            "form":form
+            "form":form,
+            "titulo":"puntoscap",
+            "titulo_view":"Puntos Capitulo"
         }
         return render(request, 'base_prueba_form.html', args)
     
@@ -1321,3 +1321,398 @@ class ObjetivoView(View):
 class MetaView(View):
     def index(request):
         all = Meta.objects.filter(Eliminado=False)
+        args = {
+            "querys":all,
+            "titulo":"meta",
+            "titulo_view":"Meta"
+        }
+        return render(request,'base_index.html',args)
+    
+    def show(request,id):
+        meta = Meta.objects.get(Id=id)
+        form = MetaForm(instance=meta)
+        args = {
+            "form":form,
+            "titulo":"meta",
+            "titulo_view":"Meta"
+        }
+        return render(request, 'base_show.html', args)
+    
+    def new(request):
+        form = MetaForm()
+        args = {
+            "form":form,
+            "titulo":"meta",
+            "titulo_view":"Meta"
+        }
+        return render(request, 'base_prueba_form.html', args)
+
+    def create(request):
+        form = MetaForm(request.POST)
+        if form.is_valid():
+            form.save()
+            aviso = "La meta se ha creado con éxito"
+            all = Meta.objects.filter(Eliminado=False)
+            args = {
+                "aviso":aviso,
+                "querys":all,
+                "titulo":"meta",
+                "titulo_view":"Meta"
+            }
+            return render(request, 'base_index.html', args)
+        else:
+            args = {
+                "form":form,
+                "titulo":"meta",
+                "titulo_view":"Meta"
+            }
+            return render(request, 'base_prueba_form.html', args)
+    def edit(request,id):
+        meta = Meta.objects.get(Id=id)
+        form = MetaForm(instance=meta)
+        args = {
+            "form":form,
+            "titulo":"meta",
+            "titulo_view":"Meta"
+        }
+        return render(request, 'base_prueba_form.html', args)
+    
+    def update(request,id):
+        meta = Meta.objects.get(Id=id)
+        form = MetaForm(request.POST, instance=meta)
+        if form.is_valid():
+            form.save()
+            aviso = "Se han actualizado los datos"
+            args = {
+                "aviso":aviso,
+                "form":form,
+                "titulo":"meta",
+                "titulo_view":"Meta"
+            }
+        else:
+            args = {
+                "form":form,
+                "titulo":"meta",
+                "titulo_view":"Meta"
+            }
+        return render(request, 'base_prueba_form.html', args)
+    
+    def delete(request,id):
+        meta = Meta.objects.get(Id=id)
+        all = Meta.objects.filter(Eliminado=False)
+        meta_accmeta=AccionMeta.objects.filter(IdMeta=meta.Id)
+        if meta_accmeta:
+            args = {
+                "eliminado": "No puedes borrar este elemento porque otros dependen de él, borralos primero",
+                "querys":all,
+                "titulo":"meta",
+                "titulo_view":"Meta"
+            }
+        else:
+            meta.Eliminado = True
+            meta.save()
+            eliminado = "La meta se ha eliminado"
+            all = Meta.objects.filter(Eliminado=False)
+            args = {
+                "eliminado":eliminado,
+                "querys":all,
+                "titulo":"meta",
+                "titulo_view":"Meta"
+            }
+        return render(request, 'base_index.html', args)
+
+class AccionMetaView(View):
+    def index(request):
+        all = AccionMeta.objects.filter(Eliminado=False)
+        args = {
+            "querys":all,
+            "titulo":"accionmeta",
+            "titulo_view":"Accion Meta"
+        }
+        return render(request, 'base_index.html', args)
+    
+    def show(request,id):
+        accion_meta = AccionMeta.objects.get(Id=id)
+        form = AccionMetaForm(instance=accion_meta)
+        args = {
+            "form":form,
+            "titulo":"accionmeta",
+            "titulo_view":"Accion Meta"
+        }
+        return render(request, 'base_show.html', args)
+
+    def new(request):
+        form = AccionMetaForm()
+        args = {
+            "form":form,
+            "titulo":"accionmeta",
+            "titulo_view":"Accion Meta"
+        }
+        return render(request, 'base_prueba_form.html', args)
+
+    def create(request):
+        form = AccionMetaForm(request.POST)
+        if form.is_valid():
+            form.save()
+            aviso = "La Accion Meta se ha creado con éxito"
+            all = AccionMeta.objects.filter(Eliminado=False)
+            args = {
+                "aviso":aviso,
+                "querys":all,
+                "titulo":"accionmeta",
+                "titulo_view":"Accion Meta"
+            }
+            return render(request, 'base_index.html', args)
+        else:
+            args = {
+                "form":form,
+                "titulo":"accionmeta",
+                "titulo_view":"Accion Meta"
+            }
+            return render(request, 'base_prueba_form.html', args)
+
+    def edit(request,id):
+        accion_meta = AccionMeta.objects.get(Id=id)
+        form = AccionMetaForm(instance=accion_meta)
+        args = {
+            "titulo":"accionmeta",
+            "titulo_view":"Accion Meta",
+            "form":form
+        }
+        return render(request, 'base_prueba_form.html', args)
+
+    def update(request,id):
+        accion_meta = AccionMeta.objects.get(Id=id)
+        form = AccionMetaForm(request.POST, instance = accion_meta)
+        if form.is_valid():
+            form.save()
+            aviso = "Los datos se han actualizado!"
+            args = {
+                "aviso":aviso,
+                "form":form,
+                "titulo":"accionmeta",
+                "titulo_view":"Accion Meta"
+            }
+            return render(request, 'base_prueba_form.html', args)
+        else:
+            args = {
+                "form":form,
+                "titulo":"accionmeta",
+                "titulo_view":"Accion Meta"
+            }
+            return render(request, 'base_prueba_form.html', args)
+
+    def delete(request,id):
+        accion_meta = AccionMeta.objects.get(Id=id)
+        accion_meta.Eliminado = True
+        accion_meta.save()
+        eliminado = "La accion meta se ha eliminado"
+        all = AccionMeta.objects.filter(Eliminado=False)
+        args = {
+            "eliminado":eliminado,
+            "querys":all,
+            "titulo":"accionmeta",
+            "titulo_view":"Accion Meta"
+        }
+        return render(request, 'base_index.html', args)
+
+class IndicadorAccionProcesoView(View):
+    def index(request):
+        all = IndicadorAccionProceso.objects.filter(Eliminado=False)
+        args = {
+            "querys":all,
+            "titulo":"indicador_accion_proceso",
+            "titulo_view":"Indicador Accion Proceso"
+        }
+        return render(request, 'base_index.html', args)
+    
+    def show(request,id):
+        indicador = IndicadorAccionProceso.objects.get(Id=id)
+        form = IndicadorAccionProcesoForm(instance=indicador)
+        args = {
+            "form":form,
+            "titulo":"indicador_accion_proceso",
+            "titulo_view":"Indicador Accion Proceso"
+        }
+        return render(request, 'base_show.html', args)
+
+    def new(request):
+        form = IndicadorAccionProcesoForm()
+        args = {
+            "form":form,
+            "titulo":"indicador_accion_proceso",
+            "titulo_view":"Indicador Accion Proceso"
+        }
+        #return render(request,'Ambitos/new.html', args)
+        return render(request, 'base_prueba_form.html',args)
+
+    def create(request):
+        form = IndicadorAccionProcesoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            aviso = "El indicador Accion preoceso se ha creado con éxito"
+            all = IndicadorAccionProceso.objects.filter(Eliminado=False)
+            args = {
+                "aviso":aviso,
+                "querys":all,
+                "titulo":"indicador_accion_proceso",
+                "titulo_view":"Indicador Accion Proceso"
+            }
+            return render(request, 'base_index.html', args )
+        else:
+            args = {
+                'form': form,
+                "titulo":"indicador_accion_proceso",
+                "titulo_view":"Indicador Accion Proceso"
+            }
+            return render (request, 'base_prueba_form.html', args )
+
+    def edit(request,id):
+        indicador = IndicadorAccionProceso.objects.get(Id=id)
+        form = IndicadorAccionProcesoForm(instance=indicador)
+        args = {
+            "form":form,
+            "titulo":"indicador_accion_proceso",
+            "titulo_view":"Indicador Accion Proceso"
+            }
+        return render(request, 'base_prueba_form.html', args)   
+    
+    def update(request,id):
+        indicador = IndicadorAccionProceso.objects.get(Id=id)
+        form = IndicadorAccionProcesoForm(request.POST, instance=indicador)
+        if form.is_valid():
+            form.save()
+            aviso = "Se han actualizado los datos"
+            args = {
+                "aviso":aviso,
+                "form":form,
+                "titulo":"indicador_accion_proceso",
+                "titulo_view":"Indicador Accion Proceso"
+            }
+        else:
+            args = {
+                "form":form,
+                "titulo":"indicador_accion_proceso",
+                "titulo_view":"Indicador Accion Proceso"
+            }
+        return render(request, 'base_prueba_form.html',args)
+    
+    def delete(request,id):
+        indicador = IndicadorAccionProceso.objects.get(Id=id)
+        all = IndicadorAccionProceso.objects.filter(Eliminado=False)
+        indicador_seguimiento = SeguimientoIndicadores.objects.filter(IdAccMeta=indicador.Id)
+        if indicador_seguimiento:
+            args = {
+                "eliminado": "No puedes borrar este elemento porque otros dependen de él, borralos primero",
+                "querys":all,
+                "titulo":"indicador_accion_proceso",
+                "titulo_view":"Indicador Accion Proceso"
+            }
+        else:
+            indicador.Eliminado = True
+            indicador.save()
+            eliminado = "El indicador accion proceso se ha eliminado"
+            all = IndicadorAccionProceso.objects.filter(Eliminado=False)
+            args = {
+                "eliminado":eliminado,
+                "querys":all,
+                "titulo":"indicador_accion_proceso",
+                "titulo_view":"Indicador Accion Proceso"
+            }
+        return render(request, 'base_index.html', args)
+
+class DocumentosSistemaView(View):
+    def index(request):
+        all = DocumentosSistema.objects.filter(Eliminado=False)
+        args = {
+            "querys":all,
+            "titulo":"documentos_sistema",
+            "titulo_view":"Documentos Sistema"
+        }
+        #return render(request, 'Ambitos/index.html', args)
+        return render(request, 'base_index.html', args)
+    
+    def show(request,id):
+        documento_sistema = DocumentosSistema.objects.get(Id=id)
+        form = DocumentosSistemaForm(instance=documento_sistema)
+        args = {
+            "form":form,
+            "titulo":"documentos_sistema",
+            "titulo_view":"Documentos Sistema"
+        }
+        return render(request, 'base_show.html', args)
+    
+    def new(request):
+        form = DocumentosSistemaForm()
+        args = {
+            "form":form,
+            "titulo":"documentos_sistema",
+            "titulo_view":"Documentos Sistema"
+        }
+        #return render(request,'Ambitos/new.html', args)
+        return render(request, 'base_prueba_form.html',args)
+    
+    def create(request):
+        form = DocumentosSistemaForm(request.POST)
+        if form.is_valid():
+            form.save()
+            aviso = "El Documento Sistema se ha creado con éxito"
+            all = DocumentosSistema.objects.filter(Eliminado=False)
+            args = {
+                "aviso":aviso,
+                "querys":all,
+                "titulo":"documentos_sistema",
+                "titulo_view":"Documentos Sistema"
+            }
+            return render(request, 'base_index.html', args )
+        else:
+            args = {
+                'form': form,
+                "titulo":"documentos_sistema",
+                "titulo_view":"Documentos Sistema"
+            }
+            return render (request, 'base_prueba_form.html', args )
+    
+    def edit(request,id):
+        documento_sistema = DocumentosSistema.objects.get(Id=id)
+        form = DocumentosSistemaForm(instance=documento_sistema)
+        args = {
+            "form":form,
+            "titulo":"documentos_sistema",
+            "titulo_view":"Documentos Sistema"
+            }
+        return render(request, 'base_prueba_form.html', args)
+    
+    def update(request,id):
+        documento_sistema = DocumentosSistema.objects.get(Id=id)
+        form = DocumentosSistemaForm(request.POST, instance=documento_sistema)
+        if form.is_valid():
+            form.save()
+            aviso = "Se han actualizado los datos"
+            args = {
+                "aviso":aviso,
+                "form":form,
+                "titulo":"documentos_sistema",
+                "titulo_view":"Documentos Sistema"
+            }
+        else:
+            args = {
+                "form":form,
+                "titulo":"documentos_sistema",
+                "titulo_view":"Documentos Sistema"
+            }
+        return render(request, 'base_prueba_form.html',args)
+
+    def delete(request,id):
+        documento_sistema = DocumentosSistema.objects.get(Id=id)
+        documento_sistema.Eliminado = True
+        documento_sistema.save()
+        eliminado = "El Documento del Sistema se ha eliminado"
+        all = DocumentosSistema.objects.filter(Eliminado=False)
+        args = {
+            "eliminado":eliminado,
+            "querys":all,
+            "titulo":"documentos_sistema",
+            "titulo_view":"Documentos Sistema"
+        }
+        return render(request, 'base_index.html', args)

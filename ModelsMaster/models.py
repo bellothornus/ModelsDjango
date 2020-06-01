@@ -107,7 +107,8 @@ class Empresa(models.Model):
     Eliminado=models.BooleanField(default=False, db_column="EM_Eliminado")
 
     def __str__(self):
-        return "%s > %s" % (self.IdSc, self.IdAg)
+        #return "%s > %s" % (self.IdSc, self.IdAg)
+        return self.Nombre
 
     class Meta:
         db_table = "T_Empresa"
@@ -160,7 +161,7 @@ class Objetivo(models.Model):
     Id=models.AutoField(primary_key=True, db_column="OB_Id_Objetivo")
     IdPc=models.ForeignKey(to=PuntosCapitulo, db_column="OB_Id_Capitulo", on_delete=models.DO_NOTHING)
     IdTo=models.ForeignKey(to=TipoObjetivo, db_column="OB_Id_Tipo_Objetivo", on_delete=models.DO_NOTHING)
-    IdParent=models.ForeignKey(to="self", default="", db_column="OB_Id_Objetivo_Padre", on_delete=models.DO_NOTHING)
+    IdParent=models.ForeignKey(to="self", default="", db_column="OB_Id_Objetivo_Padre", on_delete=models.DO_NOTHING, null=True, blank=True)
     Nombre=models.CharField(max_length=256, db_column="OB_Nombre")
     Descripcion=models.CharField(max_length=256, null=True, blank=True, db_column="OB_Descripcion")
     Codificacion=models.CharField(max_length=256, db_column="OB_Codificacion")
@@ -187,7 +188,7 @@ class Objetivo(models.Model):
 class Meta(models.Model):
     Id=models.AutoField(primary_key=True, db_column="MT_Id_Meta")
     IdObj=models.ForeignKey(to=Objetivo, db_column="MT_Id_Objetivo", on_delete=models.DO_NOTHING)
-    IdParent=models.ForeignKey(to='self', db_column="MT_Id_Padre", on_delete=models.DO_NOTHING)
+    IdParent=models.ForeignKey(to='self', db_column="MT_Id_Padre", on_delete=models.DO_NOTHING, null=True, blank=True)
     Codificacion=models.CharField(max_length=256, db_column="MT_Codificacion")
     Nombre=models.CharField(max_length=256, db_column="MT_Nombre")
     Descripcion=models.TextField(max_length=256, db_column="MT_Descripcion", null=True, blank=True)
@@ -260,7 +261,7 @@ class SeguimientoIndicadores(models.Model):
     class Meta:
         db_table = "T_Seguimiento_Indicador"
 
-class proceso(models.Model):
+class Proceso(models.Model):
     Id=models.AutoField(primary_key=True, db_column="PR_Id_Proceso")
     IdPc=models.ForeignKey(to=PuntosCapitulo, db_column="PR_Id_Punto_Capitulo", on_delete=models.DO_NOTHING)
     IdEst=models.ForeignKey(to=Estructura, db_column="PR_Id_Estructura", on_delete=models.DO_NOTHING)

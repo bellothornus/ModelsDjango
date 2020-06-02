@@ -1,6 +1,7 @@
 from django.db import models
 from django.forms import ModelForm
 from .models import Ambito, TipoObjetivo, Sector, NivelAreaGeografica, AreaGeografica, Empresa, Modelo, Benchmarking, PuntosCapitulo, Objetivo
+from django.contrib.auth.models import User
 
 class AmbitoForm(ModelForm):
     class Meta:
@@ -71,3 +72,8 @@ class ObjetivoForm(ModelForm):
     class Meta:
         model = ObjetivoRelacionado
         fields = ['id_or_ob','id_or_ob_asociado','str_or_nombre'] """
+
+class UserForm(ModelForm):
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password')

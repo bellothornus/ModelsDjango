@@ -1,9 +1,78 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from .forms import AmbitoForm, TipoObjetivoForm, SectorForm, NivelAreaGeograficaForm, AreaGeograficaForm, EmpresaForm, ModeloForm, BenchmarkingForm, PuntosCapituloForm, ObjetivoForm
+from .forms import AmbitoForm, TipoObjetivoForm, SectorForm, NivelAreaGeograficaForm, AreaGeograficaForm, EmpresaForm, ModeloForm, BenchmarkingForm, PuntosCapituloForm, ObjetivoForm, UserForm
 from .models import Ambito, TipoObjetivo, Sector, NivelAreaGeografica, AreaGeografica, Empresa, Modelo, Benchmarking, PuntosCapitulo, Objetivo
-
+from django.contrib.auth import login
+from django.http import HttpResponseRedirect
+from django.contrib.auth.models import User
 # Create your views here.
+
+class UserView(View):
+    
+    def index(request):
+        all = User.objects.filter(is_active=1)
+        args = {
+            "querys":all,
+            "titulo":"user",
+            "titulo_view":"Users"
+        }
+        return render(request, 'base_index.html', args)
+
+    def show(request,id):
+        user = User.objects.get(id=id)
+        args = {
+            "user":user
+        }
+        return render(request, 'user/show.html', args)
+
+    def create(request):
+        if request.method == "POST":
+            form = UserForm(request.POST)
+            if form.is_valid():
+                form.save()
+                #new_user = User.objects.create_user(**form.cleaned_data)
+                #login(new_user)
+                return render(request,'user/new.html')
+        else:
+            form = UserForm()
+            arg={
+                'form': form
+            } 
+
+        return render(request,'user/new.html', arg)
+
+    def update(request,id):
+        user = User.objects.get(id=id)
+        form = UserForm(request.POST, instance=user)
+        if request.method == "POST":
+            if form.is_valid():
+                form.save()
+                arg={
+                    'form':form,
+                    'user':user,
+                }
+        else:
+            form = UserForm(instance=user)
+            arg={
+                    'form':form,
+                    'user':user,
+                }
+        return render(request, 'user/update.html', arg)
+
+    def delete(request,id):
+        user = User.objects.get(id=id)
+        user.is_active = 0
+        user.save()
+        eliminado = "El usuario se ha eliminado"
+        all = User.objects.filter(is_active=1)
+        args = {
+            "eliminado":eliminado,
+            "querys":all,
+            "titulo":"user",
+            "titulo_view":"User"
+        }
+        return render(request, 'base_index.html', args)
+
 def index(request):
     return render(request, 'index.html')
 

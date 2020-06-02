@@ -1,0 +1,17 @@
+<html>
+    <head>
+        <title>
+            Riesgo {{user.username}}{{user.id}}
+        </title>
+    </head>
+    <body>
+        <h2>ID: {{user.id}}</h2>
+        <h2>Nombre:</h2>
+        <p>{{user.username}}</p>
+        <br>
+        <a href="/edit/riesgo/{{riesgo.id_rg}}">Editar</a>
+        <a href="/delete/riesgo/{{riesgo.id_rg}}">Borrar</a>
+        <br>
+        <a href="/index/riesgo">Volver atrás</a>
+    </body>
+</html>

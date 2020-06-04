@@ -1,5 +1,6 @@
 from django.db import models
 from django.forms import ModelForm
+from django import forms
 from .models import Ambito, TipoObjetivo, Sector, NivelAreaGeografica, AreaGeografica, Empresa, Modelo, Benchmarking, PuntosCapitulo, Objetivo, Estructura, Meta, AccionMeta, Proceso, IndicadorAccionProceso, SeguimientoIndicadores, DocumentosSistema
  
 
@@ -196,7 +197,7 @@ class IndicadorAccionProcesoForm(ModelForm):
             visible.field.widget.attrs['class'] = 'form-control'
         self.fields['IdAcc'].queryset = AccionMeta.objects.filter(Eliminado=False)
         self.fields['IdProc'].queryset = Proceso.objects.filter(Eliminado=False)
-    
+        
     class Meta:
         model = IndicadorAccionProceso
         fields = ['IdAcc','IdProc','Nombre','Descripcion','Periodo','Estado','ValorObjetivo','ValorConseguido','Plazo']
@@ -226,11 +227,12 @@ class DocumentosSistemaForm(ModelForm):
         super(DocumentosSistemaForm, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():
             visible.field.widget.attrs['class'] = 'form-control'
-        self.fields['IdPc'].queryset = AccionMeta.objects.filter(Eliminado=False)
+        self.fields['IdPc'].queryset = PuntosCapitulo.objects.filter(Eliminado=False)
     
     class Meta:
         model = DocumentosSistema
-        fields = ['IdPc','Nombre','Codificacion']
+        #fields = ['IdPc','Nombre','Codificacion']
+        fields = '__all__'
         labels = {
             'IdPc':'Puntos Capitulo'
         }
@@ -240,7 +242,7 @@ class ProcesoForm(ModelForm):
         super(ProcesoForm, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():
             visible.field.widget.attrs['class'] = 'form-control'
-        self.fields['IdPc'].queryset = AccionMeta.objects.filter(Eliminado=False)
+        self.fields['IdPc'].queryset = PuntosCapitulo.objects.filter(Eliminado=False)
         self.fields['IdEst'].queryset = Estructura.objects.filter(Eliminado=False)
     
     class Meta:

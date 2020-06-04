@@ -16,10 +16,11 @@
         <!-- Fontawesome.css (iconos de Bootstrap 4)-->
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
         <!-- Archivo local javascript para invocar el Datatable-->
-        <script type="text/javascript" src="{%static 'js/tabla_datos.js'%}" ></script>
+        <script type="text/javascript" src="{%static 'js/tabla_datos_show.js'%}" ></script>
         <script type="text/javascript" src="{%static 'js/label_class.js'%}" ></script>
+        <script type="text/javascript" src="{%static 'js/show_css.js'%}"></script>
         {% block head %}
-
+        
         {% endblock %}
     </head>
     <body>
@@ -35,14 +36,30 @@
                 </div>
             </div>
             {%endfor%}
-            <!--<div class="row">
-                <label for="tumadre" class="col-sm-2 col-form-label">Prueba</label>
-                <h2 type="text" class="col-sm-10 form-control" style=""></h2>
-                <select name="hola" id="hola">
-                    <option value="1">Hola</option>
-                    <option value="2">Adiós</option>
-                </select>
-            </div>-->
+            {% if hijos %}
+            <table id="myTable" class="display">
+                <thead>
+                    <tr>
+                        <th> ID: </th>
+                        <th> Nombre:</th>
+                        <th> Ver:</th>
+                        <th> Editar:</th>
+                        <th> Eliminar:</th>
+                    </tr>
+                </thead>
+                <tbody>
+            {% for hijo in hijos%}
+                    <tr>
+                        <td>{{hijo.Id}}</td>
+                        <td>{{hijo.Nombre}}</td>
+                        <td><a class="btn btn-xs far fa-eye" href="/show/{{titulo}}/{{hijo.Id}}"></a></td>
+                        <td><a class="btn btn-primary btn-xs fas fa-pen" href="/edit/{{titulo}}/{{hijo.Id}}"></a></td>
+                        <td><a class="btn btn-danger btn-xs fas fa-trash-alt  fas fa-trash-alt" href="/delete/{{titulo}}/{{hijo.Id}}"></a></td>
+                    </tr>
+            {% endfor %}
+                </tbody>
+            </table>
+            {%endif%}
             <div class="row justify-content-around">
                 <a class="btn btn-primary col-sm-5 mx-2" href="/index/{{titulo}}">Volver atrás</a>
                 <a class="btn btn-primary col-sm-5 mx-2" href="/edit/{{titulo}}/{{form.instance.Id}}">Editar</a>

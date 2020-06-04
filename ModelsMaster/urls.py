@@ -141,6 +141,22 @@ urlpatterns = [
     path('update/indicador_accion_proceso/<int:id>', views.IndicadorAccionProcesoView.update),
     path('delete/indicador_accion_proceso/<int:id>', views.IndicadorAccionProcesoView.delete),
 
+    path('index/seguimiento_indicadores', views.SeguimientoIndicadoresView.index),
+    path('show/seguimiento_indicadores/<int:id>', views.SeguimientoIndicadoresView.show),
+    path('new/seguimiento_indicadores', views.SeguimientoIndicadoresView.new),
+    path('create/seguimiento_indicadores', views.SeguimientoIndicadoresView.create),
+    path('edit/seguimiento_indicadores/<int:id>', views.SeguimientoIndicadoresView.edit),
+    path('update/seguimiento_indicadores/<int:id>', views.SeguimientoIndicadoresView.update),
+    path('delete/seguimiento_indicadores/<int:id>', views.SeguimientoIndicadoresView.delete),
+
+    path('index/proceso', views.ProcesoView.index),
+    path('show/proceso/<int:id>', views.ProcesoView.show),
+    path('new/proceso', views.ProcesoView.new),
+    path('create/proceso', views.ProcesoView.create),
+    path('edit/proceso/<int:id>', views.ProcesoView.edit),
+    path('update/proceso/<int:id>', views.ProcesoView.update),
+    path('delete/proceso/<int:id>', views.ProcesoView.delete),
+
 ]
 
 urlpatterns += staticfiles_urlpatterns()

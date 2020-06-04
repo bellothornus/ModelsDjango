@@ -18,6 +18,7 @@
         <!-- Archivo local javascript para invocar el Datatable-->
         <script type="text/javascript" src="{%static 'js/tabla_datos.js'%}" ></script>
         <script type="text/javascript" src="{%static 'js/label_class.js'%}" ></script>
+        <script type="text/javascript" src="{%static 'js/form.js'%}"></script>
         {% block head %}
 
         {% endblock %}
@@ -36,11 +37,15 @@
                 </div>
             {% endif %}
             <form style="margin-top:30px;"action="{%if form.instance.Id %}/update/{{titulo}}/{{form.instance.Id}}{%else%}/create/{{titulo}}{%endif%}" method="POST"> {% csrf_token %}
+            {% block form %}
+            
+            {% endblock %}
             {% for f in form %}
             <div class="form-group row">
                 {{f.label_tag}}
                 <!--<label for="id_{{f.name}}" class="col-sm-2 col-form-label">{{f.name}}</label>
-                --><div class="col-sm-10">
+                -->
+                <div class="col-sm-10">
                     {{f}}
                 </div>
             </div>

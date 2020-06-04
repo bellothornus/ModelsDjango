@@ -2,8 +2,10 @@ from django.shortcuts import render, redirect
 from django.views import View
 from .forms import AmbitoForm, TipoObjetivoForm, SectorForm, NivelAreaGeograficaForm, AreaGeograficaForm, EmpresaForm, ModeloForm, BenchmarkingForm, PuntosCapituloForm, ObjetivoForm, EstructuraForm, MetaForm, ProcesoForm, DocumentosSistemaForm, IndicadorAccionProcesoForm, AccionMetaForm, SeguimientoIndicadoresForm
 from .models import Ambito, TipoObjetivo, Sector, NivelAreaGeografica, AreaGeografica, Empresa, Modelo, Benchmarking, PuntosCapitulo, Objetivo, Estructura, Meta, Proceso, DocumentosSistema, IndicadorAccionProceso, AccionMeta, SeguimientoIndicadores
-
+#para ver la lista de permisos d eun usuairo
+#perm_tuple = [(x.id, x.name) for x in Permission.objects.filter(user=2)]
 # Create your views here.
+
 def index(request):
     return render(request, 'index.html')
 
@@ -296,17 +298,27 @@ class EstructuraView(View):
 
     def delete(request,id):
         #TODO:
-        estructura = Estructura.objects.get(Id=id)
-        estructura.Eliminado = True
-        estructura.save()
-        eliminado = "El tipo objetivo se ha eliminado"
         all = Estructura.objects.filter(Eliminado=False)
-        args = {
-            "eliminado":eliminado,
-            "querys":all,
-            "titulo":"estructura",
-            "titulo_view":"Estructura"
-        }
+        estructura = Estructura.objects.get(Id=id)
+        proceso = Proceso.objects.filter(IdEst=estructura)
+        if proceso:
+            args = {
+                "eliminado": "No puedes borrar este elemento porque otros dependen de él, bórralos primero",
+                "querys":all,
+                "titulo":"ambito",
+                "titulo_view":"Ambito"
+            }
+        else:
+            estructura.Eliminado = True
+            estructura.save()
+            eliminado = "El tipo objetivo se ha eliminado"
+            all = Estructura.objects.filter(Eliminado=False)
+            args = {
+                "eliminado":eliminado,
+                "querys":all,
+                "titulo":"estructura",
+                "titulo_view":"Estructura"
+            }
         return render(request, 'base_index.html', args)
 
 class RiesgoView(View):
@@ -694,12 +706,13 @@ class AreaGeograficaView(View):
         ag = AreaGeografica.objects.get(Id=id)
         form = AreaGeograficaForm(instance=ag)
         nags = NivelAreaGeografica.objects.filter(Eliminado=False)
-        
+        hijos = AreaGeografica.objects.filter(IdParent=ag.Id)
         args = {
             "form":form,
             "titulo":"area_geografica",
             "titulo_view":"Área Geográfica",
-            "nags":nags
+            "nags":nags,
+            "hijos":hijos
         }
         return render(request, 'base_show.html', args)
 
@@ -1235,12 +1248,14 @@ class ObjetivoView(View):
     def show(request,id):
         obj = Objetivo.objects.get(Id=id)
         form = ObjetivoForm(instance=obj)
+        hijos = Objetivo.objects.filter(IdParent=obj.Id)
         args = {
             "form":form,
             "titulo":"objetivo",
-            "titulo_view":"Objetivo"
+            "titulo_view":"Objetivo",
+            "hijos":hijos
         }
-        return render(request, 'Objetivo/show.html', args)
+        return render(request, 'base_show.html', args)
 
     def new(request):
         form = ObjetivoForm()
@@ -1331,10 +1346,12 @@ class MetaView(View):
     def show(request,id):
         meta = Meta.objects.get(Id=id)
         form = MetaForm(instance=meta)
+        hijos = Meta.objects.filter(IdParent=meta.Id)
         args = {
             "form":form,
             "titulo":"meta",
-            "titulo_view":"Meta"
+            "titulo_view":"Meta",
+            "hijos":hijos
         }
         return render(request, 'base_show.html', args)
     
@@ -1715,4 +1732,205 @@ class DocumentosSistemaView(View):
             "titulo":"documentos_sistema",
             "titulo_view":"Documentos Sistema"
         }
+        return render(request, 'base_index.html', args)
+
+class SeguimientoIndicadoresView(View):
+    def index(request):
+        all = SeguimientoIndicadores.objects.filter(Eliminado=False)
+        args = {
+            "querys":all,
+            "titulo":"seguimiento_indicadores",
+            "titulo_view":"Seguimiento indicadores"
+        }
+        return render(request, 'base_index.html', args)
+    
+    def show(request,id):
+        segin = SeguimientoIndicadores.objects.get(Id=id)
+        form = SeguimientoIndicadoresForm(instance=segin)
+        args = {
+            "form":form,
+            "titulo":"seguimiento_indicadores",
+            "titulo_view":"Seguimiento indicadores"
+        }
+        return render(request, 'base_show.html', args)
+    
+    def new(request):
+        form = SeguimientoIndicadoresForm()
+        args = {
+            "form":form,
+            "titulo":"seguimiento_indicadores",
+            "titulo_view":"Seguimiento indicadores"
+        }
+        #return render(request,'Ambitos/new.html', args)
+        return render(request, 'base_prueba_form.html',args) 
+    
+    def create(request):
+        form = SeguimientoIndicadoresForm(request.POST)
+        if form.is_valid():
+            form.save()
+            aviso = "El Seguimiento indicador se ha creado con éxito"
+            all = SeguimientoIndicadores.objects.filter(Eliminado=False)
+            args = {
+                "aviso":aviso,
+                "querys":all,
+                "titulo":"seguimiento_indicadores",
+                "titulo_view":"Seguimiento indicadores"
+            }
+            return render(request, 'base_index.html', args )
+        else:
+            args = {
+                'form': form,
+                "titulo":"seguimiento_indicadores",
+                "titulo_view":"Seguimiento indicadores"
+            }
+            return render (request, 'base_prueba_form.html', args )
+    
+    def edit(request,id):
+        segin = SeguimientoIndicadores.objects.get(Id=id)
+        form = SeguimientoIndicadoresForm(instance=segin)
+        args = {
+            "form":form,
+            "titulo":"seguimiento_indicadores",
+            "titulo_view":"Seguimiento indicadores"
+            }
+        return render(request, 'base_prueba_form.html', args)
+    
+    def update(request,id):
+        segin = SeguimientoIndicadores.objects.get(Id=id)
+        form = SeguimientoIndicadoresForm(request.POST, instance=segin)
+        if form.is_valid():
+            form.save()
+            aviso = "Se han actualizado los datos"
+            args = {
+                "aviso":aviso,
+                "form":form,
+                "titulo":"seguimiento_indicadores",
+                "titulo_view":"Seguimiento indicadores"
+            }
+        else:
+            args = {
+                "form":form,
+                "titulo":"seguimiento_indicadores",
+                "titulo_view":"Seguimiento indicadores"
+            }
+        return render(request, 'base_prueba_form.html',args)
+
+    def delete(request,id):
+        segin = SeguimientoIndicadores.objects.get(Id=id)
+        segin.Eliminado = True
+        segin.save()
+        eliminado = "El Seguimiento indicador se ha eliminado"
+        all = SeguimientoIndicadores.objects.filter(Eliminado=False)
+        args = {
+            "eliminado":eliminado,
+            "querys":all,
+            "titulo":"seguimiento_indicadores",
+            "titulo_view":"Seguimiento indicadores"
+        }
+        return render(request, 'base_index.html', args)
+
+class ProcesoView(View):
+    def index(request):
+        all = Proceso.objects.filter(Eliminado=False)
+        args = {
+            "querys":all,
+            "titulo":"proceso",
+            "titulo_view":"Proceso"
+        }
+        #return render(request, 'Ambitos/index.html', args)
+        return render(request, 'base_index.html', args)
+
+    def show(request,id):
+        proceso = Proceso.objects.get(Id=id)
+        form = ProcesoForm(instance=proceso)
+        args = {
+            "form":form,
+            "titulo":"proceso",
+            "titulo_view":"Proceso"
+        }
+        return render(request, 'base_show.html', args)
+    
+    def new(request):
+        form = ProcesoForm()
+        args = {
+            "form":form,
+            "titulo":"proceso",
+            "titulo_view":"Proceso"
+        }
+        #return render(request,'Ambitos/new.html', args)
+        return render(request, 'base_prueba_form.html',args)
+    
+    def create(request):
+        form = ProcesoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            aviso = "El Proceso se ha creado con éxito"
+            all = Proceso.objects.filter(Eliminado=False)
+            args = {
+                "aviso":aviso,
+                "querys":all,
+                "titulo":"proceso",
+                "titulo_view":"Proceso"
+            }
+            return render(request, 'base_index.html', args )
+        else:
+            args = {
+                'form': form,
+                "titulo":"proceso",
+                "titulo_view":"Proceso"
+            }
+            return render (request, 'base_prueba_form.html', args )
+    
+    def edit(request,id):
+        proceso = proceso.objects.get(Id=id)
+        form = ProcesoForm(instance=proceso)
+        args = {
+            "form":form,
+            "titulo":"proceso",
+            "titulo_view":"Proceso"
+            }
+        return render(request, 'base_prueba_form.html', args)
+    
+    def update(request,id):
+        proceso = Proceso.objects.get(Id=id)
+        form = ProcesoForm(request.POST, instance=proceso)
+        if form.is_valid():
+            form.save()
+            aviso = "Se han actualizado los datos"
+            args = {
+                "aviso":aviso,
+                "form":form,
+                "titulo":"proceso",
+                "titulo_view":"Proceso"
+            }
+        else:
+            args = {
+                "form":form,
+                "titulo":"proceso",
+                "titulo_view":"Proceso"
+            }
+        return render(request, 'base_prueba_form.html',args)
+    
+    def delete(request,id):
+        proceso = Proceso.objects.get(Id=id)
+        all = Proceso.objects.filter(Eliminado=False)
+        proceso_segin = IndicadorAccionProceso.objects.filter(IdProc=proceso.Id)
+        if proceso_segin:
+            args = {
+                "eliminado": "No puedes borrar este elemento porque otros dependen de él, borralos primero",
+                "querys":all,
+                "titulo":"proceso",
+                "titulo_view":"Proceso"
+            }
+        else:
+            proceso.Eliminado = True
+            proceso.save()
+            eliminado = "El Proceso se ha eliminado"
+            all = Proceso.objects.filter(Eliminado=False)
+            args = {
+                "eliminado":eliminado,
+                "querys":all,
+                "titulo":"proceso",
+                "titulo_view":"Proceso"
+            }
         return render(request, 'base_index.html', args)

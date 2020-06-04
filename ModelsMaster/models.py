@@ -153,6 +153,9 @@ class PuntosCapitulo(models.Model):
 
     def __str__(self):
         return self.Nombre
+    
+    def documentos(self):
+        return DocumentosSistema.objects.filter(IdPc=self.Id)
 
     class Meta:
         db_table = "T_Puntos_Capitulo"
@@ -224,9 +227,17 @@ class IndicadorAccionProceso(models.Model):
     Estado=models.CharField(max_length=256, db_column="IA_Estado", null=True, blank=True)
     ValorObjetivo=models.CharField(max_length=256, db_column="IA_Valor_Objetivo")
     ValorConseguido=models.CharField(max_length=256, db_column="IA_Valor_conseguido")
-    Plazo=models.CharField(max_length=256, db_column="IA_Plazo_Seguimiento", validators=[validators.plazo_filtro])
+    plazos = [
+        ("Semanal", "Semanal"), 
+        ("Mensual","Mensual"), 
+        ("Trimestral","Trimestral"), 
+        ("Bimestral","Bimestral"),
+        ("Cuatrimestral","Cuatrimestral"),
+        ("Sematral","Semastral"),
+        ("Anual","Anual")
+    ]
+    Plazo=models.CharField(max_length=256, choices=plazos, db_column="IA_Plazo_Seguimiento")
     Eliminado=models.BooleanField(default=False, db_column="IA_Eliminado")
-
     def __str__(self):
         return self.Nombre
 

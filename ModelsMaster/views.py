@@ -227,9 +227,9 @@ class EstructuraView(View):
 
     def show(request,id):
         estructura = Estructura.objects.get(Id=id)
-        form = EstructuraForm()
+        form = EstructuraForm(instance=estructura)
         args = {
-            "estructura":estructura,
+            "form":form,
             "titulo":"estructura",
             "titulo_view":"Estructura"
         }
@@ -533,7 +533,9 @@ class SectorView(View):
         sector = Sector.objects.get(Id=id)
         form = SectorForm(instance=sector)
         args = {
-            "form":form
+            "form":form,
+            "titulo":"sector",
+            "titulo_view":"Sector"
         }
         return render(request, 'base_prueba_form.html', args)
 
@@ -1289,7 +1291,7 @@ class ObjetivoView(View):
 
     def edit(request,id):
         obj = Objetivo.objects.get(Id=id)
-        form = AmbitoForm(instance=obj)
+        form = ObjetivoForm(instance=obj)
         args = {
             "form":form,
             "titulo":"objetivo",

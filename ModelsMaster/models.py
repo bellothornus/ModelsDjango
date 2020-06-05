@@ -21,6 +21,7 @@ class Ambito(models.Model):
 class TipoObjetivo(models.Model):
     Id=models.AutoField(primary_key=True, db_column="TO_Id_Tipo_Objetivo")
     Nombre=models.CharField(max_length=256, null=False, blank=False, db_column="TO_Nombre")
+    Descripcion=models.CharField(max_length=256, null=True,blank=True, db_column="TO_Descripcion")
     Eliminado=models.BooleanField(default=False, db_column="TO_Eliminado")
 
     def __str__(self):
@@ -55,7 +56,7 @@ class Estructura(models.Model):
 
 class Sector(models.Model):
     Id=models.AutoField(primary_key=True, db_column="SC_Id_Sector")
-    Nombre=models.CharField(max_length=256, db_column="SC_Nombre")
+    Nombre=models.CharField(max_length=256, db_column="SC_Nombre", null=False,blank=False)
     Descripcion=models.CharField(max_length=256, db_column="SC_Descripcion",null=True, blank=True)
     Eliminado=models.BooleanField(default=False, db_column="SC_Eliminado")
 
@@ -233,7 +234,7 @@ class IndicadorAccionProceso(models.Model):
         ("Trimestral","Trimestral"), 
         ("Bimestral","Bimestral"),
         ("Cuatrimestral","Cuatrimestral"),
-        ("Sematral","Semastral"),
+        ("Semetral","Semestral"),
         ("Anual","Anual")
     ]
     Plazo=models.CharField(max_length=256, choices=plazos, db_column="IA_Plazo_Seguimiento")

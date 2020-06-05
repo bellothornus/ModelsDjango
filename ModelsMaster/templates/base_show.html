@@ -36,30 +36,7 @@
                 </div>
             </div>
             {%endfor%}
-            {% if hijos %}
-            <table id="myTable" class="display">
-                <thead>
-                    <tr>
-                        <th> ID: </th>
-                        <th> Nombre:</th>
-                        <th> Ver:</th>
-                        <th> Editar:</th>
-                        <th> Eliminar:</th>
-                    </tr>
-                </thead>
-                <tbody>
-            {% for hijo in hijos%}
-                    <tr>
-                        <td>{{hijo.Id}}</td>
-                        <td>{{hijo.Nombre}}</td>
-                        <td><a class="btn btn-xs far fa-eye" href="/show/{{titulo}}/{{hijo.Id}}"></a></td>
-                        <td><a class="btn btn-primary btn-xs fas fa-pen" href="/edit/{{titulo}}/{{hijo.Id}}"></a></td>
-                        <td><a class="btn btn-danger btn-xs fas fa-trash-alt  fas fa-trash-alt" href="/delete/{{titulo}}/{{hijo.Id}}"></a></td>
-                    </tr>
-            {% endfor %}
-                </tbody>
-            </table>
-            {%endif%}
+            {% include 'hijos.html' %}
             <div class="row justify-content-around">
                 <a class="btn btn-primary col-sm-5 mx-2" href="/index/{{titulo}}">Volver atrás</a>
                 <a class="btn btn-primary col-sm-5 mx-2" href="/edit/{{titulo}}/{{form.instance.Id}}">Editar</a>

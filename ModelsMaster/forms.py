@@ -242,13 +242,8 @@ class DocumentosSistemaForm(ModelForm):
     
     class Meta:
         model = DocumentosSistema
-<<<<<<< HEAD
         fields = ['IdPc','Nombre','Codificacion']
         #fields = '__all__'
-=======
-        #fields = ['IdPc','Nombre','Codificacion']
-        fields = '__all__'
->>>>>>> master
         labels = {
             'IdPc':'Puntos Capitulo'
         }

@@ -2,10 +2,49 @@ from django.shortcuts import render, redirect
 from django.views import View
 from .forms import AmbitoForm, TipoObjetivoForm, SectorForm, NivelAreaGeograficaForm, AreaGeograficaForm, EmpresaForm, ModeloForm, BenchmarkingForm, PuntosCapituloForm, ObjetivoForm, UserForm
 from .models import Ambito, TipoObjetivo, Sector, NivelAreaGeografica, AreaGeografica, Empresa, Modelo, Benchmarking, PuntosCapitulo, Objetivo
-from django.contrib.auth import login
 from django.http import HttpResponseRedirect
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission
+from django.contrib.auth import logout as do_logout 
+from django.contrib.auth import login as do_login  
+from django.contrib.auth import authenticate
+from django.contrib.auth.forms import AuthenticationForm 
+from django.contrib.auth.decorators import login_required
 # Create your views here.
+
+class LogView(View):
+    def login(request):
+        #Creamos el formulario de autenticación vacío
+        form = AuthenticationForm()
+        if request.method == "POST":
+            # Añadimos los datos recibidos al formulario
+            form = AuthenticationForm(data=request.POST)
+            # Si el formulario es válido->
+            if form.is_valid():
+                # Recuperamos las credenciales validadas
+                username = form.cleaned_data['username']
+                password = form.cleaned_data['password']
+
+                # Verificamos las credenciales del usuario
+                user = authenticate(username=username, password=password)
+
+                # Si existe un usuario con ese nombre y contraseña
+                if user is not None:
+                    # Hacemos el login manualmente
+                    do_login(request, user)
+                    # Y le redireccionamos a la portada
+                    return redirect('/')
+
+        # Si llegamos al final renderizamos el formulario
+        arg={
+            'form': form
+        }
+        return render(request, "log/login.html", arg)
+
+    def logout(request):
+        # Finalizamos la sesión
+        do_logout(request)
+        # Redireccionamos a la portada
+        return redirect('/')
 
 class UserView(View):
     
@@ -26,20 +65,33 @@ class UserView(View):
         return render(request, 'user/show.html', args)
 
     def create(request):
+        #Creamos el formulario de autenticación vacío
+        form = UserForm()
+        permissions=Permission.objects.all()
         if request.method == "POST":
-            form = UserForm(request.POST)
+            # Añadimos los datos recibidos al formulario
+            form = UserForm(data=request.POST)
+            # Si el formulario es válido...
             if form.is_valid():
-                form.save()
-                #new_user = User.objects.create_user(**form.cleaned_data)
-                #login(new_user)
-                return render(request,'user/new.html')
-        else:
-            form = UserForm()
-            arg={
-                'form': form
-            } 
-
-        return render(request,'user/new.html', arg)
+                # Creamos la nueva cuenta de usuario
+                user = form.save()
+                user.user_permissions.add(request.POST["id_permission"])
+                user.save()
+                # Si el usuario se crea correctamente 
+                if user is not None:
+                    # Hacemos el login manualmente
+                    do_login(request, user)
+                    # Y le redireccionamos a la portada
+                    return redirect('/')
+        form.fields['username'].help_text = None
+        form.fields['password1'].help_text = None
+        form.fields['password2'].help_text = None
+        arg={
+            'form': form,
+            'permissions':permissions
+            }
+        # Si llegamos al final renderizamos el formulario
+        return render(request, "user/new.html", arg)
 
     def update(request,id):
         user = User.objects.get(id=id)
@@ -53,6 +105,9 @@ class UserView(View):
                 }
         else:
             form = UserForm(instance=user)
+            form.fields['username'].help_text = None
+            form.fields['password1'].help_text = None
+            form.fields['password2'].help_text = None
             arg={
                     'form':form,
                     'user':user,
@@ -72,7 +127,7 @@ class UserView(View):
             "titulo_view":"User"
         }
         return render(request, 'base_index.html', args)
-
+@login_required
 def index(request):
     return render(request, 'index.html')
 
@@ -132,7 +187,7 @@ def prueba6(request):
 
 def prueba7(request):
     relacionados1 = PuntosCapitulo.objects.all()
-    relacionados2 = TipoObjetivo.objects.all()
+    #relacionados2 = TipoObjetivo.objects.all()
     columns = Objetivo._meta.fields
     args = {
         "relacionados1":relacionados1,

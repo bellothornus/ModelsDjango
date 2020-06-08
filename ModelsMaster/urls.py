@@ -122,6 +122,9 @@ urlpatterns = [
     path('show/user/<int:id>', views.UserView.show),
     path('update/user/<int:id>', views.UserView.update),
     path('delete/user/<int:id>', views.UserView.delete),
+
+    path('login', views.LogView.login, name='login'),
+    path('logout', views.LogView.logout),
 ]
 
 urlpatterns += staticfiles_urlpatterns()

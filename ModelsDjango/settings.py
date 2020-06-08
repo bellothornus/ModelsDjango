@@ -120,3 +120,9 @@ USE_TZ = True
 
 STATIC_URL = '/ModelsMaster/assets/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR,'ModelsMaster/assets'),]
+
+LOGIN_URL = 'login'
+ 
+LOGIN_REDIRECT_URL = 'index'
+ 
+LOGOUT_REDIRECT_URL = 'login'

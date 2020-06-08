@@ -8,3 +8,5 @@ db.sqlite3
 manage.py
 ModelsDjango/__pycache__
 ModelsMaster/__pycache__
+ModelsMaster/migrations_old
+memoria_codigo.txt

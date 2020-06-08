@@ -208,8 +208,8 @@ class AccionMeta(models.Model):
     Id=models.AutoField(primary_key=True, db_column="AT_Id_AccMeta")
     IdMeta=models.ForeignKey(to=Meta, db_column="AT_Id_Meta", on_delete=models.DO_NOTHING)
     Nombre=models.CharField(max_length=256, db_column="AT_Nombre")
-    Estado=models.CharField(max_length=256,db_column="AT_Estado_Avance", null=True, blank=False)
-    Plazo=models.CharField(max_length=256,db_column="AT_Plazo")
+    Estado=models.CharField(max_length=256, db_column="AT_Estado_Avance", null=True, blank=False)
+    Plazo=models.CharField(max_length=256, db_column="AT_Plazo")
     Eliminado=models.BooleanField(default=False, db_column="AT_Eliminado")
 
     def __str__(self):
@@ -227,14 +227,14 @@ class IndicadorAccionProceso(models.Model):
     Periodo=models.CharField(max_length=256, db_column="IA_Periodo")
     Estado=models.CharField(max_length=256, db_column="IA_Estado", null=True, blank=True)
     ValorObjetivo=models.CharField(max_length=256, db_column="IA_Valor_Objetivo")
-    ValorConseguido=models.CharField(max_length=256, db_column="IA_Valor_conseguido")
+    ValorConseguido=models.CharField(max_length=256, db_column="IA_Valor_conseguido", null=True, blank=True)
     plazos = [
         ("Semanal", "Semanal"), 
         ("Mensual","Mensual"), 
         ("Trimestral","Trimestral"), 
         ("Bimestral","Bimestral"),
         ("Cuatrimestral","Cuatrimestral"),
-        ("Semetral","Semestral"),
+        ("Semestral","Semestral"),
         ("Anual","Anual")
     ]
     Plazo=models.CharField(max_length=256, choices=plazos, db_column="IA_Plazo_Seguimiento")

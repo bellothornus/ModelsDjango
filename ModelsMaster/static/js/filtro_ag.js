@@ -20,14 +20,14 @@ $(document).ready(function() {
         seleccionado = $(this).children("option:selected").text();
         if (seleccionado == "TODOS"){
             table.search('').columns().search('');
-            table.draw();
         }else{
             table.columns(1).search(seleccionado);
             //por si queremos hacer multifiltros
             //table.column(1).search( 'Continente' ).column( 2 ).search( 'Europa' )
             console.log(seleccionado)
-            table.draw();
+            
         }
+        table.draw();
         
       // Perform a filter
       //table.fnFilter($(this).text());

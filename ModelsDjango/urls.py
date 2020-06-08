@@ -21,6 +21,6 @@ urlpatterns = [
     path('', include('ModelsMaster.urls')),
 
     path('admin/', admin.site.urls),
-    path('', views.index, "index"),
+    path('', views.index),
 
 ]

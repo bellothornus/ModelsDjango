@@ -31,18 +31,9 @@ class AmbitoView(View):
         }
         return render(request, 'base_show.html', args)
     
-    def new(request):
-        form = AmbitoForm()
-        args = {
-            "form":form,
-            "titulo":"ambito",
-            "titulo_view":"Ambito"
-        }
-        #return render(request,'Ambitos/new.html', args)
-        return render(request, 'base_prueba_form.html',args)
 
     def create(request):
-        form = AmbitoForm(request.POST)
+        form = AmbitoForm(request.POST or None)
         if form.is_valid():
             form.save()
             aviso = "El ambito se ha creado con éxito"
@@ -62,19 +53,9 @@ class AmbitoView(View):
             }
             return render (request, 'base_prueba_form.html', args )
 
-    def edit(request,id):
-        ambito = Ambito.objects.get(Id=id)
-        form = AmbitoForm(instance=ambito)
-        args = {
-            "form":form,
-            "titulo":"ambito",
-            "titulo_view":"Ambito"
-            }
-        return render(request, 'base_prueba_form.html', args)
-
     def update(request,id):
         ambito = Ambito.objects.get(Id=id)
-        form = AmbitoForm(request.POST, instance=ambito)
+        form = AmbitoForm(request.POST or None, instance=ambito)
         if form.is_valid():
             form.save()
             aviso = "Se han actualizado los datos"
@@ -137,18 +118,8 @@ class TipoObjetivoView(View):
         }
         return render(request, 'base_show.html', args)
 
-    def new(request):
-        form = TipoObjetivoForm()
-        args = {
-            "form":form,
-            "titulo":"tipo_objetivo",
-            "titulo_view":"Tipo Objetivo"
-        }
-        #return render(request, 'TipoObjetivo/new.html')
-        return render(request, 'base_prueba_form.html',args)
-
     def create(request):
-        form = TipoObjetivoForm(request.POST)
+        form = TipoObjetivoForm(request.POST or None)
         if form.is_valid():
             form.save()
             aviso = "El tipo objetivo se ha creado con éxito"
@@ -168,19 +139,9 @@ class TipoObjetivoView(View):
             }
             return render(request, 'base_prueba_form.html', args)
 
-    def edit(request,id):
-        tipo_objetivo = TipoObjetivo.objects.get(Id=id)
-        form = TipoObjetivoForm(instance=tipo_objetivo)
-        args = {
-            "titulo":"tipo_objetivo",
-            "titulo_view":"Tipo Objetivo",
-            "form":form
-        }
-        return render(request, 'base_prueba_form.html', args)
-
     def update(request,id):
         tipo_objetivo = TipoObjetivo.objects.get(Id=id)
-        form = TipoObjetivoForm(request.POST, instance = tipo_objetivo)
+        form = TipoObjetivoForm(request.POST or None, instance = tipo_objetivo)
         if form.is_valid():
             form.save()
             aviso = "Los datos se han actualizado!"
@@ -235,18 +196,8 @@ class EstructuraView(View):
         }
         return render(request, 'base_prueba_form.html', args)
 
-    def new(request):
-        form = EstructuraForm()
-        args = {
-            "form":form,
-            "titulo":"estructura",
-            "titulo_view":"Estructuras"
-        }
-        #return render(request, 'Estructura/new.html')
-        return render(request,'base_prueba_form.html',args)
-
     def create(request):
-        form = EstructuraForm(request.POST)
+        form = EstructuraForm(request.POST or None)
         if form.is_valid():
             form.save()
             aviso = "La estructura se ha creado con éxito"
@@ -266,19 +217,9 @@ class EstructuraView(View):
             }
             return render(request, 'base_prueba_form.html', args)
 
-    def edit(request,id):
-        estructura = Estructura.objects.get(Id=id)
-        form = EstructuraForm(instance=estructura)
-        args = {
-            "estructura": estructura,
-            "titulo":"estructura",
-            "titulo_view":"Estructuras"
-        }
-        return render(request, 'base_prueba_form.html', args)
-
     def update(request,id):
         estructura = Estructura.objects.get(Id=id)
-        form = EstructuraForm(request.POST, instance=estructura)
+        form = EstructuraForm(request.POST or None, instance=estructura)
         if form.is_valid():
             form.save()
             aviso = "Los datos se han actualizado!"
@@ -340,11 +281,8 @@ class RiesgoView(View):
         }
         return render(request, 'Riesgo/show.html', args)
 
-    def new(request):
-        return render(request, 'Riesgo/new.html')
-
     def create(request):
-        form = RiesgoForm(request.POST)
+        form = RiesgoForm(request.POST or None)
         if form.is_valid():
             form.save()
             aviso = "El riesgo se ha creado con éxito"
@@ -499,17 +437,8 @@ class SectorView(View):
         }
         return render(request, 'base_show.html', args)
 
-    def new(request):
-        form = SectorForm()
-        args = {
-            "form":form,
-            "titulo":"sector",
-            "titulo_view":"Sector"
-        }
-        return render(request, 'base_prueba_form.html',args)
-
     def create(request):
-        ModelForm_form = SectorForm(request.POST)
+        ModelForm_form = SectorForm(request.POST or None)
         if ModelForm_form.is_valid():
             ModelForm_form.save()
             aviso = "El sector se ha creado con éxito!"
@@ -529,19 +458,9 @@ class SectorView(View):
             }
             return render(request, 'base_prueba_form.html', args)
 
-    def edit(request,id):
-        sector = Sector.objects.get(Id=id)
-        form = SectorForm(instance=sector)
-        args = {
-            "form":form,
-            "titulo":"sector",
-            "titulo_view":"Sector"
-        }
-        return render(request, 'base_prueba_form.html', args)
-
     def update(request,id):
         sector = Sector.objects.get(Id=id)
-        ModelForm_form = SectorForm(request.POST, instance=sector)
+        ModelForm_form = SectorForm(request.POST or None, instance=sector)
         if ModelForm_form.is_valid():
             ModelForm_form.save()
             aviso = "Los datos se han actualizado con éxito"
@@ -606,17 +525,8 @@ class NivelAreaGeograficaView(View):
         }
         return render(request, 'base_show.html', args)
 
-    def new(request):
-        form = NivelAreaGeograficaForm()
-        args = {
-            "titulo":"nag",
-            "form":form,
-            "titulo_view":"Nivel Área Geográfica"
-        }
-        return render(request, 'base_prueba_form.html',args)
-
     def create(request):
-        ModelForm_form = NivelAreaGeograficaForm(request.POST)
+        ModelForm_form = NivelAreaGeograficaForm(request.POST or None)
         if ModelForm_form.is_valid():
             ModelForm_form.save()
             aviso = "El Nivel de Área geográfica se ha creado con éxito!"
@@ -636,19 +546,9 @@ class NivelAreaGeograficaView(View):
             }
             return render (request, 'base_prueba_form.html', args)
 
-    def edit(request,id):
-        nag = NivelAreaGeografica.objects.get(Id=id)
-        form = NivelAreaGeograficaForm(instance=nag)
-        args = {
-            "form":form,
-            "titulo":"nag",
-            "titulo_view":"Nivel Área Geográfica"
-        }
-        return render(request, 'base_prueba_form.html', args)
-
     def update(request,id):
         nag = NivelAreaGeografica.objects.get(Id=id)
-        ModelForm_form = NivelAreaGeograficaForm(request.POST, instance=nag)
+        ModelForm_form = NivelAreaGeograficaForm(request.POST or None, instance=nag)
         if ModelForm_form.is_valid():
             ModelForm_form.save()
             aviso = "Los datos se han actualizado con éxito"
@@ -718,18 +618,8 @@ class AreaGeograficaView(View):
         }
         return render(request, 'base_show.html', args)
 
-    def new(request):
-        form = AreaGeograficaForm()
-        args = {
-            "titulo":"area_geografica",
-            "titulo_view":"Área Geográfica",
-            "form":form
-        }
-        #return render(request, 'AreaGeografica/new.html', args)
-        return render(request,'base_prueba_form.html',args)
-
     def create(request):
-        ModelForm_form = AreaGeograficaForm(request.POST)
+        ModelForm_form = AreaGeograficaForm(request.POST or None)
         if ModelForm_form.is_valid():
             ModelForm_form.save()
             aviso = "El Área geográfica se ha creado con éxito!"
@@ -751,19 +641,9 @@ class AreaGeograficaView(View):
             }
             return render(request, 'base_prueba_form.html', args)
 
-    def edit(request,id):
-        ag = AreaGeografica.objects.get(Id=id)
-        form = AreaGeograficaForm(instance=ag)
-        args = {
-            "form":form,
-            "titulo":"area_geografica",
-            "titulo_view":"Área Geográfica",
-        }
-        return render(request, 'base_prueba_form.html', args)
-
     def update(request,id):
         ag = AreaGeografica.objects.get(Id=id)
-        ModelForm_form = AreaGeograficaForm(request.POST, instance=ag)
+        ModelForm_form = AreaGeograficaForm(request.POST or None, instance=ag)
         if ModelForm_form.is_valid():
             ModelForm_form.save()
             aviso = "Los datos se han actualizado con éxito"
@@ -828,20 +708,9 @@ class EmpresaView(View):
             "titulo_view":"Empresa"
         }
         return render(request, 'base_show.html', args)
-
-    def new(request):
-        form = EmpresaForm()
-        emp_scs = Sector.objects.filter(Eliminado=False)
-        emp_ags = AreaGeografica.objects.filter(Eliminado=False)
-        args = {
-            "form":form,
-            "titulo":"empresa",
-            "titulo_view":"Empresa"
-        }
-        return render(request, 'base_prueba_form.html', args)
     
     def create(request):
-        ModelForm_form = EmpresaForm(request.POST)
+        ModelForm_form = EmpresaForm(request.POST or None)
         if ModelForm_form.is_valid():
             ModelForm_form.save()
             aviso = "La empresa se ha creado con éxito!"
@@ -862,20 +731,10 @@ class EmpresaView(View):
                 "titulo_view":"Empresa"
             }
             return render(request, 'base_prueba_form.html', args)
-
-    def edit(request,id):
-        emp = Empresa.objects.get(Id=id)
-        form = EmpresaForm(instance=emp)
-        args = {
-            "form":form,
-            "titulo":"empresa",
-            "titulo_view":"Empresa"
-        }
-        return render(request, 'base_prueba_form.html', args)
     
     def update(request,id):
         emp = Empresa.objects.get(Id=id)
-        ModelForm_form = EmpresaForm(request.POST, instance=emp)
+        ModelForm_form = EmpresaForm(request.POST or None, instance=emp)
         if ModelForm_form.is_valid():
             ModelForm_form.save()
             aviso = "Los datos se han actualizado con éxito"
@@ -938,20 +797,10 @@ class ModeloView(View):
             "titulo":"modelo",
             "titulo_view":"Modelo"
         }
-        return render(request, 'Modelo/show.html', args)
-    
-    def new(request):
-        modelo_emps = Empresa.objects.filter(Eliminado=False)
-        form = ModeloForm()
-        args = {
-            "form":form,
-            "titulo":"modelo",
-            "titulo_view":"Modelo"
-        }
-        return render(request, 'base_prueba_form.html', args)
+        return render(request, 'base_show.html', args)
 
     def create(request):
-        ModelForm_form = ModeloForm(request.POST)
+        ModelForm_form = ModeloForm(request.POST or None)
         if ModelForm_form.is_valid():
             ModelForm_form.save()
             aviso = "El Modelo se ha creado con éxito!"
@@ -971,20 +820,10 @@ class ModeloView(View):
                 "titulo_view":"Modelo"
             }
             return render(request, 'base_prueba_form.html', args)
-
-    def edit(request,id):
-        modelo = Modelo.objects.get(Id=id)
-        form = ModeloForm(instance=modelo)
-        args = {
-            "form":form,
-            "titulo":"modelo",
-            "titulo_view":"Modelo"
-        }
-        return render(request, 'Modelo/edit.html', args)
     
     def update(request,id):
         modelo = Modelo.objects.get(Id=id)
-        ModelForm_form = ModeloForm(request.POST, instance=modelo)
+        ModelForm_form = ModeloForm(request.POST or None, instance=modelo)
         if ModelForm_form.is_valid():
             ModelForm_form.save()
             aviso = "Los datos se han actualizado con éxito"
@@ -1001,7 +840,7 @@ class ModeloView(View):
                 "titulo_view":"Modelo"
                 
             }
-        return render(request, 'Modelo/edit.html', args)
+        return render(request, 'base_prueba_form.html', args)
 
     def delete(request,id):
         all = Modelo.objects.filter(Eliminado=False)
@@ -1048,19 +887,9 @@ class BenchmarkingView(View):
             "titulo_view":"Benchmarking"
         }
         return render(request, 'Benchmarking/show.html', args)
-
-    def new(request):
-        form = BenchmarkingForm()
-        args = {
-            "form":form,
-            "titulo":"benchmarking",
-            "titulo_view":"Benchmarking"
-        }
-        #return render(request, 'Benchmarking/new.html', args)
-        return render(request, 'base_prueba_form.html', args)
     
     def create(request):
-        ModelForm_form = BenchmarkingForm(request.POST)
+        ModelForm_form = BenchmarkingForm(request.POST or None)
         if ModelForm_form.is_valid():
             ModelForm_form.save()
             aviso = "El Benchmarking se ha creado con éxito!"
@@ -1079,20 +908,10 @@ class BenchmarkingView(View):
                 "titulo_view":"Benchmarking"
             }
             return render(request, 'base_prueba_form.html', args)
-
-    def edit(request,id):
-        bench = Benchmarking.objects.get(Id=id)
-        form = BenchmarkingForm(instance=bench)
-        args = {
-            "form":form,
-            "titulo":"benchmarking",
-            "titulo_view":"Benchmarking"
-        }
-        return render(request, 'base_prueba_form.html', args)
     
     def update(request,id):
         bench = Benchmarking.objects.get(Id=id)
-        ModelForm_form = BenchmarkingForm(request.POST, instance=bench)
+        ModelForm_form = BenchmarkingForm(request.POST or None, instance=bench)
         if ModelForm_form.is_valid():
             ModelForm_form.save()
             aviso = "Los datos se han actualizado con éxito"
@@ -1146,19 +965,10 @@ class PuntosCapituloView(View):
             "titulo":"puntoscap",
             "titulo_view":"Puntos Capitulo"
         }
-        return render(request, 'PuntosCapitulo/show.html', args)
-
-    def new(request):
-        form = PuntosCapituloForm()
-        args = {
-            "form":form,
-            "titulo":"puntoscap",
-            "titulo_view":"Puntos Capitulo"
-        }
-        return render(request, 'base_prueba_form.html', args)
+        return render(request, 'base_show.html', args)
     
     def create(request):
-        ModelForm_form = PuntosCapituloForm(request.POST)
+        ModelForm_form = PuntosCapituloForm(request.POST or None)
         if ModelForm_form.is_valid():
             ModelForm_form.save()
             aviso = "El PuntoCapitulo se ha creado con éxito!"
@@ -1178,19 +988,9 @@ class PuntosCapituloView(View):
             }
             return render(request, 'base_prueba_form.html', args)
 
-    def edit(request,id):
-        pc = PuntosCapitulo.objects.get(Id=id)
-        form = PuntosCapituloForm(instance=pc)
-        args = {
-            "form":form,
-            "titulo":"puntoscap",
-            "titulo_view":"Puntos Capitulo"
-        }
-        return render(request, 'base_prueba_form.html', args)
-
     def update(request,id):
         pc = PuntosCapitulo.objects.get(Id=id)
-        ModelForm_form = PuntosCapituloForm(request.POST, instance=pc)
+        ModelForm_form = PuntosCapituloForm(request.POST or None, instance=pc)
         if ModelForm_form.is_valid():
             ModelForm_form.save()
             aviso = "Los datos se han actualizado con éxito"
@@ -1258,18 +1058,9 @@ class ObjetivoView(View):
             "hijos":hijos
         }
         return render(request, 'base_show.html', args)
-
-    def new(request):
-        form = ObjetivoForm()
-        args = {
-            "form":form,
-            "titulo":"objetivo",
-            "titulo_view":"Objetivo"
-        }
-        return render(request, 'base_prueba_form.html', args)
     
     def create(request):
-        ModelForm_form = ObjetivoForm(request.POST)
+        ModelForm_form = ObjetivoForm(request.POST or None)
         if ModelForm_form.is_valid():
             ModelForm_form.save()
             aviso = "El Objetivo se ha creado con éxito!"
@@ -1289,19 +1080,9 @@ class ObjetivoView(View):
             }
             return render(request, 'base_prueba_form.html', args)
 
-    def edit(request,id):
-        obj = Objetivo.objects.get(Id=id)
-        form = ObjetivoForm(instance=obj)
-        args = {
-            "form":form,
-            "titulo":"objetivo",
-            "titulo_view":"Objetivo"
-        }
-        return render(request, 'base_prueba_form.html', args)
-
     def update(request,id):
         obj = Objetivo.objects.get(Id=id)
-        ModelForm_form = ObjetivoForm(request.POST, instance=obj)
+        ModelForm_form = ObjetivoForm(request.POST or None, instance=obj)
         if ModelForm_form.is_valid():
             ModelForm_form.save()
             aviso = "Los datos se han actualizado con éxito"
@@ -1356,18 +1137,9 @@ class MetaView(View):
             "hijos":hijos
         }
         return render(request, 'base_show.html', args)
-    
-    def new(request):
-        form = MetaForm()
-        args = {
-            "form":form,
-            "titulo":"meta",
-            "titulo_view":"Meta"
-        }
-        return render(request, 'base_prueba_form.html', args)
 
     def create(request):
-        form = MetaForm(request.POST)
+        form = MetaForm(request.POST or None)
         if form.is_valid():
             form.save()
             aviso = "La meta se ha creado con éxito"
@@ -1386,19 +1158,10 @@ class MetaView(View):
                 "titulo_view":"Meta"
             }
             return render(request, 'base_prueba_form.html', args)
-    def edit(request,id):
-        meta = Meta.objects.get(Id=id)
-        form = MetaForm(instance=meta)
-        args = {
-            "form":form,
-            "titulo":"meta",
-            "titulo_view":"Meta"
-        }
-        return render(request, 'base_prueba_form.html', args)
     
     def update(request,id):
         meta = Meta.objects.get(Id=id)
-        form = MetaForm(request.POST, instance=meta)
+        form = MetaForm(request.POST or None, instance=meta)
         if form.is_valid():
             form.save()
             aviso = "Se han actualizado los datos"
@@ -1460,17 +1223,8 @@ class AccionMetaView(View):
         }
         return render(request, 'base_show.html', args)
 
-    def new(request):
-        form = AccionMetaForm()
-        args = {
-            "form":form,
-            "titulo":"accionmeta",
-            "titulo_view":"Accion Meta"
-        }
-        return render(request, 'base_prueba_form.html', args)
-
     def create(request):
-        form = AccionMetaForm(request.POST)
+        form = AccionMetaForm(request.POST or None)
         if form.is_valid():
             form.save()
             aviso = "La Accion Meta se ha creado con éxito"
@@ -1490,19 +1244,9 @@ class AccionMetaView(View):
             }
             return render(request, 'base_prueba_form.html', args)
 
-    def edit(request,id):
-        accion_meta = AccionMeta.objects.get(Id=id)
-        form = AccionMetaForm(instance=accion_meta)
-        args = {
-            "titulo":"accionmeta",
-            "titulo_view":"Accion Meta",
-            "form":form
-        }
-        return render(request, 'base_prueba_form.html', args)
-
     def update(request,id):
         accion_meta = AccionMeta.objects.get(Id=id)
-        form = AccionMetaForm(request.POST, instance = accion_meta)
+        form = AccionMetaForm(request.POST or None, instance = accion_meta)
         if form.is_valid():
             form.save()
             aviso = "Los datos se han actualizado!"
@@ -1555,18 +1299,8 @@ class IndicadorAccionProcesoView(View):
         }
         return render(request, 'base_show.html', args)
 
-    def new(request):
-        form = IndicadorAccionProcesoForm()
-        args = {
-            "form":form,
-            "titulo":"indicador_accion_proceso",
-            "titulo_view":"Indicador Accion Proceso"
-        }
-        #return render(request,'Ambitos/new.html', args)
-        return render(request, 'base_prueba_form.html',args)
-
     def create(request):
-        form = IndicadorAccionProcesoForm(request.POST)
+        form = IndicadorAccionProcesoForm(request.POST or None)
         if form.is_valid():
             form.save()
             aviso = "El indicador Accion preoceso se ha creado con éxito"
@@ -1585,20 +1319,10 @@ class IndicadorAccionProcesoView(View):
                 "titulo_view":"Indicador Accion Proceso"
             }
             return render (request, 'base_prueba_form.html', args )
-
-    def edit(request,id):
-        indicador = IndicadorAccionProceso.objects.get(Id=id)
-        form = IndicadorAccionProcesoForm(instance=indicador)
-        args = {
-            "form":form,
-            "titulo":"indicador_accion_proceso",
-            "titulo_view":"Indicador Accion Proceso"
-            }
-        return render(request, 'base_prueba_form.html', args)   
     
     def update(request,id):
         indicador = IndicadorAccionProceso.objects.get(Id=id)
-        form = IndicadorAccionProcesoForm(request.POST, instance=indicador)
+        form = IndicadorAccionProcesoForm(request.POST or None, instance=indicador)
         if form.is_valid():
             form.save()
             aviso = "Se han actualizado los datos"
@@ -1661,18 +1385,8 @@ class DocumentosSistemaView(View):
         }
         return render(request, 'base_show.html', args)
     
-    def new(request):
-        form = DocumentosSistemaForm()
-        args = {
-            "form":form,
-            "titulo":"documentos_sistema",
-            "titulo_view":"Documentos Sistema"
-        }
-        #return render(request,'Ambitos/new.html', args)
-        return render(request, 'base_prueba_form.html',args)
-    
     def create(request):
-        form = DocumentosSistemaForm(request.POST)
+        form = DocumentosSistemaForm(request.POST or None)
         if form.is_valid():
             form.save()
             aviso = "El Documento Sistema se ha creado con éxito"
@@ -1692,19 +1406,9 @@ class DocumentosSistemaView(View):
             }
             return render (request, 'base_prueba_form.html', args )
     
-    def edit(request,id):
-        documento_sistema = DocumentosSistema.objects.get(Id=id)
-        form = DocumentosSistemaForm(instance=documento_sistema)
-        args = {
-            "form":form,
-            "titulo":"documentos_sistema",
-            "titulo_view":"Documentos Sistema"
-            }
-        return render(request, 'base_prueba_form.html', args)
-    
     def update(request,id):
         documento_sistema = DocumentosSistema.objects.get(Id=id)
-        form = DocumentosSistemaForm(request.POST, instance=documento_sistema)
+        form = DocumentosSistemaForm(request.POST or None, instance=documento_sistema)
         if form.is_valid():
             form.save()
             aviso = "Se han actualizado los datos"
@@ -1756,18 +1460,8 @@ class SeguimientoIndicadoresView(View):
         }
         return render(request, 'base_show.html', args)
     
-    def new(request):
-        form = SeguimientoIndicadoresForm()
-        args = {
-            "form":form,
-            "titulo":"seguimiento_indicadores",
-            "titulo_view":"Seguimiento indicadores"
-        }
-        #return render(request,'Ambitos/new.html', args)
-        return render(request, 'base_prueba_form.html',args) 
-    
     def create(request):
-        form = SeguimientoIndicadoresForm(request.POST)
+        form = SeguimientoIndicadoresForm(request.POST or None)
         if form.is_valid():
             form.save()
             aviso = "El Seguimiento indicador se ha creado con éxito"
@@ -1787,19 +1481,9 @@ class SeguimientoIndicadoresView(View):
             }
             return render (request, 'base_prueba_form.html', args )
     
-    def edit(request,id):
-        segin = SeguimientoIndicadores.objects.get(Id=id)
-        form = SeguimientoIndicadoresForm(instance=segin)
-        args = {
-            "form":form,
-            "titulo":"seguimiento_indicadores",
-            "titulo_view":"Seguimiento indicadores"
-            }
-        return render(request, 'base_prueba_form.html', args)
-    
     def update(request,id):
         segin = SeguimientoIndicadores.objects.get(Id=id)
-        form = SeguimientoIndicadoresForm(request.POST, instance=segin)
+        form = SeguimientoIndicadoresForm(request.POST or None, instance=segin)
         if form.is_valid():
             form.save()
             aviso = "Se han actualizado los datos"
@@ -1852,18 +1536,8 @@ class ProcesoView(View):
         }
         return render(request, 'base_show.html', args)
     
-    def new(request):
-        form = ProcesoForm()
-        args = {
-            "form":form,
-            "titulo":"proceso",
-            "titulo_view":"Proceso"
-        }
-        #return render(request,'Ambitos/new.html', args)
-        return render(request, 'base_prueba_form.html',args)
-    
     def create(request):
-        form = ProcesoForm(request.POST)
+        form = ProcesoForm(request.POST or None)
         if form.is_valid():
             form.save()
             aviso = "El Proceso se ha creado con éxito"
@@ -1883,19 +1557,9 @@ class ProcesoView(View):
             }
             return render (request, 'base_prueba_form.html', args )
     
-    def edit(request,id):
-        proceso = proceso.objects.get(Id=id)
-        form = ProcesoForm(instance=proceso)
-        args = {
-            "form":form,
-            "titulo":"proceso",
-            "titulo_view":"Proceso"
-            }
-        return render(request, 'base_prueba_form.html', args)
-    
     def update(request,id):
         proceso = Proceso.objects.get(Id=id)
-        form = ProcesoForm(request.POST, instance=proceso)
+        form = ProcesoForm(request.POST or None, instance=proceso)
         if form.is_valid():
             form.save()
             aviso = "Se han actualizado los datos"

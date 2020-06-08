@@ -1599,4 +1599,4 @@ class ProcesoView(View):
                 "titulo":"proceso",
                 "titulo_view":"Proceso"
             }
-        return render(request, 'base_index.html', args) 
+        return render(request, 'base_index.html', args)

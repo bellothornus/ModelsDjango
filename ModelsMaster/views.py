@@ -9,6 +9,8 @@ from .models import Ambito, TipoObjetivo, Sector, NivelAreaGeografica, AreaGeogr
 def index(request):
     return render(request, 'index.html')
 
+""" def prueba(request):
+    return render(request, 'index') """
 
 class AmbitoView(View):
     def index(request):

@@ -16,15 +16,23 @@
         <!-- Fontawesome.css (iconos de Bootstrap 4)-->
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
         <!-- Archivo local javascript para invocar el Datatable-->
-        <script type="text/javascript" src="{%static 'js/tabla_datos.js'%}" ></script>
+        <script type="text/javascript" src="{%static 'js/tabla_datos.js' %}" ></script>
+        <!-- FIltros en el DataTables-->
+        <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.21/api/fnFilterClear.js"></script> 
+        {% if titulo == "area_geografica" %}
+            <script type="text/javascript" src="{% static 'js/filtro_ag.js' %}"></script>
+        {% endif %}
+        <script type="text/javascript" src="{% static 'js/modal_index.js' %}"></script>
         {% block head %}
 
         {% endblock %}
     </head>
     <body>
+        
+        {%include 'navbar.html'%}
         <div class="container">
             {% block body %}
-            <a class="btn btn-primary" href="/new/{{titulo}}">Crear nuevo {{titulo_view}}</a>
+            
             {% endblock %}
             {% if aviso %}
             <div class="alert alert-success" role="alert" style="position: absolute; bottom:0;">
@@ -37,6 +45,18 @@
             </div>
             {% endif %}
             <br>
+            {% if titulo == "area_geografica" %}
+                <div class="row" style="padding:10px;">
+                    <label for="ag" class="col-form-label col-sm-2">Nivel Área Geográfica a buscar:</label>
+                    <select name="filtro" id="ag" class="form-control col-sm-4">
+                        <option value="">TODOS</option>
+                        {% for f in filtro %}
+                        <option value="{{f.Id}}">{{f.Nombre}}</option>
+                        {% endfor %}
+                    </select>
+                    <div class="col-sm-6"></div>
+                </div>
+            {% endif %}
             <table id="myTable" class="display">
                 <thead>
                     <tr>
@@ -58,10 +78,13 @@
                             {% if titulo == "area_geografica" %}
                             <td>{{query.IdNag.Nombre}}</td>
                             {% endif %}
-                            <td>{{query.username}}</td>
-                            <td><a class="btn btn-xs far fa-eye" href="/show/{{titulo}}/{{query.id}}"></a></td>
-                            <td><a class="btn btn-primary btn-xs fas fa-pen" href="/update/{{titulo}}/{{query.id}}"></a></td>
-                            <td><a class="btn btn-danger btn-xs fas fa-trash-alt  fas fa-trash-alt" href="/delete/{{titulo}}/{{query.id}}"></a></td>
+                            <td>{{query.Nombre}}</td>
+                            <td><a class="btn btn-xs far fa-eye" href="/show/{{titulo}}/{{query.Id}}"></a></td>
+                            <td><a class="btn btn-primary btn-xs fas fa-pen" href="/update/{{titulo}}/{{query.Id}}"></a></td>
+                            <!-- Button trigger modal -->
+                            <td><button id="trigger" type="button" class="btn btn-danger btn-xs fas fa-trash-alt" data-toggle="modal" data-target="#eliminar"></button></td>
+                           <!--<a class="btn btn-danger btn-xs fas fa-trash-alt  fas fa-trash-alt" href="/delete/{{titulo}}/{{query.Id}}"></a>-->
+
                         </tr>
                         {% endfor %}
                     {% else %}
@@ -69,7 +92,11 @@
                     {% endif %}
                 </tbody>
             </table>
-            <a href="/">Volver atrás</a>
+            <div class="row justify-content-between">
+                <a class="btn btn-primary col-sm-4" href="/">Volver atrás</a>
+                <a class="btn btn-primary col-sm-4" href="/create/{{titulo}}">Crear nuevo {{titulo_view}}</a>
+            </div>
         </div>
+        {% include 'modal_eliminar.html' %}
     </body>
 </html>

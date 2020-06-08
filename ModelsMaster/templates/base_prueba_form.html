@@ -17,50 +17,62 @@
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
         <!-- Archivo local javascript para invocar el Datatable-->
         <script type="text/javascript" src="{%static 'js/tabla_datos.js'%}" ></script>
+        <script type="text/javascript" src="{%static 'js/label_class.js'%}" ></script>
+        <script type="text/javascript" src="{%static 'js/form.js'%}"></script>
         {% block head %}
 
         {% endblock %}
     </head>
     <body>
+        {%include 'navbar.html'%}
+        {% if form.instance.Id %}
+        <h2>Editando un {{titulo_view}}</h2>
+        {%else%}
         <h2>Creando un nuevo {{titulo_view}}:</h2>
+        {%endif%}
         <div class="container">
-            <form style="margin-top:30px;"action="/create/{{titulo}}" method="POST"> {% csrf_token %}
-            {% for column in columns %}
-                {% if column.name == "Nombre" or column.name == "Descripcion" or column.name == "Anyo" or column.name == "Codificacion"%}
-                    <div class="form-group row">
-                        <label for="{{column.name}}" class="col-sm-2 col-form-label">{%if column.name == "Anyo"%}Año{%else%}{{column.name}}{%endif%}:</label>
-                        <div class="col-sm-10">
-                            <input class="form-control" type="text" name="{{column.name}}" id="{{column.name}}">
-                        </div>
-                    </div>
+            {% if aviso %}
+                <div class="alert alert-success" role="alert" style="position: absolute; bottom:0;">
+                    <h2 style="color:green;">{{aviso}}</h2>
+                </div>
+            {% endif %}
+            <form style="margin-top:30px;"action="{%if form.instance.Id %}/update/{{titulo}}/{{form.instance.Id}}{%else%}/create/{{titulo}}{%endif%}" method="POST"> {% csrf_token %}
+            {% block form %}
+            
+            {% endblock %}
+            {% for f in form %}
+            <div class="form-group row">
+                {{f.label_tag}}
+                <!--<label for="id_{{f.name}}" class="col-sm-2 col-form-label">{{f.name}}</label>
+                -->
+                <div class="col-sm-10">
+                    {{f}}
+                </div>
+            </div>
+            {%endfor%}
+            <div class="row justify-content-between">
+                <a class="btn btn-primary col-sm-3" href="/index/{{titulo}}">Volver atrás</a>
+                {% if form.instance.Id %}
+                    <a class="btn btn-primary col-sm-3" href="/update/{{titulo}}/{{form.instance.Id}}">Deshacer</a>
+                {% else %}
+                    <a class="btn btn-primary col-sm-3" href="/create/{{titulo}}">Deshacer</a>
                 {% endif %}
-                {% if column.name == "Nivel" or column.name == "IdParent" or column.name == "IdNag"%}
-                    <div class="form-group row">
-                        <label for="{{column.name}}" class="col-sm-2 col-form-label">{%if column.name == "IdParent"%}Padre{%elif column.name == "IdNag"%}Nivel Area Geográfica{%else%}{{column.name}}{%endif%}</label>
-                        <div class="col-sm-10">
-                            <select class="form-control" name="{{column.name}}" id="{{column.name}}">
-                            <option disabled selected value>Elige una opción</option>
-                            {%if column.name == "IdParent"%}
-                            {% for data in padres %}
-                                <option value="{{data.Id}}">{{data.Nombre}}</option>
-                            {% endfor %}
-                            {%endif%}
-                            {%if column.name == "IdNag"%}
-                            {% for data in relacionados1 %}
-                                <option data-area-level="{{data.Nivel}}"value="{{data.Id}}">{{data.Nombre}}</option>
-                            {% endfor %}
-                            {%endif%}
-                            </select>
-                        </div>
-                    </div>
+                {% if form.instance.Id %}
+                    <input class="btn btn-primary col-sm-3"type="submit" value="Actualizar">
+                {%else%}
+                    <input class="btn btn-primary col-sm-3"type="submit" value="Enviar">
                 {%endif%}
-            {% endfor%}
-            <div class="row">
-                <a class="btn btn-primary col-sm-3 mx-4" href="/index/{{titulo}}">Volver al Índice</a>
-                <a class="btn btn-primary col-sm-3 mx-4" href="/new/{{titulo}}">Deshacer</a>
-                <input class="btn btn-primary col-sm-4 mx-4"type="submit" value="Enviar">
             </div>
         </div>
     </form>
+    {% if form.errors %}
+        {% for error_field, error_message in form.errors.items %}
+        <div class="alert alert-danger " role="alert">
+
+            <p> {{ error_field|striptags }}-{{ error_message|striptags }}</p>
+
+        </div> 
+        {% endfor %}
+    {% endif %}
     </body>
 </html>

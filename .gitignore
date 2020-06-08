@@ -5,3 +5,8 @@ en3v
 db.sqlite3
 /static
 .DS_Store
+manage.py
+ModelsDjango/__pycache__
+ModelsMaster/__pycache__
+ModelsMaster/migrations_old
+memoria_codigo.txt

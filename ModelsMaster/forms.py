@@ -1,9 +1,9 @@
 from django.db import models
 from django.forms import ModelForm
 from django import forms
-#from django.contrib.auth import Permission
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User, Permission
 from .models import Ambito, TipoObjetivo, Sector, NivelAreaGeografica, AreaGeografica, Empresa, Modelo, Benchmarking, PuntosCapitulo, Objetivo, Estructura, Meta, AccionMeta, Proceso, IndicadorAccionProceso, SeguimientoIndicadores, DocumentosSistema
- 
 """ class PermissionForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(AmbitoForm, self).__init__(*args, **kwargs)
@@ -13,7 +13,6 @@ from .models import Ambito, TipoObjetivo, Sector, NivelAreaGeografica, AreaGeogr
     class Meta:
         model = Permission
         fields = "__all__" """
-
 
 class AmbitoForm(ModelForm):
     def __init__(self, *args, **kwargs):
@@ -263,3 +262,13 @@ class ProcesoForm(ModelForm):
             'IdPc':'Puntos Capitulo',
             'IdEst':'Estructura'
         }
+
+class UserForm(UserCreationForm):
+    def __init__(self, *args, **kwargs):
+        super(UserForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+
+    class Meta:
+        model = User
+        fields = ('username', 'email')

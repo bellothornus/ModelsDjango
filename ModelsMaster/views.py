@@ -1,16 +1,140 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from .forms import AmbitoForm, TipoObjetivoForm, SectorForm, NivelAreaGeograficaForm, AreaGeograficaForm, EmpresaForm, ModeloForm, BenchmarkingForm, PuntosCapituloForm, ObjetivoForm, EstructuraForm, MetaForm, ProcesoForm, DocumentosSistemaForm, IndicadorAccionProcesoForm, AccionMetaForm, SeguimientoIndicadoresForm
+from .forms import AmbitoForm, TipoObjetivoForm, SectorForm, NivelAreaGeograficaForm, AreaGeograficaForm, EmpresaForm, ModeloForm, BenchmarkingForm, PuntosCapituloForm, ObjetivoForm, EstructuraForm, MetaForm, ProcesoForm, DocumentosSistemaForm, IndicadorAccionProcesoForm, AccionMetaForm, SeguimientoIndicadoresForm, UserForm
 from .models import Ambito, TipoObjetivo, Sector, NivelAreaGeografica, AreaGeografica, Empresa, Modelo, Benchmarking, PuntosCapitulo, Objetivo, Estructura, Meta, Proceso, DocumentosSistema, IndicadorAccionProceso, AccionMeta, SeguimientoIndicadores
+from django.contrib.auth.models import User, Permission
+from django.contrib.auth import logout as do_logout, login as do_login , authenticate
+from django.contrib.auth.forms import AuthenticationForm 
+from django.contrib.auth.decorators import login_required
 #para ver la lista de permisos d eun usuairo
 #perm_tuple = [(x.id, x.name) for x in Permission.objects.filter(user=2)]
 # Create your views here.
+class LogView(View):
+    def login(request):
+        #Creamos el formulario de autenticación vacío
+        form = AuthenticationForm()
+        if request.method == "POST":
+            # Añadimos los datos recibidos al formulario
+            form = AuthenticationForm(data=request.POST)
+            # Si el formulario es válido->
+            if form.is_valid():
+                # Recuperamos las credenciales validadas
+                username = form.cleaned_data['username']
+                password = form.cleaned_data['password']
 
+                # Verificamos las credenciales del usuario
+                user = authenticate(username=username, password=password)
+
+                # Si existe un usuario con ese nombre y contraseña
+                if user is not None:
+                    # Hacemos el login manualmente
+                    do_login(request, user)
+                    # Y le redireccionamos a la portada
+                    return redirect('/')
+
+        # Si llegamos al final renderizamos el formulario
+        arg={
+            'form': form
+        }
+        return render(request, "log/login.html", arg)
+
+    def logout(request):
+        # Finalizamos la sesión
+        do_logout(request)
+        # Redireccionamos a la portada
+        return redirect('/')
+
+class UserView(View):
+    def index(request):
+        all = User.objects.filter(is_active=1)
+        args = {
+            "querys":all,
+            "titulo":"user",
+            "titulo_view":"Usuario"
+        }
+        return render(request, 'User/index.html', args)
+
+    def show(request,id):
+        user = User.objects.get(id=id)
+        args = {
+            "user":user,
+            "titulo":"user",
+            "titulo_view":"Usuario"
+        }
+        return render(request, 'User/show.html', args)
+
+    def create(request):
+        #Creamos el formulario de autenticación vacío
+        form = UserForm()
+        #permissions=Permission.objects.all()
+        if request.method == "POST":
+            # Añadimos los datos recibidos al formulario
+            form = UserForm(data=request.POST)
+            # Si el formulario es válido...
+            if form.is_valid():
+                # Creamos la nueva cuenta de usuario
+                user = form.save()
+                #user.user_permissions.add(request.POST["id_permission"])
+                user.save()
+                # Si el usuario se crea correctamente 
+                if user is not None:
+                    # Hacemos el login manualmente
+                    do_login(request, user)
+                    # Y le redireccionamos a la portada
+                    return redirect('/')
+        form.fields['username'].help_text = None
+        form.fields['password1'].help_text = None
+        form.fields['password2'].help_text = None
+        arg={
+            'form': form,
+            "titulo":"user",
+            "titulo_view":"Usuario"
+            }
+        # Si llegamos al final renderizamos el formulario
+        return render(request, "base_form.html", arg)
+
+    def update(request,id):
+        user = User.objects.get(id=id)
+        form = UserForm(request.POST, instance=user)
+        if request.method == "POST":
+            if form.is_valid():
+                form.save()
+                arg={
+                    'form':form,
+                    'user':user,
+                    "titulo":"user",
+                    "titulo_view":"Usuario"
+                }
+        else:
+            form = UserForm(instance=user)
+            form.fields['username'].help_text = None
+            form.fields['password1'].help_text = None
+            form.fields['password2'].help_text = None
+            arg={
+                    'form':form,
+                    'user':user,
+                    "titulo":"user",
+                    "titulo_view":"Usuario"
+                }
+        return render(request, 'User/update.html', arg)
+
+    def delete(request,id):
+        user = User.objects.get(id=id)
+        user.is_active = 0
+        user.save()
+        eliminado = "El usuario se ha eliminado"
+        all = User.objects.filter(is_active=1)
+        args = {
+            "eliminado":eliminado,
+            "querys":all,
+            "titulo":"user",
+            "titulo_view":"Usuario"
+        }
+        return render(request, 'User/index.html', args)
+
+@login_required
 def index(request):
     return render(request, 'index.html')
-
-""" def prueba(request):
-    return render(request, 'index') """
 
 class AmbitoView(View):
     def index(request):
@@ -20,7 +144,6 @@ class AmbitoView(View):
             "titulo":"ambito",
             "titulo_view":"Ambito"
         }
-        #return render(request, 'Ambitos/index.html', args)
         return render(request, 'base_index.html', args)
 
     def show(request,id):
@@ -33,7 +156,6 @@ class AmbitoView(View):
         }
         return render(request, 'base_show.html', args)
     
-
     def create(request):
         form = AmbitoForm(request.POST or None)
         if form.is_valid():
@@ -53,7 +175,7 @@ class AmbitoView(View):
                 "titulo":"ambito",
                 "titulo_view":"Ambito"
             }
-            return render (request, 'base_prueba_form.html', args )
+            return render (request, 'base_form.html', args )
 
     def update(request,id):
         ambito = Ambito.objects.get(Id=id)
@@ -73,7 +195,7 @@ class AmbitoView(View):
                 "titulo":"ambito",
                 "titulo_view":"Ambito"
             }
-        return render(request, 'base_prueba_form.html',args)
+        return render(request, 'base_form.html',args)
 
     def delete(request,id):
         ambito = Ambito.objects.get(Id=id)
@@ -139,7 +261,7 @@ class TipoObjetivoView(View):
                 "titulo":"tipo_objetivo",
                 "titulo_view":"Tipo Objetivo"
             }
-            return render(request, 'base_prueba_form.html', args)
+            return render(request, 'base_form.html', args)
 
     def update(request,id):
         tipo_objetivo = TipoObjetivo.objects.get(Id=id)
@@ -153,14 +275,14 @@ class TipoObjetivoView(View):
                 "titulo":"tipo_objetivo",
                 "titulo_view":"Tipo Objetivo"
             }
-            return render(request, 'base_prueba_form.html', args)
+            return render(request, 'base_form.html', args)
         else:
             args = {
                 "form":form,
                 "titulo":"tipo_objetivo",
                 "titulo_view":"Tipo Objetivo"
             }
-            return render(request, 'base_prueba_form.html', args)
+            return render(request, 'base_form.html', args)
 
     def delete(request,id):
         tipo_objetivo = TipoObjetivo.objects.get(Id=id)
@@ -196,7 +318,7 @@ class EstructuraView(View):
             "titulo":"estructura",
             "titulo_view":"Estructura"
         }
-        return render(request, 'base_prueba_form.html', args)
+        return render(request, 'base_form.html', args)
 
     def create(request):
         form = EstructuraForm(request.POST or None)
@@ -217,7 +339,7 @@ class EstructuraView(View):
                 "titulo":"estructura",
                 "titulo_view":"Estructuras"
             }
-            return render(request, 'base_prueba_form.html', args)
+            return render(request, 'base_form.html', args)
 
     def update(request,id):
         estructura = Estructura.objects.get(Id=id)
@@ -237,7 +359,7 @@ class EstructuraView(View):
                 "titulo":"estructura",
                 "titulo_view":"Estructuras"
             }
-        return render(request, 'base_prueba_form.html', args)
+        return render(request, 'base_form.html', args)
 
     def delete(request,id):
         #TODO:
@@ -458,7 +580,7 @@ class SectorView(View):
                 "titulo":"sector",
                 "titulo_view":"Sector"
             }
-            return render(request, 'base_prueba_form.html', args)
+            return render(request, 'base_form.html', args)
 
     def update(request,id):
         sector = Sector.objects.get(Id=id)
@@ -478,7 +600,7 @@ class SectorView(View):
                 "titulo":"sector",
                 "titulo_view":"Sector"
             }
-        return render(request, 'base_prueba_form.html', args)
+        return render(request, 'base_form.html', args)
 
     def delete(request,id):
         all = Sector.objects.filter(Eliminado=False)
@@ -515,7 +637,7 @@ class NivelAreaGeograficaView(View):
             "titulo_view":"Nivel Área Geográfica"
         }
         #return render(request, 'Nag/index.html', args)
-        return render(request, 'base_index.html', args)
+        return render(request, 'Nag/index.html', args)
 
     def show(request,id):
         nag = NivelAreaGeografica.objects.get(Id=id)
@@ -546,7 +668,7 @@ class NivelAreaGeograficaView(View):
                 "titulo":"nag",
                 "titulo_view":"Nivel Área Geográfica"
             }
-            return render (request, 'base_prueba_form.html', args)
+            return render (request, 'base_form.html', args)
 
     def update(request,id):
         nag = NivelAreaGeografica.objects.get(Id=id)
@@ -566,7 +688,7 @@ class NivelAreaGeograficaView(View):
                 "titulo":"nag",
                 "titulo_view":"Nivel Área Geográfica"
             }
-        return render(request, 'base_prueba_form.html', args)
+        return render(request, 'base_form.html', args)
 
     def delete(request,id):
         all = NivelAreaGeografica.objects.filter(Eliminado=False)
@@ -641,7 +763,7 @@ class AreaGeograficaView(View):
                 "titulo":"area_geografica",
                 "titulo_view":"Área Geográfica",
             }
-            return render(request, 'base_prueba_form.html', args)
+            return render(request, 'base_form.html', args)
 
     def update(request,id):
         ag = AreaGeografica.objects.get(Id=id)
@@ -661,7 +783,7 @@ class AreaGeograficaView(View):
                 "titulo":"area_geografica",
                 "titulo_view":"Área Geográfica",
             }
-        return render(request, 'base_prueba_form.html', args)
+        return render(request, 'base_form.html', args)
 
     def delete(request,id):
         all = AreaGeografica.objects.filter(Eliminado=False)
@@ -732,7 +854,7 @@ class EmpresaView(View):
                 "titulo":"empresa",
                 "titulo_view":"Empresa"
             }
-            return render(request, 'base_prueba_form.html', args)
+            return render(request, 'base_form.html', args)
     
     def update(request,id):
         emp = Empresa.objects.get(Id=id)
@@ -752,7 +874,7 @@ class EmpresaView(View):
                 "titulo":"empresa",
                 "titulo_view":"Empresa"
             }
-        return render(request, 'base_prueba_form.html', args)
+        return render(request, 'base_form.html', args)
 
     def delete(request,id):
         all = Empresa.objects.filter(Eliminado=False)
@@ -821,7 +943,7 @@ class ModeloView(View):
                 "titulo":"modelo",
                 "titulo_view":"Modelo"
             }
-            return render(request, 'base_prueba_form.html', args)
+            return render(request, 'base_form.html', args)
     
     def update(request,id):
         modelo = Modelo.objects.get(Id=id)
@@ -842,7 +964,7 @@ class ModeloView(View):
                 "titulo_view":"Modelo"
                 
             }
-        return render(request, 'base_prueba_form.html', args)
+        return render(request, 'base_form.html', args)
 
     def delete(request,id):
         all = Modelo.objects.filter(Eliminado=False)
@@ -909,7 +1031,7 @@ class BenchmarkingView(View):
                 "titulo":"benchmarking",
                 "titulo_view":"Benchmarking"
             }
-            return render(request, 'base_prueba_form.html', args)
+            return render(request, 'base_form.html', args)
     
     def update(request,id):
         bench = Benchmarking.objects.get(Id=id)
@@ -930,7 +1052,7 @@ class BenchmarkingView(View):
                 "titulo":"benchmarking",
                 "titulo_view":"Benchmarking"
             }
-        return render(request, 'base_prueba_form.html', args)
+        return render(request, 'base_form.html', args)
 
     def delete(request,id):
         bench = Benchmarking.objects.get(Id=id)
@@ -988,7 +1110,7 @@ class PuntosCapituloView(View):
                 "titulo":"puntoscap",
                 "titulo_view":"Puntos Capitulo"
             }
-            return render(request, 'base_prueba_form.html', args)
+            return render(request, 'base_form.html', args)
 
     def update(request,id):
         pc = PuntosCapitulo.objects.get(Id=id)
@@ -1008,7 +1130,7 @@ class PuntosCapituloView(View):
                 "titulo":"puntoscap",
                 "titulo_view":"Puntos Capitulo"
             }
-        return render(request, 'base_prueba_form.html', args)
+        return render(request, 'base_form.html', args)
     
     def delete(request,id):
         # TODO:
@@ -1080,7 +1202,7 @@ class ObjetivoView(View):
                 "titulo":"objetivo",
                 "titulo_view":"Objetivo"
             }
-            return render(request, 'base_prueba_form.html', args)
+            return render(request, 'base_form.html', args)
 
     def update(request,id):
         obj = Objetivo.objects.get(Id=id)
@@ -1100,7 +1222,7 @@ class ObjetivoView(View):
                 "titulo":"objetivo",
                 "titulo_view":"Objetivo"
             }
-        return render(request, 'base_prueba_form.html', args)
+        return render(request, 'base_form.html', args)
     
     def delete(request,id):
         # TODO:
@@ -1159,7 +1281,7 @@ class MetaView(View):
                 "titulo":"meta",
                 "titulo_view":"Meta"
             }
-            return render(request, 'base_prueba_form.html', args)
+            return render(request, 'base_form.html', args)
     
     def update(request,id):
         meta = Meta.objects.get(Id=id)
@@ -1179,7 +1301,7 @@ class MetaView(View):
                 "titulo":"meta",
                 "titulo_view":"Meta"
             }
-        return render(request, 'base_prueba_form.html', args)
+        return render(request, 'base_form.html', args)
     
     def delete(request,id):
         meta = Meta.objects.get(Id=id)
@@ -1244,7 +1366,7 @@ class AccionMetaView(View):
                 "titulo":"accionmeta",
                 "titulo_view":"Accion Meta"
             }
-            return render(request, 'base_prueba_form.html', args)
+            return render(request, 'base_form.html', args)
 
     def update(request,id):
         accion_meta = AccionMeta.objects.get(Id=id)
@@ -1258,14 +1380,14 @@ class AccionMetaView(View):
                 "titulo":"accionmeta",
                 "titulo_view":"Accion Meta"
             }
-            return render(request, 'base_prueba_form.html', args)
+            return render(request, 'base_form.html', args)
         else:
             args = {
                 "form":form,
                 "titulo":"accionmeta",
                 "titulo_view":"Accion Meta"
             }
-            return render(request, 'base_prueba_form.html', args)
+            return render(request, 'base_form.html', args)
 
     def delete(request,id):
         accion_meta = AccionMeta.objects.get(Id=id)
@@ -1320,7 +1442,7 @@ class IndicadorAccionProcesoView(View):
                 "titulo":"indicador_accion_proceso",
                 "titulo_view":"Indicador Accion Proceso"
             }
-            return render (request, 'base_prueba_form.html', args )
+            return render (request, 'base_form.html', args )
     
     def update(request,id):
         indicador = IndicadorAccionProceso.objects.get(Id=id)
@@ -1340,7 +1462,7 @@ class IndicadorAccionProcesoView(View):
                 "titulo":"indicador_accion_proceso",
                 "titulo_view":"Indicador Accion Proceso"
             }
-        return render(request, 'base_prueba_form.html',args)
+        return render(request, 'base_form.html',args)
     
     def delete(request,id):
         indicador = IndicadorAccionProceso.objects.get(Id=id)
@@ -1406,7 +1528,7 @@ class DocumentosSistemaView(View):
                 "titulo":"documentos_sistema",
                 "titulo_view":"Documentos Sistema"
             }
-            return render (request, 'base_prueba_form.html', args )
+            return render (request, 'base_form.html', args )
     
     def update(request,id):
         documento_sistema = DocumentosSistema.objects.get(Id=id)
@@ -1426,7 +1548,7 @@ class DocumentosSistemaView(View):
                 "titulo":"documentos_sistema",
                 "titulo_view":"Documentos Sistema"
             }
-        return render(request, 'base_prueba_form.html',args)
+        return render(request, 'base_form.html',args)
 
     def delete(request,id):
         documento_sistema = DocumentosSistema.objects.get(Id=id)
@@ -1481,7 +1603,7 @@ class SeguimientoIndicadoresView(View):
                 "titulo":"seguimiento_indicadores",
                 "titulo_view":"Seguimiento indicadores"
             }
-            return render (request, 'base_prueba_form.html', args )
+            return render (request, 'base_form.html', args )
     
     def update(request,id):
         segin = SeguimientoIndicadores.objects.get(Id=id)
@@ -1501,7 +1623,7 @@ class SeguimientoIndicadoresView(View):
                 "titulo":"seguimiento_indicadores",
                 "titulo_view":"Seguimiento indicadores"
             }
-        return render(request, 'base_prueba_form.html',args)
+        return render(request, 'base_form.html',args)
 
     def delete(request,id):
         segin = SeguimientoIndicadores.objects.get(Id=id)
@@ -1557,7 +1679,7 @@ class ProcesoView(View):
                 "titulo":"proceso",
                 "titulo_view":"Proceso"
             }
-            return render (request, 'base_prueba_form.html', args )
+            return render (request, 'base_form.html', args )
     
     def update(request,id):
         proceso = Proceso.objects.get(Id=id)
@@ -1577,7 +1699,7 @@ class ProcesoView(View):
                 "titulo":"proceso",
                 "titulo_view":"Proceso"
             }
-        return render(request, 'base_prueba_form.html',args)
+        return render(request, 'base_form.html',args)
     
     def delete(request,id):
         proceso = Proceso.objects.get(Id=id)

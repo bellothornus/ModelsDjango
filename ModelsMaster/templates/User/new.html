@@ -1,0 +1,16 @@
+<h2>Registrar usuario</h2>
+
+<form method="POST">
+    {{ form.as_p }}
+    <select name="id_permission">
+    {% for permission in permissions %}
+    <option value="{{permission.id}}">{{permission.name}}</option>
+    {% endfor %}
+    </select>
+    {% csrf_token %}
+    <button type="submit">Registrar</button>
+</form>
+
+<hr />
+
+<a href="/login">Iniciar sesión</a>

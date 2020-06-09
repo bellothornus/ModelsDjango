@@ -119,6 +119,15 @@ urlpatterns = [
     path('update/proceso/<int:id>', views.ProcesoView.update),
     path('delete/proceso/<int:id>', views.ProcesoView.delete),
 
+    path('index/user', views.UserView.index),
+    path('show/user/<int:id>', views.UserView.show),
+    path('create/user', views.UserView.create),
+    path('update/user/<int:id>', views.UserView.update),
+    path('delete/user/<int:id>', views.UserView.delete),
+    
+    path('login', views.LogView.login, name='login'),
+    path('logout', views.LogView.logout),
+
 ]
 
 urlpatterns += staticfiles_urlpatterns()

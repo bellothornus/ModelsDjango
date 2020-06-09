@@ -16,14 +16,20 @@
         <!-- Fontawesome.css (iconos de Bootstrap 4)-->
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
         <!-- Archivo local javascript para invocar el Datatable-->
-        <script type="text/javascript" src="{%static 'js/tabla_datos.js'%}" ></script>
+        <script type="text/javascript" src="{%static 'js/tabla_datos.js' %}" ></script>
+        <!-- FIltros en el DataTables-->
+        <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.21/api/fnFilterClear.js"></script> 
+        <script type="text/javascript" src="{% static 'js/modal_index.js' %}"></script>
         {% block head %}
 
         {% endblock %}
     </head>
     <body>
+        
+        {%include '../navbar.html'%}
         <div class="container">
             {% block body %}
+            
             {% endblock %}
             {% if aviso %}
             <div class="alert alert-success" role="alert" style="position: absolute; bottom:0;">
@@ -39,18 +45,37 @@
             <table id="myTable" class="display">
                 <thead>
                     <tr>
-                    {% block thead %}
-
-                    {% endblock %}
+                        <th> ID: </th>
+                        <th> Nombre:</th>
+                        <th> Ver:</th>
+                        <th> Editar:</th>
+                        <th> Eliminar:</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% block tbody %}
+                    {% if querys %}
+                        {% for query in querys %}
+                        <tr>
+                            <td>{{query.id}}</td>
+                            <td>{{query.username}}</td>
+                            <td><a class="btn btn-xs far fa-eye" href="/show/{{titulo}}/{{query.id}}"></a></td>
+                            <td><a class="btn btn-primary btn-xs fas fa-pen" href="/update/{{titulo}}/{{query.id}}"></a></td>
+                            <!-- Button trigger modal -->
+                            <td><button id="trigger" type="button" class="btn btn-danger btn-xs fas fa-trash-alt" data-toggle="modal" data-target="#eliminar"></button></td>
+                           <!--<a class="btn btn-danger btn-xs fas fa-trash-alt  fas fa-trash-alt" href="/delete/{{titulo}}/{{query.Id}}"></a>-->
 
-                    {% endblock %}
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <h2>No se han encontrado ningún {{titulo_view}} creado</h2>
+                    {% endif %}
                 </tbody>
             </table>
-            <a href="/">Volver atrás</a>
+            <div class="row justify-content-between">
+                <a class="btn btn-primary col-sm-4" href="/">Volver atrás</a>
+                <a class="btn btn-primary col-sm-4" href="/create/{{titulo}}">Crear nuevo {{titulo_view}}</a>
+            </div>
         </div>
+        {% include 'modal_eliminar.html' %}
     </body>
 </html>

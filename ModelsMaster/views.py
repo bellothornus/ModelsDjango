@@ -1079,7 +1079,7 @@ class PuntosCapituloView(View):
            "titulo_view":"Puntos Capitulo"
        }
        #return render(request, 'PuntosCapitulo/index.html', args)
-       return render(request, 'base_index.html', args)
+       return render(request, 'PuntosCapitulo/index.html', args)
 
     def show(request,id):
         pc = PuntosCapitulo.objects.get(Id=id)
@@ -1335,7 +1335,7 @@ class AccionMetaView(View):
             "titulo":"accionmeta",
             "titulo_view":"Accion Meta"
         }
-        return render(request, 'base_index.html', args)
+        return render(request, 'AccionMeta/index.html', args)
     
     def show(request,id):
         accion_meta = AccionMeta.objects.get(Id=id)

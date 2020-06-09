@@ -50,6 +50,16 @@
                 </div>
             </div>
             {%endfor%}
+            {% for f in form_archivo %}
+            <div class="form-group row">
+                {{f.label_tag}}
+                <!--<label for="id_{{f.name}}" class="col-sm-2 col-form-label">{{f.name}}</label>
+                -->
+                <div class="col-sm-10">
+                    {{f}}
+                </div>
+            </div>
+            {%endfor%}
             <div class="row justify-content-between">
                 <a class="btn btn-primary col-sm-3" href="/index/{{titulo}}">Volver atrás</a>
                 {% if form.instance.Id %}

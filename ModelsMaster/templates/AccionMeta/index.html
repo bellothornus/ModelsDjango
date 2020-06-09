@@ -19,16 +19,12 @@
         <script type="text/javascript" src="{%static 'js/tabla_datos.js' %}" ></script>
         <!-- FIltros en el DataTables-->
         <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.21/api/fnFilterClear.js"></script> 
-        {% if titulo == "area_geografica" %}
-            <script type="text/javascript" src="{% static 'js/filtro_ag.js' %}"></script>
-        {% endif %}
         <script type="text/javascript" src="{% static 'js/modal_index.js' %}"></script>
         {% block head %}
 
         {% endblock %}
     </head>
     <body>
-        
         {%include 'navbar.html'%}
         <div class="container">
             {% block body %}
@@ -49,7 +45,7 @@
                 <thead>
                     <tr>
                         <th> ID: </th>
-                        <th> Ámbito:</th>
+                        <th> Meta:</th>
                         <th> Nombre:</th>
                         <th> Ver:</th>
                         <th> Editar:</th>
@@ -61,14 +57,13 @@
                         {% for query in querys %}
                         <tr>
                             <td>{{query.Id}}</td>
-                            <td>{{query.IdAm}}</td>
+                            <td>{{query.IdMeta}}</td>
                             <td>{{query.Nombre}}</td>
                             <td><a class="btn btn-xs far fa-eye" href="/show/{{titulo}}/{{query.Id}}"></a></td>
                             <td><a class="btn btn-primary btn-xs fas fa-pen" href="/update/{{titulo}}/{{query.Id}}"></a></td>
                             <!-- Button trigger modal -->
                             <td><button id="trigger" type="button" class="btn btn-danger btn-xs fas fa-trash-alt" data-toggle="modal" data-target="#eliminar"></button></td>
                            <!--<a class="btn btn-danger btn-xs fas fa-trash-alt  fas fa-trash-alt" href="/delete/{{titulo}}/{{query.Id}}"></a>-->
-
                         </tr>
                         {% endfor %}
                     {% else %}

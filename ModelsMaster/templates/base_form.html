@@ -36,53 +36,53 @@
                     <h2 style="color:green;">{{aviso}}</h2>
                 </div>
             {% endif %}
-            <form style="margin-top:30px;"action="{%if form.instance.Id %}/update/{{titulo}}/{{form.instance.Id}}{%else%}/create/{{titulo}}{%endif%}" method="POST"> {% csrf_token %}
-            {% block form %}
-            
-            {% endblock %}
-            {% for f in form %}
-            <div class="form-group row">
-                {{f.label_tag}}
-                <!--<label for="id_{{f.name}}" class="col-sm-2 col-form-label">{{f.name}}</label>
-                -->
-                <div class="col-sm-10">
-                    {{f}}
+            <form style="margin-top:30px;"action="{%if form.instance.Id %}/update/{{titulo}}/{{form.instance.Id}}{%else%}/create/{{titulo}}{%endif%}" method="POST" enctype="multipart/form-data"> {% csrf_token %}
+                {% block form %}
+                
+                {% endblock %}
+                {% for f in form %}
+                <div class="form-group row">
+                    {{f.label_tag}}
+                    <!--<label for="id_{{f.name}}" class="col-sm-2 col-form-label">{{f.name}}</label>
+                    -->
+                    <div class="col-sm-10">
+                        {{f}}
+                    </div>
                 </div>
-            </div>
-            {%endfor%}
-            {% for f in form_archivo %}
-            <div class="form-group row">
-                {{f.label_tag}}
-                <!--<label for="id_{{f.name}}" class="col-sm-2 col-form-label">{{f.name}}</label>
-                -->
-                <div class="col-sm-10">
-                    {{f}}
+                {%endfor%}
+                {% for f in form_archivo %}
+                <div class="form-group row">
+                    {{f.label_tag}}
+                    <!--<label for="id_{{f.name}}" class="col-sm-2 col-form-label">{{f.name}}</label>
+                    -->
+                    <div class="col-sm-10">
+                        {{f}}
+                    </div>
                 </div>
-            </div>
-            {%endfor%}
-            <div class="row justify-content-between">
-                <a class="btn btn-primary col-sm-3" href="/index/{{titulo}}">Volver atrás</a>
-                {% if form.instance.Id %}
-                    <a class="btn btn-primary col-sm-3" href="/update/{{titulo}}/{{form.instance.Id}}">Deshacer</a>
-                {% else %}
-                    <a class="btn btn-primary col-sm-3" href="/create/{{titulo}}">Deshacer</a>
-                {% endif %}
-                {% if form.instance.Id %}
-                    <input class="btn btn-primary col-sm-3"type="submit" value="Actualizar">
-                {%else%}
-                    <input class="btn btn-primary col-sm-3"type="submit" value="Enviar">
-                {%endif%}
-            </div>
+                {%endfor%}
+                <div class="row justify-content-between">
+                    <a class="btn btn-primary col-sm-3" href="/index/{{titulo}}">Volver atrás</a>
+                    {% if form.instance.Id %}
+                        <a class="btn btn-primary col-sm-3" href="/update/{{titulo}}/{{form.instance.Id}}">Deshacer</a>
+                    {% else %}
+                        <a class="btn btn-primary col-sm-3" href="/create/{{titulo}}">Deshacer</a>
+                    {% endif %}
+                    {% if form.instance.Id %}
+                        <input class="btn btn-primary col-sm-3"type="submit" value="Actualizar">
+                    {%else%}
+                        <input class="btn btn-primary col-sm-3"type="submit" value="Enviar">
+                    {%endif%}
+                </div>
+            </form>
         </div>
-    </form>
-    {% if form.errors %}
-        {% for error_field, error_message in form.errors.items %}
-        <div class="alert alert-danger " role="alert">
+        {% if form.errors %}
+            {% for error_field, error_message in form.errors.items %}
+            <div class="alert alert-danger " role="alert">
 
-            <p> {{ error_field|striptags }}-{{ error_message|striptags }}</p>
+                <p> {{ error_field|striptags }}-{{ error_message|striptags }}</p>
 
-        </div> 
-        {% endfor %}
-    {% endif %}
+            </div> 
+            {% endfor %}
+        {% endif %}
     </body>
 </html>

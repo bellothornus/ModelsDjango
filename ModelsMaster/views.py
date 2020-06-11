@@ -6,6 +6,8 @@ from django.contrib.auth.models import User, Permission
 from django.contrib.auth import logout as do_logout, login as do_login , authenticate
 from django.contrib.auth.forms import AuthenticationForm 
 from django.contrib.auth.decorators import login_required
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
 #para ver la lista de permisos d eun usuairo
 #perm_tuple = [(x.id, x.name) for x in Permission.objects.filter(user=2)]
 # Create your views here.
@@ -1510,9 +1512,32 @@ class DocumentosSistemaView(View):
         return render(request, 'base_show.html', args)
     
     def create(request):
-        form = DocumentosSistemaForm(request.POST or None)
-        if form.is_valid():
-            form.save()
+        form = DocumentosSistemaForm(request.POST or None, request.FILES or None)
+        if form.is_valid() and request.FILES['Archivo']:
+            #request.FILES.get('Archivo',False)
+            documento = form.save(commit=False)
+            nombre = request.FILES['Archivo'].name
+            guardar = DocumentosSistema(IdPc=documento.IdPc,Nombre=nombre,Codificacion=documento.Codificacion)
+            
+            #  Saving POST'ed file to storage
+            archivo = request.FILES['Archivo']
+            directorio = settings.MEDIA_ROOT+'/files/DocumentosSistema/'
+            fs = FileSystemStorage(location=directorio, base_url=directorio)
+            archivo_path = fs.save(nombre, archivo)
+            archivo_url = fs.url(archivo)
+            guardar.save()
+            return render(request, 'upload.html', {
+            'archivo_url': archivo_url
+            })
+            #fs = FileSystemStorage(location=folder) #defaults to   MEDIA_ROOT  
+            #filename = fs.save(myfile.name, myfile)
+            #file_url = fs.url(filename)
+
+
+            #  Reading file from storage
+            #archivo = default_storage.open(archivo_path)
+            #archivo_url = default_storage.url(archivo_path)
+
             aviso = "El Documento Sistema se ha creado con éxito"
             all = DocumentosSistema.objects.filter(Eliminado=False)
             args = {
@@ -1521,6 +1546,16 @@ class DocumentosSistemaView(View):
                 "titulo":"documentos_sistema",
                 "titulo_view":"Documentos Sistema"
             }
+            """ form.save()
+            aviso = "El Documento Sistema se ha creado con éxito"
+            all = DocumentosSistema.objects.filter(Eliminado=False)
+            args = {
+                "aviso":aviso,
+                "querys":all,
+                "titulo":"documentos_sistema",
+                "titulo_view":"Documentos Sistema"
+            } """
+            
             return render(request, 'base_index.html', args )
         else:
             args = {

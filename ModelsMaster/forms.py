@@ -232,6 +232,13 @@ class SeguimientoIndicadoresForm(ModelForm):
             'IdDoc':'Documento'
         }
 
+""" class ArchivoForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super(ArchivoForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+    Archivo = models.FileField(allow_empty_files=False, required=True, upload_to='/files/DocumentosSistema')
+ """
 class DocumentosSistemaForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(DocumentosSistemaForm, self).__init__(*args, **kwargs)
@@ -241,11 +248,11 @@ class DocumentosSistemaForm(ModelForm):
     
     class Meta:
         model = DocumentosSistema
-        fields = ['IdPc','Nombre','Codificacion']
-        #fields = '__all__'
+        fields = ('IdPc','Codificacion','Archivo')
         labels = {
             'IdPc':'Puntos Capitulo'
         }
+    Archivo = forms.FileField(allow_empty_file=False, required=True)
 
 class ProcesoForm(ModelForm):
     def __init__(self, *args, **kwargs):

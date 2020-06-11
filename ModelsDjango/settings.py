@@ -117,10 +117,12 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
-MEDIA_URL= '/ModelsMaster/media/'
-MEDIA_ROOT= os.path.join(BASE_DIR,'/ModelsMaster/media')
-STATIC_URL = '/ModelsMaster/static/'
+
+MEDIA_ROOT= os.path.join(BASE_DIR,'D:/Documentos/A_Trabajo_Practicas/ProyectosDjango/ModelsDjangoServices/media')
+MEDIA_URL= 'media/'
 STATIC_ROOT = os.path.join(BASE_DIR,'ModelsMaster/static')
+STATIC_URL = '/ModelsMaster/static/'
+
 
 #variables inmutables / también llamadas Constantes
 LOGIN_URL = 'login'

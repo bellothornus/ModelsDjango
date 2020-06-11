@@ -9,4 +9,6 @@ $( document ).ready(function() {
     $('textarea').attr('disabled','');
     $('textarea').attr('readonly','');
     $('textarea').attr('style','background-color:white;');
+    //para ocultar el arhivo en el show
+    $('#id_Archivo').parent().parent().hide()
 });

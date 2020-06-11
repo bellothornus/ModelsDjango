@@ -1504,8 +1504,10 @@ class DocumentosSistemaView(View):
     def show(request,id):
         documento_sistema = DocumentosSistema.objects.get(Id=id)
         form = DocumentosSistemaForm(instance=documento_sistema)
+        file = '/'+settings.MEDIA_URL+'files/DocumentosSistema/'+documento_sistema.Nombre
         args = {
             "form":form,
+            "file":file,
             "titulo":"documentos_sistema",
             "titulo_view":"Documentos Sistema"
         }
@@ -1515,29 +1517,29 @@ class DocumentosSistemaView(View):
         form = DocumentosSistemaForm(request.POST or None, request.FILES or None)
         if form.is_valid() and request.FILES['Archivo']:
             #request.FILES.get('Archivo',False)
+            #para poder operar con los campos del Modelo
             documento = form.save(commit=False)
+            #guardo el nombre del archivo
             nombre = request.FILES['Archivo'].name
+            #instancio manualmente el modelo con los datos personalizados
             guardar = DocumentosSistema(IdPc=documento.IdPc,Nombre=nombre,Codificacion=documento.Codificacion)
             
-            #  Saving POST'ed file to storage
+            #aqui guardo el archivo en sí
             archivo = request.FILES['Archivo']
-            directorio = settings.MEDIA_ROOT+'/files/DocumentosSistema/'
+            #especifíco en que directorio se guarda
+            directorio = settings.MEDIA_URL+'/files/DocumentosSistema/'
+            #digo donde debe guardarse
             fs = FileSystemStorage(location=directorio, base_url=directorio)
+            #guardo el archivo
             archivo_path = fs.save(nombre, archivo)
-            archivo_url = fs.url(archivo)
+            #cojo la direccion dle archivo para poder presentarlo
+            archivo_url = fs.url(archivo_path)
+            #guardo el modelo con los datos perosnalizaods
             guardar.save()
-            return render(request, 'upload.html', {
+            #Devuelvo una template que te muestra el archivo a descargar
+            """ return render(request, 'upload.html', {
             'archivo_url': archivo_url
-            })
-            #fs = FileSystemStorage(location=folder) #defaults to   MEDIA_ROOT  
-            #filename = fs.save(myfile.name, myfile)
-            #file_url = fs.url(filename)
-
-
-            #  Reading file from storage
-            #archivo = default_storage.open(archivo_path)
-            #archivo_url = default_storage.url(archivo_path)
-
+            }) """
             aviso = "El Documento Sistema se ha creado con éxito"
             all = DocumentosSistema.objects.filter(Eliminado=False)
             args = {
@@ -1546,16 +1548,6 @@ class DocumentosSistemaView(View):
                 "titulo":"documentos_sistema",
                 "titulo_view":"Documentos Sistema"
             }
-            """ form.save()
-            aviso = "El Documento Sistema se ha creado con éxito"
-            all = DocumentosSistema.objects.filter(Eliminado=False)
-            args = {
-                "aviso":aviso,
-                "querys":all,
-                "titulo":"documentos_sistema",
-                "titulo_view":"Documentos Sistema"
-            } """
-            
             return render(request, 'base_index.html', args )
         else:
             args = {

@@ -1517,13 +1517,6 @@ class DocumentosSistemaView(View):
         form = DocumentosSistemaForm(request.POST or None, request.FILES or None)
         if form.is_valid() and request.FILES['Archivo']:
             #request.FILES.get('Archivo',False)
-            #para poder operar con los campos del Modelo
-            documento = form.save(commit=False)
-            #guardo el nombre del archivo
-            nombre = request.FILES['Archivo'].name
-            #instancio manualmente el modelo con los datos personalizados
-            guardar = DocumentosSistema(IdPc=documento.IdPc,Nombre=nombre,Codificacion=documento.Codificacion)
-            
             #aqui guardo el archivo en sí
             archivo = request.FILES['Archivo']
             #especifíco en que directorio se guarda
@@ -1531,15 +1524,18 @@ class DocumentosSistemaView(View):
             #digo donde debe guardarse
             fs = FileSystemStorage(location=directorio, base_url=directorio)
             #guardo el archivo
-            archivo_path = fs.save(nombre, archivo)
+            archivo_path = fs.save(archivo.name, archivo)
             #cojo la direccion dle archivo para poder presentarlo
             archivo_url = fs.url(archivo_path)
+            #para poder operar con los campos del Modelo
+            documento = form.save(commit=False)
+            #guardo el nombre del archivo
+            nombre = archivo_path
+            #instancio manualmente el modelo con los datos personalizados
+            guardar = DocumentosSistema(IdPc=documento.IdPc,Nombre=nombre,Codificacion=documento.Codificacion)
             #guardo el modelo con los datos perosnalizaods
             guardar.save()
-            #Devuelvo una template que te muestra el archivo a descargar
-            """ return render(request, 'upload.html', {
-            'archivo_url': archivo_url
-            }) """
+
             aviso = "El Documento Sistema se ha creado con éxito"
             all = DocumentosSistema.objects.filter(Eliminado=False)
             args = {

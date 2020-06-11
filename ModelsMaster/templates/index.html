@@ -12,6 +12,7 @@
         
     </head>
     <body>
+        {%include 'navbar.html'%}
         <!--<nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
                 <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Home</a>
@@ -26,7 +27,6 @@
             </div>-->
         <div class="container">
             <h2>Mantenimiento de Tablas</h2>
-            <p>To make the tabs toggleable, add the data-toggle="tab" attribute to each link. Then add a .tab-pane class with a unique ID for every tab and wrap them inside a div element with class .tab-content.</p>
             <nav>
                 <div class="nav nav-tabs" role="tablist">
                 <a class="nav-item nav-link active" id="nav-home-tab" role="tabpanel" data-toggle="tab" href="#nav-home">Tablas Maestras</a></li>
@@ -37,7 +37,6 @@
             </nav>
             <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                    <h3>Tablas Maestras</h3>
                     <h4>Básicas</h4>
                     <ul>
                         <ol><a href="index/ambitos">Ámbitos</a></ol>
@@ -61,7 +60,6 @@
                     </ul>
                 </div>
                 <div class="tab-pane fade" id="nav-menu1" role="tabpanel" aria-labelledby="nav-menu1-tab">
-                    <h3>Objetivos</h3>
                     <ul>
                         <ol><a href="index/objetivo">Objetivos</a></ol>
                         <ol><a href="index/meta">Metas opr Objetivos</a></ol>
@@ -69,14 +67,12 @@
                     </ul>
                 </div>
                 <div class="tab-pane fade" id="nav-menu2" role="tabpanel" aria-labelledby="nav-menu2-tab">
-                    <h3>Indicadores y Seguimiento</h3>
                     <ul>
                         <ol><a href="index/indicador_accion_proceso">Indicador por Accion</a></ol>
                         <ol><a href="index/seguimiento_indicadores">Seguimiento de Indicadores</a></ol>
                     </ul>
                 </div>
                 <div class="tab-pane fade" id="nav-menu3" role="tabpanel" aria-labelledby="nav-menu3-tab">
-                    <h3>Cuadro de mando</h3>
                     <ul>
                         <ol><a href="">Comparativas del sector y/o área</a></ol>
                         <ol><a href="">Evolución Interna</a></ol>

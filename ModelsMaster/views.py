@@ -83,17 +83,28 @@ class UserView(View):
                     # Hacemos el login manualmente
                     do_login(request, user)
                     # Y le redireccionamos a la portada
-                    return redirect('/')
-        form.fields['username'].help_text = None
-        form.fields['password1'].help_text = None
-        form.fields['password2'].help_text = None
-        arg={
-            'form': form,
-            "titulo":"user",
-            "titulo_view":"Usuario"
-            }
-        # Si llegamos al final renderizamos el formulario
-        return render(request, "base_form.html", arg)
+                    return redirect('/login')
+            else:
+                arg={
+                'form': form,
+                #'permissions':permissions,
+                "titulo":"user",    
+                "titulo_view":"Usuario"
+                }
+                # Si llegamos al final renderizamos el formulario
+                return render(request, "user/new.html", arg)
+        else:
+            form.fields['username'].help_text = None
+            form.fields['password1'].help_text = None
+            form.fields['password2'].help_text = None
+            arg={
+                'form': form,
+                #'permissions':permissions,
+                "titulo":"user",    
+                "titulo_view":"Usuario"
+                }
+            # Si llegamos al final renderizamos el formulario
+            return render(request, "user/new.html", arg)
 
     def update(request,id):
         user = User.objects.get(id=id)

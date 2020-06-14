@@ -248,7 +248,7 @@ class DocumentosSistemaForm(ModelForm):
     
     class Meta:
         model = DocumentosSistema
-        fields = ('IdPc','Codificacion','Archivo')
+        fields = ('IdPc','Codificacion','Archivo','Descripcion')
         labels = {
             'IdPc':'Puntos Capitulo'
         }

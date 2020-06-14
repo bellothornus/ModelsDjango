@@ -250,6 +250,7 @@ class DocumentosSistema(models.Model):
     IdPc=models.ForeignKey(to=PuntosCapitulo, db_column="DC_Id_Puntos_Capitulo", on_delete=models.DO_NOTHING)
     #no lo intorducirá el usuario sino que será automático
     Nombre=models.CharField(max_length=256, db_column="DC_Nombre")
+    Descripcion=models.CharField(max_length=256, db_column="DC_Descripcion")
     Codificacion=models.CharField(max_length=256, db_column="DC_Codificacion")
     Eliminado=models.BooleanField(default=False, db_column="DC_Eliminado")
 

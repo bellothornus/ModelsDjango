@@ -1577,7 +1577,14 @@ class DocumentosSistemaView(View):
         documento_sistema = DocumentosSistema.objects.get(Id=id)
         documento_sistema.Eliminado = True
         documento_sistema.save()
+
+        archivo = request.FILES['Archivo']
+        directorio = settings.MEDIA_URL+'/files/DocumentosSistema/'
+        fs = FileSystemStorage(location=directorio, base_url=directorio)
+        fs.delete(archivo.name)
+
         eliminado = "El Documento del Sistema se ha eliminado"
+        
         all = DocumentosSistema.objects.filter(Eliminado=False)
         args = {
             "eliminado":eliminado,

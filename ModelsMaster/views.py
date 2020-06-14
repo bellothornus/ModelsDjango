@@ -232,8 +232,8 @@ class TipoObjetivoView(View):
             "titulo":"tipo_objetivo",
             "titulo_view":"Tipo Objetivo"
         }
-        #return render(request, 'TipoObjetivo/index.html', args)
         return render(request, 'base_index.html', args)
+
     def show(request,id):
         tipo_objetivo = TipoObjetivo.objects.get(Id=id)
         form = TipoObjetivoForm(instance=tipo_objetivo)
@@ -287,6 +287,7 @@ class TipoObjetivoView(View):
             return render(request, 'base_form.html', args)
 
     def delete(request,id):
+        #TODO:
         tipo_objetivo = TipoObjetivo.objects.get(Id=id)
         tipo_objetivo.Eliminado = True
         tipo_objetivo.save()
@@ -1815,3 +1816,58 @@ class UserEmpresaView(View):
                 "titulo_view":"Usuario de Empresa"
             }
         return render(request, "base_form.html", args)
+    
+    def delete(request,id):
+        user_empresa=UserEmpresa.objects.get(Id=id)
+        user_empresa.Eliminado = True
+        user_empresa.save()
+        eliminado = "El Usuario de Empresa se ha eliminado"
+        all = UserEmpresa.objects.filter(Eliminado=False)
+        args = {
+            "eliminado":eliminado,
+            "querys":all,
+            "titulo":"user_empresa",
+            "titulo_view":"Usuario de Empresa"
+        }
+        return render(request, "UserEmpresa/index.html", args)
+
+class GroupEmpresaView(View):
+    def index(request):
+        all = GroupEmpresa.objects.filter(Eliminado=False)
+        args = {
+            "querys":all,
+            "titulo":"group_empresa",
+            "titulo_view":"Grupo de Empresa"
+        }
+        return render(request, "GroupEmpresa/index.html", args)
+    
+    def show(request,id):
+        group_empresa = GroupEmpresa.objects.get(Id=id)
+        form = GroupEmpresaForm(instance=group_empresa)
+        args = {
+            "form":form,
+            "titulo":"group_empresa",
+            "titulo_view":"Grupo de Empresa"
+        }
+        return render(request, "GroupEmpresa/show.html")
+    
+    def create(request):
+        form = GroupEmpresaForm(request.POST or None)
+        if form.is_valid():
+            form.save()
+            aviso = "El Grupo Empresa se ha creado con éxito"
+            all = GroupEmpresa.objects.filter(Eliminado=False)
+            args = {
+                "aviso":aviso,
+                "querys":all,
+                "titulo":"group_empresa",
+                "titulo_view":"Grupo de Empresa"
+            }
+            return render(request, "GroupEmpresa/index.html", args)
+        else:
+            args = {
+                "form":form,
+                "titulo":"group_empresa",
+                "titulo_view":"Grupo de Empresa"
+            }
+            return render(request, "base_form.html", args)

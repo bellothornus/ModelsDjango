@@ -1765,6 +1765,16 @@ class UserEmpresaView(View):
         }
         return render(request, "UserEmpresa/index.html", args)
     
+    def show(request,id):
+        user_empresa = UserEmpresa.objects.get(Id=id)
+        form = UserEmpresaForm(instance=user_empresa)
+        args = {
+            "form":form,
+            "titulo":"user_empresa",
+            "titulo_view":"Usuario de Empresa"
+        }
+        return render(request, 'UserEmpresa/show.html', args)
+
     def create(request):
         form = UserEmpresaForm(request.POST or None)
         if form.is_valid():
@@ -1777,7 +1787,7 @@ class UserEmpresaView(View):
                 "titulo":"user_empresa",
                 "titulo_view":"Usuario de Empresa"
             }
-            return render(request, "base_index.html", args)
+            return render(request, "UserEmpresa/index.html", args)
         else:
             args = {
                 "form":form,
@@ -1785,3 +1795,23 @@ class UserEmpresaView(View):
                 "titulo_view":"Usuario de Empresa"
             }
             return render(request, "base_form.html", args)
+    
+    def update(request,id):
+        user_empresa=UserEmpresa.objects.get(Id=id)
+        form = UserEmpresaForm(request.POST or None, instance=user_empresa)
+        if form.is_valid():
+            form.save()
+            aviso="Se han actualizado los datos"
+            args={
+                "aviso":aviso,
+                "form":form,
+                "titulo":"user_empresa",
+                "titulo_view":"Usuario de Empresa"
+            }
+        else:
+            args = {
+                "form":form,
+                "titulo":"user_empresa",
+                "titulo_view":"Usuario de Empresa"
+            }
+        return render(request, "base_form.html", args)

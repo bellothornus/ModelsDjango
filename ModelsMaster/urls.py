@@ -132,6 +132,8 @@ urlpatterns = [
 
     path("index/user_empresa", views.UserEmpresaView.index),
     path("create/user_empresa", views.UserEmpresaView.create),
+    path("show/user_empresa/<int:id>", views.UserEmpresaView.show),
+    path("update/user_empresa/<int:id>", views.UserEmpresaView.update),
 
 ]
 

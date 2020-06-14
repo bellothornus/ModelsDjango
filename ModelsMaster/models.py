@@ -3,8 +3,8 @@ from ModelsMaster import validators
 #from django.contrib.auth.forms import UserCreationForm
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.exceptions import ValidationError
-#class User(AbstractUser):
-
+from django.contrib.auth.models import User
+from django.contrib.auth.models import Group
 # Create your models here.
 class Ambito(models.Model):
     Id=models.AutoField(primary_key=True,db_column="AM_Id_Ambito")
@@ -250,6 +250,7 @@ class DocumentosSistema(models.Model):
     IdPc=models.ForeignKey(to=PuntosCapitulo, db_column="DC_Id_Puntos_Capitulo", on_delete=models.DO_NOTHING)
     #no lo intorducirá el usuario sino que será automático
     Nombre=models.CharField(max_length=256, db_column="DC_Nombre")
+    Descripcion=models.CharField(max_length=256, db_column="DC_Descripcion", null=True,blank=True)
     Codificacion=models.CharField(max_length=256, db_column="DC_Codificacion")
     Eliminado=models.BooleanField(default=False, db_column="DC_Eliminado")
 
@@ -288,3 +289,28 @@ class Proceso(models.Model):
     class Meta:
         db_table = "T_Proceso"
 
+class UserEmpresa(models.Model):
+    Id=models.AutoField(primary_key=True, db_column="UE_Id_UserEmpresa")
+    IdEmp=models.ForeignKey(to=Empresa, db_column="UE_Id_Empresa", on_delete=models.DO_NOTHING)
+    IdUser=models.ForeignKey(to=User, db_column="UE_Id_Usuario",on_delete=models.DO_NOTHING)
+    Eliminado=models.BooleanField(default=False, db_column="UE_Eliminado")
+
+    def __str__(self):
+        #usuario = User.objects.get(id=self.Id)
+        #empresa = Empresa.objects.get(Id=self.Id)
+        return "%s de %s" % (self.IdUser, self.IdEmp)
+    
+    class Meta:
+        db_table = "T_User_Empresa"
+
+class GroupEmpresa(models.Model):
+    Id=models.AutoField(primary_key=True, db_column="GE_Id_GroupEmpresa")
+    IdEmp=models.ForeignKey(to=Empresa, db_column="GE_Id_Empresa", on_delete=models.DO_NOTHING)
+    IdGroup=models.ForeignKey(to=Group, db_column="GE_Id_Group", on_delete=models.DO_NOTHING)
+    Eliminado=models.BooleanField(default=False, db_column="GE_Eliminado")
+
+    def __str__(self):
+        return "%s de %s" % (self.IdGroup, self.IdEmp)
+
+    class Meta:
+        db_table = "T_Group_Empresa"

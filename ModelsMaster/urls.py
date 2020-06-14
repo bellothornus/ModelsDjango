@@ -130,6 +130,18 @@ urlpatterns = [
     path('login', views.LogView.login, name='login'),
     path('logout', views.LogView.logout),
 
+    path("index/user_empresa", views.UserEmpresaView.index),
+    path("show/user_empresa/<int:id>", views.UserEmpresaView.show),
+    path("create/user_empresa", views.UserEmpresaView.create),
+    path("update/user_empresa/<int:id>", views.UserEmpresaView.update),
+    path("delete/user_empresa/<int:id>", views.UserEmpresaView.delete),
+
+    path("index/group_empresa", views.GroupEmpresaView.index),
+    path("show/group_empresa/<int:id>", views.GroupEmpresaView.show),
+    path("create/group_empresa", views.GroupEmpresaView.create),
+    
+
+
 ]
 
 urlpatterns += staticfiles_urlpatterns()

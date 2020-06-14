@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from .forms import AmbitoForm, TipoObjetivoForm, SectorForm, NivelAreaGeograficaForm, AreaGeograficaForm, EmpresaForm, ModeloForm, BenchmarkingForm, PuntosCapituloForm, ObjetivoForm, EstructuraForm, MetaForm, ProcesoForm, DocumentosSistemaForm, IndicadorAccionProcesoForm, AccionMetaForm, SeguimientoIndicadoresForm, UserForm
-from .models import Ambito, TipoObjetivo, Sector, NivelAreaGeografica, AreaGeografica, Empresa, Modelo, Benchmarking, PuntosCapitulo, Objetivo, Estructura, Meta, Proceso, DocumentosSistema, IndicadorAccionProceso, AccionMeta, SeguimientoIndicadores
+from .forms import AmbitoForm, TipoObjetivoForm, SectorForm, NivelAreaGeograficaForm, AreaGeograficaForm, EmpresaForm, ModeloForm, BenchmarkingForm, PuntosCapituloForm, ObjetivoForm, EstructuraForm, MetaForm, ProcesoForm, DocumentosSistemaForm, IndicadorAccionProcesoForm, AccionMetaForm, SeguimientoIndicadoresForm, UserForm, UserEmpresaForm, GroupEmpresaForm
+from .models import Ambito, TipoObjetivo, Sector, NivelAreaGeografica, AreaGeografica, Empresa, Modelo, Benchmarking, PuntosCapitulo, Objetivo, Estructura, Meta, Proceso, DocumentosSistema, IndicadorAccionProceso, AccionMeta, SeguimientoIndicadores, UserEmpresa, GroupEmpresa
 from django.contrib.auth.models import User, Permission
 from django.contrib.auth import logout as do_logout, login as do_login , authenticate
 from django.contrib.auth.forms import AuthenticationForm 
@@ -243,8 +243,8 @@ class TipoObjetivoView(View):
             "titulo":"tipo_objetivo",
             "titulo_view":"Tipo Objetivo"
         }
-        #return render(request, 'TipoObjetivo/index.html', args)
         return render(request, 'base_index.html', args)
+
     def show(request,id):
         tipo_objetivo = TipoObjetivo.objects.get(Id=id)
         form = TipoObjetivoForm(instance=tipo_objetivo)
@@ -298,6 +298,7 @@ class TipoObjetivoView(View):
             return render(request, 'base_form.html', args)
 
     def delete(request,id):
+        #TODO:
         tipo_objetivo = TipoObjetivo.objects.get(Id=id)
         tipo_objetivo.Eliminado = True
         tipo_objetivo.save()
@@ -1588,7 +1589,14 @@ class DocumentosSistemaView(View):
         documento_sistema = DocumentosSistema.objects.get(Id=id)
         documento_sistema.Eliminado = True
         documento_sistema.save()
+        #lo elimina del sistema, no se si imlpantarlo así o dejarlo
+        #por si hay que recuperarlo en algún momento
+        directorio = settings.MEDIA_URL+'/files/DocumentosSistema/'
+        fs = FileSystemStorage(location=directorio, base_url=directorio)
+        fs.delete(documento_sistema.Nombre)
+
         eliminado = "El Documento del Sistema se ha eliminado"
+        
         all = DocumentosSistema.objects.filter(Eliminado=False)
         args = {
             "eliminado":eliminado,
@@ -1758,3 +1766,119 @@ class ProcesoView(View):
                 "titulo_view":"Proceso"
             }
         return render(request, 'base_index.html', args)
+
+class UserEmpresaView(View):
+    def index(request):
+        all = UserEmpresa.objects.filter(Eliminado=False)
+        args = {
+            "querys":all,
+            "titulo":"user_empresa",
+            "titulo_view":"Usuario de Empresa"
+        }
+        return render(request, "UserEmpresa/index.html", args)
+    
+    def show(request,id):
+        user_empresa = UserEmpresa.objects.get(Id=id)
+        form = UserEmpresaForm(instance=user_empresa)
+        args = {
+            "form":form,
+            "titulo":"user_empresa",
+            "titulo_view":"Usuario de Empresa"
+        }
+        return render(request, 'UserEmpresa/show.html', args)
+
+    def create(request):
+        form = UserEmpresaForm(request.POST or None)
+        if form.is_valid():
+            form.save()
+            aviso="El Usuario de Empresa se ha creado con éxito"
+            all = UserEmpresa.objects.filter(Eliminado=False)
+            args = {
+                "aviso":aviso,
+                "querys":all,
+                "titulo":"user_empresa",
+                "titulo_view":"Usuario de Empresa"
+            }
+            return render(request, "UserEmpresa/index.html", args)
+        else:
+            args = {
+                "form":form,
+                "titulo":"user_empresa",
+                "titulo_view":"Usuario de Empresa"
+            }
+            return render(request, "base_form.html", args)
+    
+    def update(request,id):
+        user_empresa=UserEmpresa.objects.get(Id=id)
+        form = UserEmpresaForm(request.POST or None, instance=user_empresa)
+        if form.is_valid():
+            form.save()
+            aviso="Se han actualizado los datos"
+            args={
+                "aviso":aviso,
+                "form":form,
+                "titulo":"user_empresa",
+                "titulo_view":"Usuario de Empresa"
+            }
+        else:
+            args = {
+                "form":form,
+                "titulo":"user_empresa",
+                "titulo_view":"Usuario de Empresa"
+            }
+        return render(request, "base_form.html", args)
+    
+    def delete(request,id):
+        user_empresa=UserEmpresa.objects.get(Id=id)
+        user_empresa.Eliminado = True
+        user_empresa.save()
+        eliminado = "El Usuario de Empresa se ha eliminado"
+        all = UserEmpresa.objects.filter(Eliminado=False)
+        args = {
+            "eliminado":eliminado,
+            "querys":all,
+            "titulo":"user_empresa",
+            "titulo_view":"Usuario de Empresa"
+        }
+        return render(request, "UserEmpresa/index.html", args)
+
+class GroupEmpresaView(View):
+    def index(request):
+        all = GroupEmpresa.objects.filter(Eliminado=False)
+        args = {
+            "querys":all,
+            "titulo":"group_empresa",
+            "titulo_view":"Grupo de Empresa"
+        }
+        return render(request, "GroupEmpresa/index.html", args)
+    
+    def show(request,id):
+        group_empresa = GroupEmpresa.objects.get(Id=id)
+        form = GroupEmpresaForm(instance=group_empresa)
+        args = {
+            "form":form,
+            "titulo":"group_empresa",
+            "titulo_view":"Grupo de Empresa"
+        }
+        return render(request, "GroupEmpresa/show.html")
+    
+    def create(request):
+        form = GroupEmpresaForm(request.POST or None)
+        if form.is_valid():
+            form.save()
+            aviso = "El Grupo Empresa se ha creado con éxito"
+            all = GroupEmpresa.objects.filter(Eliminado=False)
+            args = {
+                "aviso":aviso,
+                "querys":all,
+                "titulo":"group_empresa",
+                "titulo_view":"Grupo de Empresa"
+            }
+            return render(request, "GroupEmpresa/index.html", args)
+        else:
+            args = {
+                "form":form,
+                "titulo":"group_empresa",
+                "titulo_view":"Grupo de Empresa"
+            }
+            return render(request, "base_form.html", args)

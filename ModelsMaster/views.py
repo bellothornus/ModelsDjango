@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from .forms import AmbitoForm, TipoObjetivoForm, SectorForm, NivelAreaGeograficaForm, AreaGeograficaForm, EmpresaForm, ModeloForm, BenchmarkingForm, PuntosCapituloForm, ObjetivoForm, EstructuraForm, MetaForm, ProcesoForm, DocumentosSistemaForm, IndicadorAccionProcesoForm, AccionMetaForm, SeguimientoIndicadoresForm, UserForm
-from .models import Ambito, TipoObjetivo, Sector, NivelAreaGeografica, AreaGeografica, Empresa, Modelo, Benchmarking, PuntosCapitulo, Objetivo, Estructura, Meta, Proceso, DocumentosSistema, IndicadorAccionProceso, AccionMeta, SeguimientoIndicadores
+from .forms import AmbitoForm, TipoObjetivoForm, SectorForm, NivelAreaGeograficaForm, AreaGeograficaForm, EmpresaForm, ModeloForm, BenchmarkingForm, PuntosCapituloForm, ObjetivoForm, EstructuraForm, MetaForm, ProcesoForm, DocumentosSistemaForm, IndicadorAccionProcesoForm, AccionMetaForm, SeguimientoIndicadoresForm, UserForm, UserEmpresaForm, GroupEmpresaForm
+from .models import Ambito, TipoObjetivo, Sector, NivelAreaGeografica, AreaGeografica, Empresa, Modelo, Benchmarking, PuntosCapitulo, Objetivo, Estructura, Meta, Proceso, DocumentosSistema, IndicadorAccionProceso, AccionMeta, SeguimientoIndicadores, UserEmpresa, GroupEmpresa
 from django.contrib.auth.models import User, Permission
 from django.contrib.auth import logout as do_logout, login as do_login , authenticate
 from django.contrib.auth.forms import AuthenticationForm 
@@ -1754,3 +1754,34 @@ class ProcesoView(View):
                 "titulo_view":"Proceso"
             }
         return render(request, 'base_index.html', args)
+
+class UserEmpresaView(View):
+    def index(request):
+        all = UserEmpresa.objects.filter(Eliminado=False)
+        args = {
+            "querys":all,
+            "titulo":"user_empresa",
+            "titulo_view":"Usuario de Empresa"
+        }
+        return render(request, "UserEmpresa/index.html", args)
+    
+    def create(request):
+        form = UserEmpresaForm(request.POST or None)
+        if form.is_valid():
+            form.save()
+            aviso="El Usuario de Empresa se ha creado con éxito"
+            all = UserEmpresa.objects.filter(Eliminado=False)
+            args = {
+                "aviso":aviso,
+                "querys":all,
+                "titulo":"user_empresa",
+                "titulo_view":"Usuario de Empresa"
+            }
+            return render(request, "base_index.html", args)
+        else:
+            args = {
+                "form":form,
+                "titulo":"user_empresa",
+                "titulo_view":"Usuario de Empresa"
+            }
+            return render(request, "base_form.html", args)

@@ -3,7 +3,7 @@ from django.forms import ModelForm
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User, Permission
-from .models import Ambito, TipoObjetivo, Sector, NivelAreaGeografica, AreaGeografica, Empresa, Modelo, Benchmarking, PuntosCapitulo, Objetivo, Estructura, Meta, AccionMeta, Proceso, IndicadorAccionProceso, SeguimientoIndicadores, DocumentosSistema
+from .models import Ambito, TipoObjetivo, Sector, NivelAreaGeografica, AreaGeografica, Empresa, Modelo, Benchmarking, PuntosCapitulo, Objetivo, Estructura, Meta, AccionMeta, Proceso, IndicadorAccionProceso, SeguimientoIndicadores, DocumentosSistema, UserEmpresa, GroupEmpresa
 """ class PermissionForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(AmbitoForm, self).__init__(*args, **kwargs)
@@ -279,3 +279,31 @@ class UserForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'email')
+
+class UserEmpresaForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(UserEmpresaForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+
+    class Meta:
+        model = UserEmpresa
+        fields = ('IdEmp', 'IdUser')
+        labels = {
+            'IdEmp':'Empresa',
+            'IdUser':'Usuario'
+        }
+
+class GroupEmpresaForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(GroupEmpresaForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+
+    class Meta:
+        model = GroupEmpresa
+        fields = ('IdEmp', 'IdGroup')
+        labels = {
+            'IdEmp':'Empresa',
+            'IdGroup':'Grupo de Usuario'
+        }

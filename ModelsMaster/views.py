@@ -1577,11 +1577,11 @@ class DocumentosSistemaView(View):
         documento_sistema = DocumentosSistema.objects.get(Id=id)
         documento_sistema.Eliminado = True
         documento_sistema.save()
-
-        archivo = request.FILES['Archivo']
+        #lo elimina del sistema, no se si imlpantarlo así o dejarlo
+        #por si hay que recuperarlo en algún momento
         directorio = settings.MEDIA_URL+'/files/DocumentosSistema/'
         fs = FileSystemStorage(location=directorio, base_url=directorio)
-        fs.delete(archivo.name)
+        fs.delete(documento_sistema.Nombre)
 
         eliminado = "El Documento del Sistema se ha eliminado"
         
